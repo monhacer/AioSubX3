@@ -4,7 +4,16 @@ Modern custom subscription page for **3x-ui v3.3.0+**
 
 **AioSubX3** یک صفحه ساب کاستوم، مدرن، ریسپانسیو و دو زبانه برای پنل **3x-ui** است که برای نسخه‌های **3.3.0 به بعد** آماده شده است.
 
----
+## 🖼️ Preview
+
+### 🌙 Dark Mode
+
+![AioSubX3 Dark Preview](preview-dark.png)
+
+### ☀️ Light Mode
+
+![AioSubX3 Light Preview](preview-light.png)
+
 
 ## ✨ Features
 
