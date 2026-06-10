@@ -1,0 +1,1450 @@
+
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark" data-build="v21-config-item-fixed-height">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>{{ .subTitle }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+
+    /* ======================== DESIGN SYSTEM / STANDARDIZED UI ======================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      color-scheme: dark;
+      --font-sans: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --bg: #050712;
+      --bg-soft: #0b1020;
+      --surface: rgba(15, 23, 42, 0.72);
+      --surface-strong: rgba(15, 23, 42, 0.9);
+      --surface-muted: rgba(255, 255, 255, 0.055);
+      --border: rgba(255, 255, 255, 0.10);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text-primary: #f8fafc;
+      --text-secondary: #a8b3c7;
+      --text-muted: #7f8aa3;
+      --accent: #3b82f6;
+      --accent-strong: #2563eb;
+      --accent-soft: rgba(59, 130, 246, 0.14);
+      --accent-secondary: #8b5cf6;
+      --danger: #f97316;
+      --success: #10b981;
+      --warning-soft: rgba(249, 115, 22, 0.16);
+      --success-soft: rgba(16, 185, 129, 0.16);
+      --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.18);
+      --shadow-lg: 0 28px 80px rgba(0, 0, 0, 0.34);
+      --radius-sm: 0.9rem;
+      --radius-md: 1.2rem;
+      --radius-lg: 1.6rem;
+      --radius-xl: 2rem;
+      --space-1: 0.35rem;
+      --space-2: 0.6rem;
+      --space-3: 0.9rem;
+      --space-4: 1.2rem;
+      --space-5: 1.6rem;
+      --space-6: 2rem;
+      --ring-focus: rgba(59, 130, 246, 0.45);
+      --dashboard-panel-height: clamp(32rem, 58vh, 38rem);
+      /* v18: neon status colors are defined on :root so they work in dark mode too */
+      --status-active-bg: rgba(57, 255, 20, 0.16);
+      --status-active-border: rgba(57, 255, 20, 0.60);
+      --status-active-text: #39ff14;
+      --status-active-glow: rgba(57, 255, 20, 0.34);
+      --status-inactive-bg: rgba(255, 23, 68, 0.16);
+      --status-inactive-border: rgba(255, 23, 68, 0.62);
+      --status-inactive-text: #ff1744;
+      --status-inactive-glow: rgba(255, 23, 68, 0.34);
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #eef2ff;
+      --bg-soft: #f8fafc;
+      --surface: rgba(255, 255, 255, 0.76);
+      --surface-strong: rgba(255, 255, 255, 0.92);
+      --surface-muted: rgba(15, 23, 42, 0.045);
+      --border: rgba(15, 23, 42, 0.09);
+      --border-strong: rgba(15, 23, 42, 0.14);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent: #2563eb;
+      --accent-strong: #1d4ed8;
+      --accent-soft: rgba(37, 99, 235, 0.12);
+      --status-active-bg: rgba(57, 255, 20, 0.18);
+      --status-active-border: rgba(57, 255, 20, 0.62);
+      --status-active-text: #00b828;
+      --status-active-glow: rgba(57, 255, 20, 0.30);
+      --status-inactive-bg: rgba(255, 23, 68, 0.15);
+      --status-inactive-border: rgba(255, 23, 68, 0.62);
+      --status-inactive-text: #e6002f;
+      --status-inactive-glow: rgba(255, 23, 68, 0.30);
+      --shadow-sm: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.14);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      text-rendering: optimizeLegibility;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      background:
+        radial-gradient(circle at 15% 18%, rgba(59, 130, 246, 0.18), transparent 32rem),
+        radial-gradient(circle at 88% 68%, rgba(139, 92, 246, 0.22), transparent 34rem),
+        linear-gradient(135deg, var(--bg), var(--bg-soft));
+      background-attachment: fixed;
+      padding: clamp(1rem, 2vw, 1.75rem);
+      line-height: 1.65;
+    }
+
+    html[data-theme="light"] body {
+      background:
+        radial-gradient(circle at 15% 18%, rgba(59, 130, 246, 0.13), transparent 32rem),
+        radial-gradient(circle at 88% 68%, rgba(139, 92, 246, 0.12), transparent 34rem),
+        linear-gradient(135deg, #eef2ff, #f8fafc);
+    }
+
+    button, a {
+      font: inherit;
+      max-width: 100%;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--ring-focus);
+      outline-offset: 3px;
+    }
+
+    .container {
+      width: min(100%, 1320px);
+      max-width: 100%;
+      margin-inline: auto;
+      display: grid;
+      gap: var(--space-5);
+      overflow-x: clip;
+    }
+
+    .container > *,
+    .dashboard-two > *,
+    .stats-grid > *,
+    .apps-grid > *,
+    .traffic-details > *,
+    .countdown > * {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .glass-panel,
+    .usage-ring,
+    .configs-section,
+    .stat-card,
+    .app-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .glass-panel {
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* ======================== HEADER ======================== */
+    .header-card {
+      padding: clamp(1rem, 2.2vw, 1.6rem) clamp(1rem, 3vw, 2rem);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      min-width: 0;
+    }
+
+    .icon-badge {
+      width: 3.5rem;
+      height: 3.5rem;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 1.25rem;
+      font-size: 1.55rem;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      box-shadow: 0 14px 32px rgba(59, 130, 246, 0.25);
+    }
+
+    .title-section {
+      min-width: 0;
+    }
+
+    .title-section h2 {
+      font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.25;
+    }
+
+    .sub-email {
+      margin-top: 0.25rem;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      word-break: break-word;
+    }
+
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    .btn-icon {
+      min-height: 2.75rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.65rem 1.05rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      color: var(--text-primary);
+      background: var(--surface-muted);
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+      white-space: nowrap;
+    }
+
+    .btn-icon:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+      background: var(--accent-soft);
+      box-shadow: 0 10px 24px rgba(59, 130, 246, 0.10);
+    }
+
+    .btn-primary {
+      border: 0;
+      color: #fff;
+      background: linear-gradient(95deg, var(--accent), var(--accent-secondary));
+      box-shadow: 0 12px 28px rgba(59, 130, 246, 0.24);
+    }
+
+    .circle-btn {
+      width: 2.75rem;
+      padding-inline: 0;
+      aspect-ratio: 1;
+    }
+
+    /* ======================== STATS ======================== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-4);
+    }
+
+    .stat-card {
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      min-height: 9rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-strong);
+      background: var(--surface-strong);
+    }
+
+    .stat-title {
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stat-number {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    .stat-unit {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .trend-badge {
+      width: fit-content;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+      border-radius: 999px;
+      padding: 0.18rem 0.65rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    #statusChip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      background: var(--status-active-bg, rgba(57, 255, 20, 0.16));
+      border-color: var(--status-active-border, rgba(57, 255, 20, 0.60));
+      color: var(--status-active-text, #39ff14);
+      box-shadow: 0 0 18px var(--status-active-glow, rgba(57, 255, 20, 0.34)), inset 0 0 14px rgba(255, 255, 255, 0.035);
+      text-shadow: 0 0 10px currentColor;
+    }
+
+    #statusChip.is-inactive {
+      background: var(--status-inactive-bg, rgba(255, 23, 68, 0.16));
+      border-color: var(--status-inactive-border, rgba(255, 23, 68, 0.62));
+      color: var(--status-inactive-text, #ff1744);
+      box-shadow: 0 0 18px var(--status-inactive-glow, rgba(255, 23, 68, 0.34)), inset 0 0 14px rgba(255, 255, 255, 0.035);
+    }
+
+
+    /* ======================== MAIN LAYOUT ======================== */
+    /* v13: equal dashboard columns; configs scroll internally; accent switched from teal to blue */
+    .dashboard-two {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.35fr);
+      gap: var(--space-5);
+      align-items: stretch;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .usage-ring,
+    .configs-section {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      height: var(--dashboard-panel-height);
+      min-height: var(--dashboard-panel-height);
+      max-height: var(--dashboard-panel-height);
+    }
+
+    .usage-ring {
+      padding: var(--space-5);
+      display: grid;
+      gap: var(--space-4);
+      align-content: center;
+    }
+
+    .ring-wrapper {
+      display: grid;
+      place-items: center;
+      gap: var(--space-4);
+    }
+
+    .progress-ring {
+      position: relative;
+      width: 11.25rem;
+      height: 11.25rem;
+      filter: drop-shadow(0 18px 24px rgba(59, 130, 246, 0.12));
+    }
+
+    .ring-fill,
+    #progressCircle {
+      stroke: var(--accent);
+      stroke-linecap: round;
+      transition: stroke-dasharray 400ms ease;
+    }
+
+    .ring-percent {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      font-weight: 900;
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    .traffic-details {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+
+    .traffic-item,
+    .cd-unit {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    .traffic-item i {
+      color: var(--accent);
+      margin-inline-end: 0.25rem;
+    }
+
+    .expiry-box {
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, var(--accent-soft), transparent 70%);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      text-align: center;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+
+    .cd-number {
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      direction: ltr;
+    }
+
+    .cd-unit span,
+    .traffic-item span:last-child {
+      color: var(--text-secondary);
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    /* ======================== CONFIGS ======================== */
+    .configs-section {
+      display: flex;
+      flex-direction: column;
+      min-height: var(--dashboard-panel-height);
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: var(--space-4) var(--space-5);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+    }
+
+    .section-header strong {
+      font-size: 1rem;
+    }
+
+    .config-list {
+      padding: var(--space-4);
+      flex: 1 1 auto;
+      min-height: 0;
+      height: auto;
+      max-height: none;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      display: grid;
+      align-content: start;
+      gap: var(--space-3);
+    }
+
+    .config-item {
+      background: var(--surface-muted);
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+    }
+
+    .config-item:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+      background: var(--accent-soft);
+    }
+
+    .config-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-bottom: 0.55rem;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .config-name {
+      min-width: 0;
+      max-width: 72%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 800;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+      border-radius: 999px;
+      padding: 0.22rem 0.8rem;
+      font-size: 0.78rem;
+    }
+
+    .config-actions {
+      display: flex;
+      gap: 0.35rem;
+      flex: 0 0 auto;
+    }
+
+    .mini-action {
+      width: 2rem;
+      height: 2rem;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 0.8rem;
+      color: var(--text-secondary);
+      background: transparent;
+      cursor: pointer;
+      transition: 150ms ease;
+    }
+
+    .mini-action:hover {
+      color: var(--accent);
+      background: var(--surface-strong);
+      border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    }
+
+    .config-link {
+      direction: ltr;
+      text-align: left;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    /* ======================== APPS ======================== */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+
+    .app-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform 150ms ease, border-color 150ms ease;
+    }
+
+    .app-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+
+    .app-header {
+      min-height: 56px;
+      padding: 0 var(--space-4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .app-title {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      min-width: 0;
+      line-height: 1;
+    }
+
+    .app-title i {
+      color: var(--accent);
+      flex: 0 0 auto;
+      width: 1.25rem;
+      height: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1;
+    }
+
+    .app-title span {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .app-header .chev {
+      flex: 0 0 auto;
+      margin-inline-start: var(--space-2);
+      width: 1rem;
+      height: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      line-height: 1;
+      color: var(--text-secondary);
+    }
+
+    .app-links {
+      display: none;
+      padding: 0 var(--space-3) var(--space-3);
+      gap: var(--space-2);
+      flex-direction: column;
+    }
+
+    .app-card.open .app-links {
+      display: flex;
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-3);
+    }
+
+    .app-card.open .chev {
+      transform: rotate(180deg);
+    }
+
+    .app-link {
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      padding: 0.55rem 0.75rem;
+      border-radius: 0.9rem;
+      background: var(--surface-muted);
+      transition: 140ms ease;
+    }
+
+    .app-link:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    /* ======================== MODAL / TOAST ======================== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-content {
+      width: min(100%, 24rem);
+      padding: var(--space-5);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .qr-img {
+      width: 100%;
+      border-radius: var(--radius-md);
+      background: #fff;
+      padding: 0.7rem;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(1.25rem, env(safe-area-inset-bottom));
+      z-index: 200;
+      transform: translateX(-50%) translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 999px;
+      color: var(--text-primary);
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(16px);
+      transition: 180ms ease;
+      font-weight: 700;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .scroll-style {
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) transparent;
+    }
+
+    .scroll-style::-webkit-scrollbar { width: 0.35rem; }
+    .scroll-style::-webkit-scrollbar-track { background: transparent; }
+    .scroll-style::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 999px; }
+
+
+
+    /* v21: keep individual config cards readable even when many configs exist */
+    .config-list {
+      grid-auto-rows: minmax(88px, auto);
+    }
+
+    .config-item {
+      min-height: 88px;
+      height: auto;
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (max-width: 680px) {
+      .config-list {
+        grid-auto-rows: minmax(92px, auto);
+      }
+
+      .config-item {
+        min-height: 92px;
+      }
+    }
+
+    /* ======================== RESPONSIVE ======================== */
+    @media (max-width: 1060px) {
+      .stats-grid,
+      .apps-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .dashboard-two {
+        grid-template-columns: 1fr;
+        --dashboard-panel-height: auto;
+      }
+
+      .usage-ring,
+      .configs-section {
+        height: auto;
+        min-height: 0;
+        max-height: none;
+      }
+
+      .config-list {
+        height: 22rem;
+        max-height: 55vh;
+        overflow-y: auto;
+        flex: 0 0 auto;
+      }
+    }
+
+    @media (max-width: 680px) {
+      html,
+      body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      body { padding: 0.85rem; }
+
+      .container {
+        width: 100%;
+        max-width: 100%;
+        gap: var(--space-4);
+        overflow-x: clip;
+      }
+
+      .header-card,
+      .brand,
+      .action-group {
+        width: 100%;
+      }
+
+      .header-card {
+        align-items: stretch;
+      }
+
+      .action-group {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--space-2);
+      }
+
+      .btn-icon {
+        width: 100%;
+        min-width: 0;
+        padding-inline: 0.55rem;
+        white-space: normal;
+      }
+
+      .circle-btn {
+        width: 100%;
+        aspect-ratio: auto;
+      }
+
+      .stats-grid,
+      .apps-grid,
+      .traffic-details,
+      .countdown {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-card {
+        min-height: auto;
+        gap: var(--space-3);
+      }
+
+      .section-header,
+      .usage-ring {
+        padding: var(--space-4);
+      }
+
+      .dashboard-two {
+        --dashboard-panel-height: auto;
+      }
+
+      .usage-ring,
+      .configs-section {
+        height: auto;
+        min-height: 0;
+        max-height: none;
+      }
+
+      .config-list {
+        height: 22rem;
+        max-height: 55vh;
+        overflow-y: auto;
+        flex: 0 0 auto;
+      }
+    }
+
+
+    @media (max-width: 420px) {
+      .action-group {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .header-card,
+      .glass-panel,
+      .usage-ring,
+      .configs-section,
+      .stat-card,
+      .app-card {
+        border-radius: min(var(--radius-xl), 1.35rem);
+      }
+
+      .section-header,
+      .usage-ring,
+      .config-list {
+        padding-inline: var(--space-3);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+  </style>
+</head>
+<body data-fixed-version="config-scroll-v8">
+<div class="container">
+  <!-- HEADER CARD -->
+  <div class="glass-panel header-card">
+    <div class="brand">
+      <div class="icon-badge"><i class="fa-solid fa-bolt"></i></div>
+      <div class="title-section">
+        <h2 id="panelTitle">پنل اشتراک</h2>
+        <div class="sub-email" id="userEmailBadge"></div>
+      </div>
+    </div>
+    <div class="action-group">
+      <button id="copyMainBtn" class="btn-icon btn-primary icon-only-action" type="button" aria-label="کپی لینک اشتراک" title="کپی لینک اشتراک"><i class="fa-regular fa-copy"></i></button>
+      <button id="qrMainBtn" class="btn-icon icon-only-action" type="button" aria-label="نمایش QR اشتراک" title="نمایش QR اشتراک"><i class="fa-solid fa-qrcode"></i></button>
+      <button id="themeToggleBtn" class="btn-icon circle-btn" type="button" aria-label="تغییر حالت روشن و تاریک"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+      <button id="langToggleBtn" class="btn-icon circle-btn" type="button" aria-label="تغییر زبان"><i class="fa-solid fa-globe"></i></button>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-title"><i class="fa-solid fa-chart-line"></i> <span id="usedStatLabel">مصرف شده</span></div><div><span id="usedStatValue" class="stat-number">0</span> <span class="stat-unit" id="usedUnit">گیگابایت</span></div></div>
+    <div class="stat-card"><div class="stat-title"><i class="fa-solid fa-database"></i> <span id="totalStatLabel">حجم کل</span></div><div><span id="totalStatValue" class="stat-number">0</span> <span class="stat-unit">گیگابایت</span></div></div>
+    <div class="stat-card"><div class="stat-title"><i class="fa-regular fa-clock"></i> <span id="remainStatLabel">باقی‌مانده</span></div><div><span id="remainStatValue" class="stat-number">0</span> <span class="stat-unit">گیگابایت</span></div></div>
+    <div class="stat-card"><div class="stat-title"><i class="fa-regular fa-calendar"></i> <span id="expiryStatLabel">انقضا</span></div><div><span id="expiryDatePreview" class="stat-number" style="font-size:1.1rem;">—</span></div><div id="statusChip" class="trend-badge"><i class="fa-solid fa-circle-check"></i> فعال</div></div>
+  </div>
+
+  <!-- MAIN TWO COLUMN LAYOUT -->
+  <div class="dashboard-two">
+    <!-- LEFT: Usage & Countdown -->
+    <div class="usage-ring">
+      <div class="ring-wrapper">
+        <div class="progress-ring">
+          <svg width="180" height="180" viewBox="0 0 180 180">
+            <circle cx="90" cy="90" r="78" fill="none" stroke="rgba(148,163,184,0.2)" stroke-width="12" />
+            <circle id="progressCircle" cx="90" cy="90" r="78" fill="none" stroke="var(--accent)" stroke-width="12" stroke-dasharray="0 490" transform="rotate(-90 90 90)" stroke-linecap="round" />
+          </svg>
+          <div class="ring-percent"><span id="ringPercentText">0%</span><span id="ringUsageLabel" style="font-size:0.7rem;">مصرف</span></div>
+        </div>
+        <div class="traffic-details">
+          <div class="traffic-item"><i class="fa-solid fa-arrow-down"></i> <span id="downloadVal">۰ گیگابایت</span><br><span style="font-size:0.7rem;" id="downloadLabel">دریافت</span></div>
+          <div class="traffic-item"><i class="fa-solid fa-arrow-up"></i> <span id="uploadVal">۰ گیگابایت</span><br><span style="font-size:0.7rem;" id="uploadLabel">ارسال</span></div>
+        </div>
+      </div>
+      <div class="expiry-box">
+        <div><i class="fa-regular fa-hourglass-half"></i> <span id="expiryTextLabel">زمان باقی‌مانده</span></div>
+        <div class="countdown">
+          <div class="cd-unit"><div class="cd-number" id="daysLeft">0</div><span id="daysLabel">روز</span></div>
+          <div class="cd-unit"><div class="cd-number" id="hoursLeft">0</div><span id="hoursLabel">ساعت</span></div>
+          <div class="cd-unit"><div class="cd-number" id="minutesLeft">0</div><span id="minutesLabel">دقیقه</span></div>
+        </div>
+        <div id="lastOnlineInfo" style="margin-top: 0.7rem; font-size: 0.7rem; color: var(--text-secondary);"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Configs List -->
+    <div class="configs-section">
+      <div class="section-header">
+        <div><i class="fa-solid fa-key"></i> <strong id="configsTitle">کانفیگ‌های اختصاصی</strong></div>
+        <span id="configCountBadge" style="font-size:0.7rem; background: rgba(59,130,246,0.2); padding:0.2rem 0.7rem; border-radius:2rem;">0</span>
+      </div>
+      <div class="config-list scroll-style" id="configListContainer">
+        <div style="text-align:center; padding:2rem;" id="noConfigMsg">در حال بارگذاری...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPS SECTION -->
+  <div class="glass-panel" style="padding: 1.2rem 1.5rem;">
+    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;"><i class="fa-solid fa-download"></i><strong id="appsTitleApp">برنامه های پیشنهادی</strong></div>
+    <div id="appsGridContainer" class="apps-grid"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="qrModal" class="modal">
+  <div class="modal-content">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;"><strong id="modalQrTitle">QR کد اشتراک</strong><button id="closeModalBtn" type="button" aria-label="بستن" style="background:none; border:none; color:var(--text-primary); font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button></div>
+    <img id="qrModalImg" class="qr-img" alt="QR Code">
+    <p id="qrModalText" style="font-size:0.75rem; word-break: break-all; margin-top: 0.6rem; direction: ltr;"></p>
+  </div>
+</div>
+<div id="toastMessage" class="toast">Copied!</div>
+
+<script>
+  // ======================== VARIABLES FROM BACKEND ========================
+  const templateVars = {
+    sId: "{{ .sId }}", enabled: "{{ .enabled }}",
+    download: "{{ .download }}", upload: "{{ .upload }}", total: "{{ .total }}", used: "{{ .used }}", remained: "{{ .remained }}",
+    expire: "{{ .expire }}", lastOnline: "{{ .lastOnline }}",
+    downloadByte: "{{ .downloadByte }}", uploadByte: "{{ .uploadByte }}", totalByte: "{{ .totalByte }}",
+    subUrl: "{{ .subUrl }}", subJsonUrl: "{{ .subJsonUrl }}", subClashUrl: "{{ .subClashUrl }}",
+    subTitle: "{{ .subTitle }}", subSupportUrl: "{{ .subSupportUrl }}",
+    links: `{{ range .links }}{{ . }}
+{{ end }}`,
+    emails: `{{ range .emails }}{{ . }}
+{{ end }}`,
+    datepicker: "{{ .datepicker }}", result: "{{ .subUrl }}", jsonUrl: "{{ .subJsonUrl }}", clashUrl: "{{ .subClashUrl }}"
+  };
+  const BYTES_IN_GB = 1073741824;
+
+  // ---------- helper: normalize Persian/Arabic digits ----------
+  function normalizeDigits(str) {
+    if (typeof str !== 'string') return str;
+    const persian = '۰۱۲۳۴۵۶۷۸۹';
+    const arabic = '٠١٢٣٤٥٦٧٨٩';
+    return str.replace(/[۰-۹]/g, c => persian.indexOf(c)).replace(/[٠-٩]/g, c => arabic.indexOf(c));
+  }
+
+  function isPlaceholder(v) { return typeof v === "string" && v.includes("{{") && v.includes("}}"); }
+  function normalize(v, fb) { let t = String(v ?? "").trim(); if (!t || isPlaceholder(t)) return fb; return t; }
+  function toNumber(v) { 
+    let val = normalize(v, ""); 
+    if (!val) return null; 
+    let cleaned = normalizeDigits(val).replace(/[٬,]/g, '').replace(/٫/g, '.'); 
+    let n = Number(cleaned); 
+    return isNaN(n) ? null : n; 
+  }
+  function isUnlimitedText(v) { return /unlimited|infinite|∞|نامحدود/i.test(String(v ?? "")); }
+  function parseTrafficToBytes(val) { 
+    let text = normalize(val, ""); 
+    if (!text) return null; 
+    if (isUnlimitedText(text)) return 0; 
+    let normalizedNum = normalizeDigits(text);
+    let match = normalizedNum.match(/-?\d+(?:\.\d+)?/); 
+    if (!match) return null; 
+    let amount = parseFloat(match[0]); 
+    let multi = 1; 
+    if (/tb|ترابایت/i.test(normalizedNum)) multi = 1024**4; 
+    else if (/gb|گیگابایت/i.test(normalizedNum)) multi = BYTES_IN_GB; 
+    else if (/mb|مگابایت/i.test(normalizedNum)) multi = 1048576; 
+    return amount * multi; 
+  }
+  function parseExpireIso(exp) { 
+    let ts = toNumber(exp); 
+    if (ts === null || ts === 0) return null; 
+    let ms = ts < 1e12 ? ts * 1000 : ts; 
+    let d = new Date(ms); 
+    return isNaN(d.getTime()) ? null : d.toISOString(); 
+  }
+  function parseEmails(raw) { 
+    let txt = normalize(raw, ""); 
+    if (!txt) return []; 
+    if (txt.startsWith("[") && txt.endsWith("]")) try { let arr = JSON.parse(txt); return Array.isArray(arr) ? arr : []; } catch(e) {} 
+    return txt.split(/[,\s]+/).filter(Boolean); 
+  }
+  function parseLinks(raw) { 
+    let txt = normalize(raw, ""); 
+    return txt ? txt.split(/\r?\n/).filter(l => l.trim()) : []; 
+  }
+
+  // Build model
+  let totalByteNum = toNumber(templateVars.totalByte) ?? parseTrafficToBytes(templateVars.total);
+  let uploadByteNum = toNumber(templateVars.uploadByte) ?? parseTrafficToBytes(templateVars.upload);
+  let downloadByteNum = toNumber(templateVars.downloadByte) ?? parseTrafficToBytes(templateVars.download);
+  if (uploadByteNum === null) uploadByteNum = 0;
+  if (downloadByteNum === null) downloadByteNum = 0;
+  let usedBytes = (isNaN(uploadByteNum) ? 0 : uploadByteNum) + (isNaN(downloadByteNum) ? 0 : downloadByteNum);
+  let isDataUnlimited = (totalByteNum !== null && totalByteNum <= 0) || isUnlimitedText(templateVars.total);
+  let totalGB = (totalByteNum !== null && totalByteNum > 0) ? totalByteNum / BYTES_IN_GB : 0;
+  let usedGB = usedBytes / BYTES_IN_GB;
+  let remainGB = (!isDataUnlimited && totalGB > 0) ? Math.max(0, totalGB - usedGB) : 0;
+  let subLink = normalize(templateVars.subUrl, "") || normalize(templateVars.result, "") || "";
+  let emailsList = parseEmails(templateVars.emails);
+  let configsList = parseLinks(templateVars.links);
+  let expireISO = parseExpireIso(templateVars.expire);
+  let lastOnlineRaw = normalize(templateVars.lastOnline, "");
+  let isEnabled = String(templateVars.enabled).toLowerCase() !== "false";
+
+  // i18n
+  const locales = {
+    fa: { used: "مصرف شده", usage: "مصرف", total: "کل حجم", remain: "باقی‌مانده", expiry: "انقضا", days: "روز", hours: "ساعت", minutes: "دقیقه", copy: "کپی لینک", qr: "QR", active: "فعال", inactive: "غیرفعال", unlimited: "نامحدود", copyDone: "کپی شد!", copyFail: "خطا", download: "دریافت", upload: "ارسال", configTitle: "کانفیگ‌ها", appsTitle: "دانلود اپلیکیشن", noConfig: "کانفیگی موجود نیست", lastOnline: "آخرین آنلاین", timeExpired: "منقضی شده", timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده", expireDateFormat: "روز / ساعت / دقیقه", subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت" },
+    en: { used: "Used", usage: "Usage", total: "Total", remain: "Remaining", expiry: "Expiry", days: "Days", hours: "Hours", minutes: "Mins", copy: "Copy Link", qr: "QR", active: "Active", inactive: "Inactive", unlimited: "Unlimited", copyDone: "Copied!", copyFail: "Failed", download: "Download", upload: "Upload", configTitle: "Configs", appsTitle: "Client Apps", noConfig: "No configs available", lastOnline: "Last online", timeExpired: "Expired", timeUnlimited: "No limit", remainTime: "Remaining time", expireDateFormat: "day / hour / min", subscriptionHub: "Subscription Hub", volumeUnit: "GB" }
+  };
+  let currentLang = localStorage.getItem("nexus_lang") || "fa";
+  let isDark = (localStorage.getItem("nexus_theme") || "dark") !== "light";
+  let countdownInterval = null;
+
+  function t(key) { return locales[currentLang][key] || key; }
+  function volumeUnit() { return t("volumeUnit"); }
+  function formatVolume(value, digits = 1) { return `${formatFixed(value, digits)} ${volumeUnit()}`; }
+
+  // ---------- display helpers: Persian digits + safe timestamp/date formatting ----------
+  function toFaDigits(value) {
+    return String(value ?? "").replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
+  }
+
+  function formatDisplay(value) {
+    return currentLang === "fa" ? toFaDigits(value) : String(value ?? "");
+  }
+
+  function formatFixed(value, digits = 1) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return formatDisplay("0");
+    const rounded = Number(n.toFixed(digits));
+    const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
+    return formatDisplay(text);
+  }
+
+  function formatInteger(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return currentLang === "fa" ? "۰" : "0";
+    return formatDisplay(Math.floor(n));
+  }
+
+  function isPersianUI() {
+    return currentLang === "fa" || document.documentElement.getAttribute("dir") === "rtl";
+  }
+
+  function parseSafeTimestamp(raw) {
+    const valOriginal = normalize(raw, "");
+    if (!valOriginal) return null;
+    const val = normalizeDigits(valOriginal).trim();
+    if (!val || /^(0|-1|null|undefined|never|none|نامشخص|هیچ)$/i.test(val)) return null;
+
+    // Do not reinterpret an already formatted date as Unix time.
+    if (/^\d{2,5}\s*[\/-]\s*\d{1,2}\s*[\/-]\s*\d{1,2}/.test(val)) return null;
+
+    const match = val.match(/-?\d+(?:\.\d+)?/);
+    if (!match) return null;
+    const n = Number(match[0]);
+    if (!Number.isFinite(n) || n <= 0) return null;
+
+    const now = Date.now();
+    const candidates = [];
+    const add = (ms) => {
+      if (!Number.isFinite(ms) || ms <= 0) return;
+      const d = new Date(ms);
+      if (isNaN(d.getTime())) return;
+      const y = d.getFullYear();
+      if (y >= 2000 && y <= 2100) candidates.push({ date: d, score: Math.abs(ms - now) });
+    };
+
+    add(n);              // milliseconds
+    add(n * 1000);       // seconds
+    add(n / 10);         // one extra zero
+    add(n / 100);        // two extra zeros
+    add(n / 1000);       // microseconds -> ms OR 1000x ms
+    add(n / 10000);
+    add(n / 100000);
+    add(n / 1000000);    // high precision -> ms
+    add(n / 1000000000); // nanoseconds fallback
+
+    if (!candidates.length) return null;
+    candidates.sort((a, b) => a.score - b.score);
+    return candidates[0].date;
+  }
+
+  function pad2(value) {
+    return String(value).padStart(2, "0");
+  }
+
+  function gregorianToJalali(gy, gm, gd) {
+    const gDm = [0,31,59,90,120,151,181,212,243,273,304,334];
+    let jy = (gy <= 1600) ? 0 : 979;
+    gy -= (gy <= 1600) ? 621 : 1600;
+    const gy2 = (gm > 2) ? (gy + 1) : gy;
+    let days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + gDm[gm - 1];
+    jy += 33 * Math.floor(days / 12053);
+    days %= 12053;
+    jy += 4 * Math.floor(days / 1461);
+    days %= 1461;
+    if (days > 365) {
+      jy += Math.floor((days - 1) / 365);
+      days = (days - 1) % 365;
+    }
+    const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+    const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+    return [jy, jm, jd];
+  }
+
+  function formatDisplay(value) {
+    return isPersianUI() ? toFaDigits(value) : String(value ?? "");
+  }
+
+  function formatFixed(value, digits = 1) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return formatDisplay("0");
+    const rounded = Number(n.toFixed(digits));
+    const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
+    return formatDisplay(text);
+  }
+
+  function formatInteger(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return isPersianUI() ? "۰" : "0";
+    return formatDisplay(Math.floor(n));
+  }
+
+  function formatDateTime(date) {
+    if (!date || isNaN(date.getTime())) return "";
+    if (isPersianUI()) {
+      const [jy, jm, jd] = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
+      return toFaDigits(`${jy}/${pad2(jm)}/${pad2(jd)}، ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`);
+    }
+    return `${date.getFullYear()}/${pad2(date.getMonth() + 1)}/${pad2(date.getDate())}, ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
+  }
+
+  function formatDateOnly(date) {
+    if (!date || isNaN(date.getTime())) return "";
+    if (isPersianUI()) {
+      const [jy, jm, jd] = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
+      return toFaDigits(`${jy}/${pad2(jm)}/${pad2(jd)}`);
+    }
+    return `${date.getFullYear()}/${pad2(date.getMonth() + 1)}/${pad2(date.getDate())}`;
+  }
+
+  function normalizeFormattedDateText(raw) {
+    const valOriginal = normalize(raw, "");
+    if (!valOriginal) return "";
+    const val = normalizeDigits(valOriginal).trim();
+    const m = val.match(/^(\d{2,5})\s*([\/-])\s*(\d{1,2})\s*\2\s*(\d{1,2})(.*)$/);
+    if (!m) return "";
+    const y = Number(m[1]);
+    if ((y >= 1200 && y <= 1700) || (y >= 1900 && y <= 2100)) {
+      return isPersianUI() ? toFaDigits(val) : val;
+    }
+    return "";
+  }
+
+  function renderLastOnline() {
+    const box = document.getElementById("lastOnlineInfo");
+    const parsed = parseSafeTimestamp(templateVars.lastOnline);
+    const formattedRaw = normalizeFormattedDateText(templateVars.lastOnline);
+    const finalText = parsed ? formatDateTime(parsed) : formattedRaw;
+    box.innerHTML = finalText ? `<i class="fa-regular fa-eye"></i> ${t("lastOnline")}: ${finalText}` : "";
+  }
+
+  // DOM helpers
+  function showToast(msg) { let toast = document.getElementById("toastMessage"); toast.innerText = msg; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 1700); }
+  function showQR(data, title, label) { 
+    if (!data) { showToast(t("copyFail")); return; }
+    document.getElementById("modalQrTitle").innerText = title; 
+    document.getElementById("qrModalImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(data)}`; 
+    document.getElementById("qrModalText").innerText = label || data; 
+    document.getElementById("qrModal").classList.add("show"); 
+  }
+  function closeModal() { document.getElementById("qrModal").classList.remove("show"); }
+  async function copyText(text, successMsg) { 
+    if (!text) { showToast(t("copyFail")); return; }
+    try { await navigator.clipboard.writeText(text); showToast(successMsg); } catch(e) { showToast(t("copyFail")); } 
+  }
+
+  // render functions
+  function renderStatsAndRing() {
+    let unlimitedFlag = isDataUnlimited || totalGB <= 0;
+    let usedPercent = (!unlimitedFlag && totalGB > 0) ? (usedGB / totalGB) * 100 : 0;
+    document.getElementById("usedStatValue").innerText = formatFixed(usedGB, 1);
+    document.getElementById("totalStatValue").innerHTML = unlimitedFlag ? "∞" : formatFixed(totalGB, 1);
+    document.getElementById("remainStatValue").innerHTML = unlimitedFlag ? "∞" : formatFixed(remainGB, 1);
+    let ringPercentText = unlimitedFlag ? "∞" : formatInteger(usedPercent) + "%";
+    document.getElementById("ringPercentText").innerHTML = ringPercentText;
+    let circumference = 2 * Math.PI * 78;
+    let dash = unlimitedFlag ? circumference : (usedPercent / 100) * circumference;
+    document.getElementById("progressCircle").setAttribute("stroke-dasharray", `${dash} ${circumference}`);
+    let downloadGB = (downloadByteNum || 0) / BYTES_IN_GB;
+    let uploadGB = (uploadByteNum || 0) / BYTES_IN_GB;
+    document.getElementById("downloadVal").innerHTML = formatVolume(downloadGB, 1);
+    document.getElementById("uploadVal").innerHTML = formatVolume(uploadGB, 1);
+    document.getElementById("downloadLabel").innerText = t("download");
+    document.getElementById("uploadLabel").innerText = t("upload");
+    
+    let isActive = isEnabled && (!expireISO || new Date(expireISO) > new Date()) && (!(!unlimitedFlag && usedGB >= totalGB && totalGB > 0));
+    let statusSpan = document.getElementById("statusChip");
+    statusSpan.innerHTML = `<i class="fa-solid ${isActive ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> ${isActive ? t("active") : t("inactive")}`;
+    statusSpan.classList.toggle("is-inactive", !isActive);
+    statusSpan.style.background = isActive ? "var(--status-active-bg, rgba(57, 255, 20, 0.16))" : "var(--status-inactive-bg, rgba(255, 23, 68, 0.16))";
+    statusSpan.style.borderColor = isActive ? "var(--status-active-border, rgba(57, 255, 20, 0.60))" : "var(--status-inactive-border, rgba(255, 23, 68, 0.62))";
+    statusSpan.style.color = isActive ? "var(--status-active-text, #39ff14)" : "var(--status-inactive-text, #ff1744)";
+    if (expireISO && new Date(expireISO) > new Date()) 
+      document.getElementById("expiryDatePreview").innerText = formatDateOnly(new Date(expireISO));
+    else if (!expireISO) 
+      document.getElementById("expiryDatePreview").innerText = t("timeUnlimited");
+    else 
+      document.getElementById("expiryDatePreview").innerText = t("timeExpired");
+    
+  }
+
+  function renderExpiryCountdown() {
+    if (countdownInterval) clearInterval(countdownInterval);
+    if (!expireISO) {
+      document.getElementById("daysLeft").innerText = "∞"; 
+      document.getElementById("hoursLeft").innerText = "∞"; 
+      document.getElementById("minutesLeft").innerText = "∞";
+      document.getElementById("expiryTextLabel").innerText = t("timeUnlimited");
+      renderLastOnline();
+      return;
+    }
+    let end = new Date(expireISO).getTime();
+    countdownInterval = setInterval(() => {
+      let now = Date.now();
+      let diff = Math.max(0, end - now);
+      let days = Math.floor(diff / 86400000);
+      let hours = Math.floor((diff % 86400000) / 3600000);
+      let mins = Math.floor((diff % 3600000) / 60000);
+      document.getElementById("daysLeft").innerText = formatDisplay(days);
+      document.getElementById("hoursLeft").innerText = formatDisplay(hours);
+      document.getElementById("minutesLeft").innerText = formatDisplay(mins);
+      if (diff <= 0) clearInterval(countdownInterval);
+    }, 1000);
+    document.getElementById("expiryTextLabel").innerText = t("remainTime");
+    renderLastOnline();
+  }
+
+  function renderConfigs() {
+    let container = document.getElementById("configListContainer");
+    if (!configsList.length) { 
+      container.innerHTML = `<div style="text-align:center;padding:2rem;">${t("noConfig")}</div>`; 
+      document.getElementById("configCountBadge").innerText = formatDisplay(0); 
+      return; 
+    }
+    document.getElementById("configCountBadge").innerText = formatDisplay(configsList.length);
+    container.innerHTML = "";
+    configsList.forEach((cfg, idx) => {
+      let name = cfg.includes("#") ? decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " ")) : `${t("configTitle")} ${formatDisplay(idx+1)}`;
+      let div = document.createElement("div"); div.className = "config-item";
+      div.innerHTML = `<div class="config-meta"><span class="config-name">${escapeHtml(name)}</span><div class="config-actions"><button class="mini-action copyConfigBtn" data-raw=''><i class="fa-regular fa-copy"></i></button><button class="mini-action qrConfigBtn" data-raw='' data-name="${escapeHtml(name)}"><i class="fa-solid fa-qrcode"></i></button></div></div><div class="config-link">${escapeHtml(cfg.length > 80 ? cfg.substring(0, 80)+"..." : cfg)}</div>`;
+      let copyBtn = div.querySelector(".copyConfigBtn");
+      let qrBtn = div.querySelector(".qrConfigBtn");
+      copyBtn.dataset.raw = cfg;
+      qrBtn.dataset.raw = cfg;
+      copyBtn.addEventListener("click", (e) => { let link = e.currentTarget.dataset.raw; copyText(link, t("copyDone")); });
+      qrBtn.addEventListener("click", (e) => { let link = e.currentTarget.dataset.raw; let n = e.currentTarget.dataset.name; showQR(link, `${n} (${t("configTitle")})`, link); });
+      container.appendChild(div);
+    });
+  }
+
+  function renderApps() {
+    let apps = [
+      { name: "Android", icon: "fa-brands fa-android", list: [{ n: "v2rayNG", url: "https://github.com/2dust/v2rayNG/releases" }, { n: "Happ", url: "https://happ.app/" }] },
+      { name: "iOS", icon: "fa-brands fa-apple", list: [{ n: "Streisand", url: "https://apps.apple.com/search?term=streisand" }, { n: "Shadowrocket", url: "https://apps.apple.com/search?term=shadowrocket" }] },
+      { name: "Windows", icon: "fa-brands fa-windows", list: [{ n: "v2rayN", url: "https://github.com/2dust/v2rayN/releases" }, { n: "Nekoray", url: "https://github.com/MatsuriDayo/nekoray" }] },
+      { name: "macOS", icon: "fa-brands fa-apple", list: [{ n: "V2rayU", url: "https://github.com/yanue/V2rayU" }, { n: "Happ", url: "https://happ.app/" }] }
+    ];
+    let grid = document.getElementById("appsGridContainer");
+    grid.innerHTML = "";
+    apps.forEach(os => {
+      let card = document.createElement("div"); card.className = "app-card";
+      card.innerHTML = `<div class="app-header"><span class="app-title"><i class="${os.icon}"></i><span>${os.name}</span></span><i class="fa-solid fa-chevron-down chev"></i></div><div class="app-links"></div>`;
+      let linksDiv = card.querySelector(".app-links");
+      os.list.forEach(app => { let a = document.createElement("a"); a.href = app.url; a.target="_blank"; a.className="app-link"; a.innerHTML = `<span>${app.n}</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>`; linksDiv.appendChild(a); });
+      card.querySelector(".app-header").addEventListener("click", () => { card.classList.toggle("open"); });
+      grid.appendChild(card);
+    });
+  }
+
+  function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+  function forcePersianDigitsInTextNodes(root = document.body) {
+    if (!isPersianUI() || !root) return;
+    const skipTags = new Set(["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "CODE", "PRE"]);
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        if (!parent || skipTags.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+        if (parent.closest && parent.closest(".config-link, #qrModalText")) return NodeFilter.FILTER_REJECT;
+        return /\d/.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      }
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => { node.nodeValue = toFaDigits(node.nodeValue); });
+  }
+
+  let faDigitObserver = null;
+  function startPersianDigitObserver() {
+    if (faDigitObserver || typeof MutationObserver === "undefined") return;
+    faDigitObserver = new MutationObserver((mutations) => {
+      if (!isPersianUI()) return;
+      for (const m of mutations) {
+        if (m.type === "characterData" && m.target && /\d/.test(m.target.nodeValue || "")) {
+          const parent = m.target.parentElement;
+          if (parent && !(parent.closest && parent.closest(".config-link, #qrModalText"))) {
+            m.target.nodeValue = toFaDigits(m.target.nodeValue);
+          }
+        }
+        m.addedNodes && m.addedNodes.forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE && /\d/.test(node.nodeValue || "")) node.nodeValue = toFaDigits(node.nodeValue);
+          else if (node.nodeType === Node.ELEMENT_NODE) forcePersianDigitsInTextNodes(node);
+        });
+      }
+    });
+    faDigitObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  function getPanelTitle() {
+    return normalize(templateVars.subTitle, "") || t("subscriptionHub");
+  }
+
+  function updateDocumentTitle() {
+    document.title = getPanelTitle();
+  }
+
+  function updateUI() {
+    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+    document.documentElement.lang = currentLang === "fa" ? "fa" : "en";
+    document.documentElement.dir = currentLang === "fa" ? "rtl" : "ltr";
+    localStorage.setItem("nexus_theme", isDark ? "dark" : "light");
+    localStorage.setItem("nexus_lang", currentLang);
+    document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    updateDocumentTitle();
+    document.getElementById("panelTitle").innerText = getPanelTitle();
+    document.getElementById("usedStatLabel").innerText = t("used");
+    document.querySelectorAll(".stat-unit").forEach(el => { el.innerText = volumeUnit(); });
+    document.getElementById("totalStatLabel").innerText = t("total");
+    document.getElementById("remainStatLabel").innerText = t("remain");
+    document.getElementById("expiryStatLabel").innerText = t("expiry");
+    document.getElementById("daysLabel").innerText = t("days");
+    document.getElementById("hoursLabel").innerText = t("hours");
+    document.getElementById("minutesLabel").innerText = t("minutes");
+    document.getElementById("ringUsageLabel").innerText = t("usage");
+    document.getElementById("configsTitle").innerText = t("configTitle");
+    document.getElementById("appsTitleApp").innerText = t("appsTitle");
+    document.getElementById("copyMainBtn").setAttribute("aria-label", t("copy"));
+    document.getElementById("copyMainBtn").setAttribute("title", t("copy"));
+    document.getElementById("qrMainBtn").setAttribute("aria-label", t("qr"));
+    document.getElementById("qrMainBtn").setAttribute("title", t("qr"));
+    document.getElementById("themeToggleBtn").setAttribute("aria-label", currentLang === "fa" ? "تغییر حالت روشن و تاریک" : "Toggle light/dark mode");
+    document.getElementById("langToggleBtn").setAttribute("aria-label", currentLang === "fa" ? "تغییر زبان" : "Change language");
+    document.getElementById("closeModalBtn").setAttribute("aria-label", currentLang === "fa" ? "بستن" : "Close");
+    if (emailsList.length) 
+      document.getElementById("userEmailBadge").innerHTML = `<i class="fa-regular fa-user"></i> ${emailsList.join(currentLang === "fa" ? " ، " : ", ")}`;
+    else 
+      document.getElementById("userEmailBadge").innerHTML = "";
+    renderStatsAndRing();
+    renderExpiryCountdown();
+    renderConfigs();
+    renderApps();
+    forcePersianDigitsInTextNodes();
+  }
+
+  // event listeners
+  document.getElementById("copyMainBtn").addEventListener("click", () => copyText(subLink, t("copyDone")));
+  document.getElementById("qrMainBtn").addEventListener("click", () => { if(subLink) showQR(subLink, t("qr") + " " + t("configTitle"), subLink); else showToast(t("copyFail")); });
+  document.getElementById("themeToggleBtn").addEventListener("click", () => { isDark = !isDark; updateUI(); });
+  document.getElementById("langToggleBtn").addEventListener("click", () => { currentLang = currentLang === "fa" ? "en" : "fa"; updateUI(); });
+  document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+  document.getElementById("qrModal").addEventListener("click", (e) => { if(e.target === document.getElementById("qrModal")) closeModal(); });
+  document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
+
+  startPersianDigitObserver();
+  updateUI();
+  setInterval(() => { if (isPersianUI()) forcePersianDigitsInTextNodes(); }, 800);
+</script>
+</body>
+</html>
