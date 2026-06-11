@@ -3,7 +3,7 @@
 set -e
 
 INSTALL_DIR="/etc/x-ui/sub"
-INSTALL_FILE="$INSTALL_DIR/sub.html"
+INSTALL_FILE="$INSTALL_DIR/"
 SOURCE_URL="https://raw.githubusercontent.com/monhacer/AioSubX3/main/sub.html"
 
 echo "Installing / Updating AioSubX3..."
