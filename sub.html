@@ -1,6 +1,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl" data-theme="dark" data-build="v22-mobile-header-clean">
 <head>
@@ -62,6 +63,10 @@
       --status-inactive-border: rgba(255, 23, 68, 0.62);
       --status-inactive-text: #ff1744;
       --status-inactive-glow: rgba(255, 23, 68, 0.34);
+      --usage-green: #22c55e;
+      --usage-yellow: #eab308;
+      --usage-red: #ef4444;
+      --usage-purple: #8b5cf6;
     }
 
     html[data-theme="light"] {
@@ -1156,6 +1161,17 @@
       }
     }
 
+
+    /* v26: keep app accordion cards independent; opening one should not stretch siblings */
+    .apps-grid {
+      align-items: start !important;
+    }
+
+    .apps-grid > .app-card {
+      align-self: start !important;
+      height: auto !important;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         scroll-behavior: auto !important;
@@ -1266,7 +1282,9 @@
 {{ end }}`,
     datepicker: "{{ .datepicker }}", result: "{{ .subUrl }}", jsonUrl: "{{ .subJsonUrl }}", clashUrl: "{{ .subClashUrl }}"
   };
-  const BYTES_IN_GB = 1073741824;
+  const BYTES_IN_KB = 1024;
+  const BYTES_IN_MB = 1024 ** 2;
+  const BYTES_IN_GB = 1024 ** 3;
 
   // ---------- helper: normalize Persian/Arabic digits ----------
   function normalizeDigits(str) {
@@ -1347,7 +1365,50 @@
 
   function t(key) { return locales[currentLang][key] || key; }
   function volumeUnit() { return t("volumeUnit"); }
-  function formatVolume(value, digits = 1) { return `${formatFixed(value, digits)} ${volumeUnit()}`; }
+
+  function volumeUnitByBytes(bytes) {
+    const n = Number(bytes);
+    const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
+
+    if (isPersianUI()) {
+      if (safeBytes < BYTES_IN_KB) return "بایت";
+      if (safeBytes < BYTES_IN_MB) return "کیلوبایت";
+      if (safeBytes < BYTES_IN_GB) return "مگابایت";
+      return "گیگابایت";
+    }
+
+    if (safeBytes < BYTES_IN_KB) return "B";
+    if (safeBytes < BYTES_IN_MB) return "KB";
+    if (safeBytes < BYTES_IN_GB) return "MB";
+    return "GB";
+  }
+
+  function formatBytesParts(bytes, digits = 1) {
+    const n = Number(bytes);
+    const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
+    let value = safeBytes;
+
+    if (safeBytes < BYTES_IN_KB) value = safeBytes;
+    else if (safeBytes < BYTES_IN_MB) value = safeBytes / BYTES_IN_KB;
+    else if (safeBytes < BYTES_IN_GB) value = safeBytes / BYTES_IN_MB;
+    else value = safeBytes / BYTES_IN_GB;
+
+    return { value: formatFixed(value, digits), unit: volumeUnitByBytes(safeBytes) };
+  }
+
+  function formatBytes(bytes, digits = 1) {
+    const parts = formatBytesParts(bytes, digits);
+    return `${parts.value} ${parts.unit}`;
+  }
+
+  function setVolumeStat(valueId, unitId, bytes, digits = 1) {
+    const valueEl = document.getElementById(valueId);
+    if (!valueEl) return;
+    const parts = formatBytesParts(bytes, digits);
+    valueEl.innerText = parts.value;
+    const unitEl = unitId ? document.getElementById(unitId) : valueEl.parentElement?.querySelector(".stat-unit");
+    if (unitEl) unitEl.innerText = parts.unit;
+  }
 
   // ---------- display helpers: Persian digits + safe timestamp/date formatting ----------
   function toFaDigits(value) {
@@ -1513,19 +1574,40 @@
   // render functions
   function renderStatsAndRing() {
     let unlimitedFlag = isDataUnlimited || totalGB <= 0;
-    let usedPercent = (!unlimitedFlag && totalGB > 0) ? (usedGB / totalGB) * 100 : 0;
-    document.getElementById("usedStatValue").innerText = formatFixed(usedGB, 1);
-    document.getElementById("totalStatValue").innerHTML = unlimitedFlag ? "∞" : formatFixed(totalGB, 1);
-    document.getElementById("remainStatValue").innerHTML = unlimitedFlag ? "∞" : formatFixed(remainGB, 1);
+    let usedPercent = (!unlimitedFlag && totalGB > 0) ? Math.min(100, Math.max(0, (usedGB / totalGB) * 100)) : 0;
+    let remainBytes = (!unlimitedFlag && totalByteNum !== null && totalByteNum > 0) ? Math.max(0, totalByteNum - usedBytes) : 0;
+
+    setVolumeStat("usedStatValue", "usedUnit", usedBytes, 1);
+
+    if (unlimitedFlag) {
+      document.getElementById("totalStatValue").innerHTML = "∞";
+      document.getElementById("remainStatValue").innerHTML = "∞";
+    } else {
+      setVolumeStat("totalStatValue", null, totalByteNum || 0, 1);
+      setVolumeStat("remainStatValue", null, remainBytes, 1);
+    }
+
     let ringPercentText = unlimitedFlag ? "∞" : formatInteger(usedPercent) + "%";
     document.getElementById("ringPercentText").innerHTML = ringPercentText;
+
     let circumference = 2 * Math.PI * 78;
     let dash = unlimitedFlag ? circumference : (usedPercent / 100) * circumference;
-    document.getElementById("progressCircle").setAttribute("stroke-dasharray", `${dash} ${circumference}`);
-    let downloadGB = (downloadByteNum || 0) / BYTES_IN_GB;
-    let uploadGB = (uploadByteNum || 0) / BYTES_IN_GB;
-    document.getElementById("downloadVal").innerHTML = formatVolume(downloadGB, 1);
-    document.getElementById("uploadVal").innerHTML = formatVolume(uploadGB, 1);
+
+    let progressColor = "var(--usage-green)";
+    if (unlimitedFlag) {
+      progressColor = "var(--usage-purple)";
+    } else if (usedPercent >= 80) {
+      progressColor = "var(--usage-red)";
+    } else if (usedPercent >= 50) {
+      progressColor = "var(--usage-yellow)";
+    }
+
+    const progressCircle = document.getElementById("progressCircle");
+    progressCircle.setAttribute("stroke-dasharray", `${dash} ${circumference}`);
+    progressCircle.style.stroke = progressColor;
+    document.getElementById("ringPercentText").style.color = progressColor;
+    document.getElementById("downloadVal").innerHTML = formatBytes(downloadByteNum || 0, 1);
+    document.getElementById("uploadVal").innerHTML = formatBytes(uploadByteNum || 0, 1);
     document.getElementById("downloadLabel").innerText = t("download");
     document.getElementById("uploadLabel").innerText = t("upload");
     
