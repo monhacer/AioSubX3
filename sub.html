@@ -50,7 +50,6 @@
       --space-6: 2rem;
       --ring-focus: rgba(59, 130, 246, 0.45);
       --dashboard-panel-height: clamp(32rem, 58vh, 38rem);
-      /* v18: neon status colors are defined on :root so they work in dark mode too */
       --status-active-bg: rgba(57, 255, 20, 0.16);
       --status-active-border: rgba(57, 255, 20, 0.60);
       --status-active-text: #39ff14;
@@ -346,7 +345,6 @@
 
 
     /* ======================== MAIN LAYOUT ======================== */
-    /* v13: equal dashboard columns; configs scroll internally; accent switched from teal to blue */
     .dashboard-two {
       display: grid;
       grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.35fr);
@@ -737,9 +735,6 @@
     .scroll-style::-webkit-scrollbar-track { background: transparent; }
     .scroll-style::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 999px; }
 
-
-
-    /* v21: keep individual config cards readable even when many configs exist */
     .config-list {
       grid-auto-rows: minmax(88px, auto);
     }
@@ -841,7 +836,6 @@
         grid-template-columns: 1fr;
       }
 
-      /* mobile stats: keep two cards per row */
       .stats-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -875,7 +869,6 @@
       }
     }
 
-
     @media (max-width: 420px) {
       .action-group {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -897,9 +890,6 @@
       }
     }
 
-
-
-    /* v22: polished compact mobile header */
     @media (max-width: 680px) {
       .header-card {
         display: grid;
@@ -999,8 +989,6 @@
       }
     }
 
-
-    /* v23: mobile stats cards stay two per row */
     @media (max-width: 680px) {
       .stats-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1048,8 +1036,6 @@
       }
     }
 
-
-    /* v24: force mobile stats cards to 2 columns; placed last to beat earlier 1-column mobile rules */
     @media (max-width: 820px) {
       .container > .stats-grid,
       .stats-grid {
@@ -1100,7 +1086,7 @@
       }
 
       .stats-grid .stat-title {
-        font-size: 0.6rem;
+        font-size: 0.66rem;
       }
 
       .stats-grid .stat-number {
@@ -1108,9 +1094,6 @@
       }
     }
 
-
-    /* v25-final: stats cards are ALWAYS 2 per row on mobile.
-       This is placed at the very end and uses direct children to beat older rules. */
     @media screen and (max-width: 900px) {
       .container .stats-grid {
         display: grid !important;
@@ -1157,8 +1140,6 @@
       }
     }
 
-
-    /* v26: keep app accordion cards independent; opening one should not stretch siblings */
     .apps-grid {
       align-items: start !important;
     }
@@ -1181,7 +1162,6 @@
 </head>
 <body data-fixed-version="mobile-stats-2col-v25">
 <div class="container">
-  <!-- HEADER CARD -->
   <div class="glass-panel header-card">
     <div class="brand">
       <div class="icon-badge"><i class="fa-solid fa-bolt"></i></div>
@@ -1198,7 +1178,6 @@
     </div>
   </div>
 
-  <!-- STATS ROW -->
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-title"><i class="fa-solid fa-chart-line"></i> <span id="usedStatLabel">مصرف شده</span></div><div><span id="usedStatValue" class="stat-number">0</span> <span class="stat-unit" id="usedUnit">گیگابایت</span></div></div>
     <div class="stat-card"><div class="stat-title"><i class="fa-solid fa-database"></i> <span id="totalStatLabel">حجم کل</span></div><div><span id="totalStatValue" class="stat-number">0</span> <span class="stat-unit">گیگابایت</span></div></div>
@@ -1206,9 +1185,7 @@
     <div class="stat-card"><div class="stat-title"><i class="fa-regular fa-calendar"></i> <span id="expiryStatLabel">انقضا</span></div><div><span id="expiryDatePreview" class="stat-number" style="font-size:1.1rem;">—</span></div><div id="statusChip" class="trend-badge"><i class="fa-solid fa-circle-check"></i> فعال</div></div>
   </div>
 
-  <!-- MAIN TWO COLUMN LAYOUT -->
   <div class="dashboard-two">
-    <!-- LEFT: Usage & Countdown -->
     <div class="usage-ring">
       <div class="ring-wrapper">
         <div class="progress-ring">
@@ -1234,11 +1211,16 @@
       </div>
     </div>
 
-    <!-- RIGHT: Configs List -->
     <div class="configs-section">
       <div class="section-header">
         <div><i class="fa-solid fa-key"></i> <strong id="configsTitle">کانفیگ‌های اختصاصی</strong></div>
-        <span id="configCountBadge" style="font-size:0.7rem; background: rgba(59,130,246,0.2); padding:0.2rem 0.7rem; border-radius:2rem;">0</span>
+        <div style="display: flex; align-items: center; gap: var(--space-2);">
+          <button id="copyAllConfigsBtn" type="button" class="mini-action" style="width: auto; padding: 0.2rem 0.6rem; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 0.3rem; border-radius: 2rem;" title="کپی همه کانفیگ‌ها" aria-label="کپی همه کانفیگ‌ها">
+            <i class="fa-regular fa-copy"></i>
+            <span id="copyAllText">کپی همه</span>
+          </button>
+          <span id="configCountBadge" style="font-size:0.7rem; background: rgba(59,130,246,0.2); padding:0.2rem 0.7rem; border-radius:2rem;">0</span>
+        </div>
       </div>
       <div class="config-list scroll-style" id="configListContainer">
         <div style="text-align:center; padding:2rem;" id="noConfigMsg">در حال بارگذاری...</div>
@@ -1246,14 +1228,12 @@
     </div>
   </div>
 
-  <!-- APPS SECTION -->
   <div class="glass-panel" style="padding: 1.2rem 1.5rem;">
     <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;"><i class="fa-solid fa-download"></i><strong id="appsTitleApp">برنامه های پیشنهادی</strong></div>
     <div id="appsGridContainer" class="apps-grid"></div>
   </div>
 </div>
 
-<!-- MODAL -->
 <div id="qrModal" class="modal">
   <div class="modal-content">
     <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;"><strong id="modalQrTitle">QR کد اشتراک</strong><button id="closeModalBtn" type="button" aria-label="بستن" style="background:none; border:none; color:var(--text-primary); font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button></div>
@@ -1325,7 +1305,9 @@
     let txt = normalize(raw, ""); 
     if (!txt) return []; 
     if (txt.startsWith("[") && txt.endsWith("]")) try { let arr = JSON.parse(txt); return Array.isArray(arr) ? arr : []; } catch(e) {} 
-    return txt.split(/[,\s]+/).filter(Boolean); 
+    // حذف تکراری‌ها در سطح تبدیل آرایه
+    let items = txt.split(/[,\s]+/).filter(Boolean);
+    return [...new Set(items)];
   }
   function parseLinks(raw) { 
     let txt = normalize(raw, ""); 
@@ -1352,8 +1334,8 @@
 
   // i18n
   const locales = {
-    fa: { used: "مصرف شده", usage: "مصرف", total: "کل حجم", remain: "باقی‌مانده", expiry: "انقضا", days: "روز", hours: "ساعت", minutes: "دقیقه", copy: "کپی لینک", qr: "QR", active: "فعال", inactive: "غیرفعال", unlimited: "نامحدود", copyDone: "کپی شد!", copyFail: "خطا", download: "دریافت", upload: "ارسال", configTitle: "کانفیگ‌ها", appsTitle: "دانلود اپلیکیشن", noConfig: "کانفیگی موجود نیست", lastOnline: "آخرین آنلاین", timeExpired: "منقضی شده", timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده", expireDateFormat: "روز / ساعت / دقیقه", subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت" },
-    en: { used: "Used", usage: "Usage", total: "Total", remain: "Remaining", expiry: "Expiry", days: "Days", hours: "Hours", minutes: "Mins", copy: "Copy Link", qr: "QR", active: "Active", inactive: "Inactive", unlimited: "Unlimited", copyDone: "Copied!", copyFail: "Failed", download: "Download", upload: "Upload", configTitle: "Configs", appsTitle: "Client Apps", noConfig: "No configs available", lastOnline: "Last online", timeExpired: "Expired", timeUnlimited: "No limit", remainTime: "Remaining time", expireDateFormat: "day / hour / min", subscriptionHub: "Subscription Hub", volumeUnit: "GB" }
+    fa: { used: "مصرف شده", usage: "مصرف", total: "کل حجم", remain: "باقی‌مانده", expiry: "انقضا", days: "روز", hours: "ساعت", minutes: "دقیقه", copy: "کپی لینک", qr: "QR", active: "فعال", inactive: "غیرفعال", unlimited: "نامحدود", copyDone: "کپی شد!", copyFail: "خطا", download: "دریافت", upload: "ارسال", configTitle: "کانفیگ‌ها", appsTitle: "دانلود اپلیکیشن", noConfig: "کانفیگی موجود نیست", lastOnline: "آخرین آنلاین", timeExpired: "منقضی شده", timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده", expireDateFormat: "روز / ساعت / دقیقه", subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت", copyAll: "کپی همه", noConfigToCopy: "کانفیگی برای کپی وجود ندارد" },
+    en: { used: "Used", usage: "Usage", total: "Total", remain: "Remaining", expiry: "Expiry", days: "Days", hours: "Hours", minutes: "Mins", copy: "Copy Link", qr: "QR", active: "Active", inactive: "Inactive", unlimited: "Unlimited", copyDone: "Copied!", copyFail: "Failed", download: "Download", upload: "Upload", configTitle: "Configs", appsTitle: "Client Apps", noConfig: "No configs available", lastOnline: "Last online", timeExpired: "Expired", timeUnlimited: "No limit", remainTime: "Remaining time", expireDateFormat: "day / hour / min", subscriptionHub: "Subscription Hub", volumeUnit: "GB", copyAll: "Copy All", noConfigToCopy: "No configs to copy" }
   };
   let currentLang = localStorage.getItem("nexus_lang") || "fa";
   let isDark = (localStorage.getItem("nexus_theme") || "dark") !== "light";
@@ -1412,7 +1394,7 @@
   }
 
   function formatDisplay(value) {
-    return currentLang === "fa" ? toFaDigits(value) : String(value ?? "");
+    return isPersianUI() ? toFaDigits(value) : String(value ?? "");
   }
 
   function formatFixed(value, digits = 1) {
@@ -1425,7 +1407,7 @@
 
   function formatInteger(value) {
     const n = Number(value);
-    if (!Number.isFinite(n)) return currentLang === "fa" ? "۰" : "0";
+    if (!Number.isFinite(n)) return isPersianUI() ? "۰" : "0";
     return formatDisplay(Math.floor(n));
   }
 
@@ -1433,13 +1415,13 @@
     return currentLang === "fa" || document.documentElement.getAttribute("dir") === "rtl";
   }
 
+  // فرآیند تطبیق زمانی
   function parseSafeTimestamp(raw) {
     const valOriginal = normalize(raw, "");
     if (!valOriginal) return null;
     const val = normalizeDigits(valOriginal).trim();
     if (!val || /^(0|-1|null|undefined|never|none|نامشخص|هیچ)$/i.test(val)) return null;
 
-    // Do not reinterpret an already formatted date as Unix time.
     if (/^\d{2,5}\s*[\/-]\s*\d{1,2}\s*[\/-]\s*\d{1,2}/.test(val)) return null;
 
     const match = val.match(/-?\d+(?:\.\d+)?/);
@@ -1457,15 +1439,15 @@
       if (y >= 2000 && y <= 2100) candidates.push({ date: d, score: Math.abs(ms - now) });
     };
 
-    add(n);              // milliseconds
-    add(n * 1000);       // seconds
-    add(n / 10);         // one extra zero
-    add(n / 100);        // two extra zeros
-    add(n / 1000);       // microseconds -> ms OR 1000x ms
+    add(n);
+    add(n * 1000);
+    add(n / 10);
+    add(n / 100);
+    add(n / 1000);
     add(n / 10000);
     add(n / 100000);
-    add(n / 1000000);    // high precision -> ms
-    add(n / 1000000000); // nanoseconds fallback
+    add(n / 1000000);
+    add(n / 1000000000);
 
     if (!candidates.length) return null;
     candidates.sort((a, b) => a.score - b.score);
@@ -1493,24 +1475,6 @@
     const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
     const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
     return [jy, jm, jd];
-  }
-
-  function formatDisplay(value) {
-    return isPersianUI() ? toFaDigits(value) : String(value ?? "");
-  }
-
-  function formatFixed(value, digits = 1) {
-    const n = Number(value);
-    if (!Number.isFinite(n)) return formatDisplay("0");
-    const rounded = Number(n.toFixed(digits));
-    const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
-    return formatDisplay(text);
-  }
-
-  function formatInteger(value) {
-    const n = Number(value);
-    if (!Number.isFinite(n)) return isPersianUI() ? "۰" : "0";
-    return formatDisplay(Math.floor(n));
   }
 
   function formatDateTime(date) {
@@ -1620,7 +1584,6 @@
       document.getElementById("expiryDatePreview").innerText = t("timeUnlimited");
     else 
       document.getElementById("expiryDatePreview").innerText = t("timeExpired");
-    
   }
 
   function renderExpiryCountdown() {
@@ -1765,10 +1728,18 @@
     document.getElementById("themeToggleBtn").setAttribute("aria-label", currentLang === "fa" ? "تغییر حالت روشن و تاریک" : "Toggle light/dark mode");
     document.getElementById("langToggleBtn").setAttribute("aria-label", currentLang === "fa" ? "تغییر زبان" : "Change language");
     document.getElementById("closeModalBtn").setAttribute("aria-label", currentLang === "fa" ? "بستن" : "Close");
-    if (emailsList.length) 
-      document.getElementById("userEmailBadge").innerHTML = `<i class="fa-regular fa-user"></i> ${emailsList.join(currentLang === "fa" ? " ، " : ", ")}`;
-    else 
+    
+    document.getElementById("copyAllText").innerText = t("copyAll");
+    document.getElementById("copyAllConfigsBtn").setAttribute("title", t("copyAll"));
+    document.getElementById("copyAllConfigsBtn").setAttribute("aria-label", t("copyAll"));
+
+    // رندر منحصربه‌فرد فقط یک مقدار بدون تکرار
+    if (emailsList && emailsList.length > 0) {
+      document.getElementById("userEmailBadge").innerHTML = `<i class="fa-regular fa-user"></i> ${emailsList[0]}`;
+    } else {
       document.getElementById("userEmailBadge").innerHTML = "";
+    }
+
     renderStatsAndRing();
     renderExpiryCountdown();
     renderConfigs();
@@ -1784,6 +1755,15 @@
   document.getElementById("closeModalBtn").addEventListener("click", closeModal);
   document.getElementById("qrModal").addEventListener("click", (e) => { if(e.target === document.getElementById("qrModal")) closeModal(); });
   document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
+
+  document.getElementById("copyAllConfigsBtn").addEventListener("click", () => {
+    if (!configsList || configsList.length === 0) {
+      showToast(t("noConfigToCopy"));
+      return;
+    }
+    const allConfigsText = configsList.join("\n");
+    copyText(allConfigsText, t("copyDone"));
+  });
 
   startPersianDigitObserver();
   updateUI();
