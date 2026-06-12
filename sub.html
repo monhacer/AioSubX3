@@ -7,8 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
-
-    /* ======================== DESIGN SYSTEM / STANDARDIZED UI ======================== */
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -1305,7 +1303,6 @@
     let txt = normalize(raw, ""); 
     if (!txt) return []; 
     if (txt.startsWith("[") && txt.endsWith("]")) try { let arr = JSON.parse(txt); return Array.isArray(arr) ? arr : []; } catch(e) {} 
-    // حذف تکراری‌ها در سطح تبدیل آرایه
     let items = txt.split(/[,\s]+/).filter(Boolean);
     return [...new Set(items)];
   }
@@ -1415,7 +1412,6 @@
     return currentLang === "fa" || document.documentElement.getAttribute("dir") === "rtl";
   }
 
-  // فرآیند تطبیق زمانی
   function parseSafeTimestamp(raw) {
     const valOriginal = normalize(raw, "");
     if (!valOriginal) return null;
@@ -1733,7 +1729,6 @@
     document.getElementById("copyAllConfigsBtn").setAttribute("title", t("copyAll"));
     document.getElementById("copyAllConfigsBtn").setAttribute("aria-label", t("copyAll"));
 
-    // رندر منحصربه‌فرد فقط یک مقدار بدون تکرار
     if (emailsList && emailsList.length > 0) {
       document.getElementById("userEmailBadge").innerHTML = `<i class="fa-regular fa-user"></i> ${emailsList[0]}`;
     } else {
