@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-theme="dark" data-build="v34-vibrant-blue-usage-spacing">
+<html lang="fa" dir="rtl" data-theme="dark" data-build="v34-vibrant-blue-status-reverted">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -500,7 +500,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: clamp(1.5rem, 5vh, 3rem); /* فاصله‌گذاری داینامیک و تنفس‌پذیر */
+      gap: clamp(1.5rem, 5vh, 2.5rem);
       min-width: 0;
     }
 
@@ -559,17 +559,26 @@
       color: var(--accent);
       font-size: 1.1rem;
     }
-    .traffic-item span:first-of-type {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text-primary);
-      direction: ltr;
-      white-space: nowrap;
+    
+    .traffic-value-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
     }
-    .traffic-item span:last-child {
+    .traffic-value-row .stat-number {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    .traffic-value-row .stat-unit {
+      font-size: 0.75rem;
+      margin: 0;
+    }
+    .traffic-label {
       color: var(--text-secondary);
       font-size: 0.75rem;
       font-weight: 500;
+      margin-top: 0.15rem;
     }
 
     /* ======================== CONTENT GRID (Configs & Apps) ======================== */
@@ -826,9 +835,10 @@
     }
   </style>
 </head>
-<body data-fixed-version="mobile-stats-2col-v34-spacing-perfect">
+<body data-fixed-version="mobile-stats-2col-v36-status-reverted">
 <div class="container">
   
+  <!-- HEADER -->
   <div class="glass-panel header-card animate-in">
     <div class="brand">
       <div class="icon-badge shine-effect"><i class="fa-solid fa-bolt"></i></div>
@@ -848,8 +858,10 @@
     </div>
   </div>
 
+  <!-- HERO SECTION -->
   <div class="hero-grid animate-in delay-1">
     
+    <!-- Right Col (RTL): Stats, Quick Import & Countdown -->
     <div class="hero-stats-col">
       <div class="glass-panel quick-import-panel">
         <div class="qi-label">
@@ -874,9 +886,11 @@
           <div class="stat-title"><i class="fa-regular fa-clock"></i> <span id="remainStatLabel">باقی‌مانده</span></div>
           <div><span id="remainStatValue" class="stat-number">0</span> <span class="stat-unit">گیگابایت</span></div>
         </div>
+        <!-- کارت انقضا با بازگشت بج وضعیت به جایگاه قبلی -->
         <div class="stat-card">
           <div class="stat-title"><i class="fa-regular fa-calendar"></i> <span id="expiryStatLabel">انقضا</span></div>
           <div><span id="expiryDatePreview" class="stat-number" style="font-size:1.25rem;">—</span></div>
+          <div id="statusChip" class="trend-badge shine-effect"><i class="fa-solid fa-circle-check"></i> فعال</div>
         </div>
       </div>
 
@@ -891,42 +905,45 @@
       </div>
     </div>
 
+    <!-- Left Col (RTL): Usage Panel (Ring & Traffic) -->
     <div class="glass-panel usage-panel">
       
-      <div style="display: flex; flex-direction: column; align-items: center; gap: clamp(1rem, 2vh, 1.5rem); width: 100%;">
-        <div id="statusChip" class="trend-badge shine-effect" style="margin: 0; font-size: 0.85rem; padding: 0.35rem 1rem; border-radius: 999px;">
-          <i class="fa-solid fa-circle-check"></i> فعال
-        </div>
-        
-        <div class="progress-ring">
-          <svg width="192" height="192" viewBox="0 0 192 192">
-            <circle cx="96" cy="96" r="84" fill="none" stroke="var(--border)" stroke-width="12" />
-            <circle id="progressCircle" cx="96" cy="96" r="84" fill="none" stroke-width="12" stroke-dasharray="0 528" transform="rotate(-90 96 96)" stroke-linecap="round" />
-          </svg>
-          <div class="ring-percent">
-            <span id="ringPercentText">0%</span>
-            <span id="ringUsageLabel">مصرف</span>
-          </div>
+      <div class="progress-ring">
+        <svg width="192" height="192" viewBox="0 0 192 192">
+          <circle cx="96" cy="96" r="84" fill="none" stroke="var(--border)" stroke-width="12" />
+          <circle id="progressCircle" cx="96" cy="96" r="84" fill="none" stroke-width="12" stroke-dasharray="0 528" transform="rotate(-90 96 96)" stroke-linecap="round" />
+        </svg>
+        <div class="ring-percent">
+          <span id="ringPercentText">0%</span>
+          <span id="ringUsageLabel">مصرف</span>
         </div>
       </div>
       
       <div class="traffic-details">
         <div class="traffic-item">
           <i class="fa-solid fa-arrow-down"></i>
-          <span id="downloadVal">۰ گیگابایت</span>
-          <span id="downloadLabel">دریافت</span>
+          <div class="traffic-value-row">
+            <span id="downloadVal" class="stat-number">0</span>
+            <span id="downloadUnit" class="stat-unit">گیگابایت</span>
+          </div>
+          <span id="downloadLabel" class="traffic-label">دریافت</span>
         </div>
         <div class="traffic-item">
           <i class="fa-solid fa-arrow-up"></i>
-          <span id="uploadVal">۰ گیگابایت</span>
-          <span id="uploadLabel">ارسال</span>
+          <div class="traffic-value-row">
+            <span id="uploadVal" class="stat-number">0</span>
+            <span id="uploadUnit" class="stat-unit">گیگابایت</span>
+          </div>
+          <span id="uploadLabel" class="traffic-label">ارسال</span>
         </div>
       </div>
     </div>
 
   </div>
 
+  <!-- CONTENT GRID (Configs & Apps) -->
   <div class="content-grid animate-in delay-2">
+    <!-- Configs -->
     <div class="glass-panel configs-section">
       <div class="section-header">
         <div><i class="fa-solid fa-key"></i> <span id="configsTitle">کانفیگ‌های اختصاصی</span></div>
@@ -942,6 +959,7 @@
       </div>
     </div>
     
+    <!-- Apps -->
     <div class="glass-panel apps-section">
       <div class="section-header">
         <div><i class="fa-brands fa-app-store-ios"></i> <span id="appsTitleApp">برنامه‌های پیشنهادی</span></div>
@@ -1244,8 +1262,8 @@
     setTimeout(() => { progressCircle.setAttribute("stroke-dasharray", `${dash} ${circumference}`); }, 100);
     progressCircle.style.stroke = progressColor;
 
-    document.getElementById("downloadVal").innerHTML = formatBytes(downloadByteNum || 0, 1);
-    document.getElementById("uploadVal").innerHTML = formatBytes(uploadByteNum || 0, 1);
+    setVolumeStat("downloadVal", "downloadUnit", downloadByteNum || 0, 1);
+    setVolumeStat("uploadVal", "uploadUnit", uploadByteNum || 0, 1);
     document.getElementById("downloadLabel").innerText = t("download");
     document.getElementById("uploadLabel").innerText = t("upload");
     
