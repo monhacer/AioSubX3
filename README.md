@@ -8,11 +8,7 @@ Modern custom subscription page for **3x-ui v3.3.0+**
 
 ### 🌙 Dark Mode
 
-![AioSubX3 Dark Preview](preview-dark.png)
-
-### ☀️ Light Mode
-
-![AioSubX3 Light Preview](preview-light.png)
+![AioSubX3 Dark Preview](v2Dark.png)
 
 
 ## ✨ Features
