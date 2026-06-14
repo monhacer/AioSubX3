@@ -17,12 +17,11 @@ chmod 755 "$INSTALL_DIR"
 rm -f "$INSTALL_FILE"
 
 echo "Downloading..."
-wget -O "$INSTALL_FILE" "$SOURCE_URL"
+wget -O "$INSTALL_FILE" "$SOURCE_URL" 2>/dev/null
 
 if [ -f "$INSTALL_FILE" ]; then
   chmod 644 "$INSTALL_FILE"
-  echo "Success: $INSTALL_FILE"
-  ls -la "$INSTALL_FILE"
+  echo "Success: $INSTALL_DIR/"
 else
   echo "Failed!"
   exit 1
