@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark" data-build="v34-vibrant-blue-usage-spacing">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>{{ .subTitle }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      color-scheme: dark;
+      --font-sans: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      
+      /* Vibrant Blue Dark Theme */
+      --bg: #040f21;
+      --bg-soft: #0a192f;
+      --surface: rgba(13, 27, 46, 0.7);
+      --surface-strong: rgba(16, 33, 56, 0.95);
+      --surface-muted: rgba(56, 189, 248, 0.06);
+      
+      --border: rgba(56, 189, 248, 0.15);
+      --border-strong: rgba(56, 189, 248, 0.35);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #bae6fd;
+      --text-muted: #7dd3fc;
+      
+      --accent: #0ea5e9;
+      --accent-strong: #38bdf8;
+      --accent-soft: rgba(14, 165, 233, 0.15);
+      --accent-glow: rgba(14, 165, 233, 0.4);
+      
+      --danger: #ef4444;
+      --warning: #eab308;
+      --success: #10b981;
+      
+      /* Status Colors */
+      --status-active-bg: rgba(16, 185, 129, 0.15);
+      --status-active-border: rgba(16, 185, 129, 0.4);
+      --status-active-text: #34d399;
+      --status-inactive-bg: rgba(239, 68, 68, 0.15);
+      --status-inactive-border: rgba(239, 68, 68, 0.4);
+      --status-inactive-text: #f87171;
+
+      --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.35);
+      --shadow-glow: 0 0 20px var(--accent-glow);
+      
+      --radius-sm: 0.75rem;
+      --radius-md: 1rem;
+      --radius-lg: 1.25rem;
+      --radius-xl: 1.5rem;
+      
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1.25rem;
+      --space-5: 2rem;
+      
+      --ring-focus: rgba(56, 189, 248, 0.4);
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f0f9ff;
+      --bg-soft: #e0f2fe;
+      --surface: rgba(255, 255, 255, 0.85);
+      --surface-strong: #ffffff;
+      --surface-muted: rgba(2, 132, 199, 0.05);
+      
+      --border: rgba(2, 132, 199, 0.15);
+      --border-strong: rgba(2, 132, 199, 0.3);
+      
+      --text-primary: #0f172a;
+      --text-secondary: #0369a1;
+      --text-muted: #075985;
+      
+      --accent: #0284c7;
+      --accent-strong: #0369a1;
+      --accent-soft: rgba(2, 132, 199, 0.12);
+      --accent-glow: rgba(2, 132, 199, 0.25);
+      
+      --status-active-bg: rgba(16, 185, 129, 0.15);
+      --status-active-border: rgba(16, 185, 129, 0.4);
+      --status-active-text: #059669;
+      --status-inactive-bg: rgba(239, 68, 68, 0.15);
+      --status-inactive-border: rgba(239, 68, 68, 0.4);
+      --status-inactive-text: #dc2626;
+
+      --shadow-sm: 0 4px 20px rgba(14, 165, 233, 0.08);
+      --shadow-lg: 0 12px 40px rgba(14, 165, 233, 0.12);
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      background: var(--bg);
+      background-image: 
+        radial-gradient(circle at 15% 0%, var(--bg-soft), transparent 45rem),
+        radial-gradient(circle at 85% 100%, var(--bg-soft), transparent 45rem);
+      background-attachment: fixed;
+      padding: clamp(0.75rem, 2vw, 2rem);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+
+    /* Shine / Light Sweep Effect */
+    @keyframes shine {
+      0% { left: -150%; }
+      20% { left: 150%; }
+      100% { left: 150%; }
+    }
+    .shine-effect {
+      position: relative;
+      overflow: hidden;
+    }
+    .shine-effect::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+      transform: skewX(-25deg);
+      animation: shine 4s infinite ease-in-out;
+      pointer-events: none;
+    }
+    html[data-theme="light"] .btn-primary.shine-effect::after {
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), transparent);
+    }
+
+    button, a { font: inherit; max-width: 100%; text-decoration: none; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--ring-focus); outline-offset: 2px; }
+
+    .container {
+      width: min(100%, 1100px);
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      min-width: 0;
+    }
+
+    .glass-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      max-width: 100%;
+      min-width: 0;
+    }
+    .glass-panel:hover {
+      border-color: var(--border-strong);
+    }
+
+    /* ======================== HEADER ======================== */
+    .header-card {
+      padding: var(--space-4) clamp(1.25rem, 3vw, 2rem);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      min-width: 0;
+    }
+
+    .icon-badge {
+      width: 3.5rem;
+      height: 3.5rem;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-md);
+      font-size: 1.5rem;
+      color: #fff;
+      background: var(--accent);
+      box-shadow: var(--shadow-glow);
+      flex: 0 0 auto;
+    }
+
+    .title-section {
+      min-width: 0;
+    }
+
+    .title-section h2 {
+      font-size: clamp(1.25rem, 2vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sub-email {
+      margin-top: 0.25rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    .btn-icon {
+      min-height: 2.75rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.5rem 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--accent);
+      background: var(--accent-soft);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-icon:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: transparent;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px var(--accent-glow);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--accent);
+      border-color: transparent;
+      box-shadow: var(--shadow-glow);
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .circle-btn {
+      width: 2.75rem;
+      padding-inline: 0;
+      aspect-ratio: 1;
+      color: var(--text-primary);
+      background: transparent;
+    }
+    .circle-btn:hover {
+      color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: none;
+    }
+
+    /* ======================== NEW BALANCED HERO GRID ======================== */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr);
+      gap: var(--space-4);
+      align-items: stretch;
+    }
+
+    /* Left Side (RTL Right): Stats & Actions */
+    .hero-stats-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      min-width: 0;
+    }
+
+    .quick-import-panel {
+      padding: var(--space-3) clamp(1rem, 2vw, 1.5rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      border-radius: var(--radius-lg);
+    }
+
+    .qi-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent);
+    }
+
+    .qi-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .qi-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface-strong);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .qi-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .stats-grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-4);
+      min-width: 0;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.35rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      min-width: 0;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .stat-title {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0;
+    }
+    .stat-title i {
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .stat-number {
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      direction: ltr;
+      display: inline-block;
+      color: var(--text-primary);
+    }
+
+    .stat-unit {
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-inline-start: 0.25rem;
+    }
+
+    .trend-badge {
+      width: fit-content;
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.15rem;
+    }
+
+    #statusChip {
+      background: var(--status-active-bg);
+      border: 1px solid var(--status-active-border);
+      color: var(--status-active-text);
+    }
+    #statusChip.is-inactive {
+      background: var(--status-inactive-bg);
+      border-color: var(--status-inactive-border);
+      color: var(--status-inactive-text);
+    }
+
+    /* شمارشگر */
+    .countdown-wrapper {
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-3);
+      margin-top: var(--space-2);
+      width: 100%;
+    }
+
+    .cd-unit {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem;
+    }
+
+    .cd-number {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      font-weight: 700;
+      direction: ltr;
+      color: var(--text-primary);
+    }
+    .cd-unit span {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: block;
+    }
+
+    /* Last Online Badge Styling */
+    .last-online-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      padding: 0.35rem 0.85rem;
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .last-online-badge i {
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    /* Right Side (RTL Left): Usage Panel */
+    .usage-panel {
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1.5rem, 5vh, 3rem); /* فاصله‌گذاری داینامیک و تنفس‌پذیر */
+      min-width: 0;
+    }
+
+    .progress-ring {
+      position: relative;
+      width: 12rem;
+      height: 12rem;
+      filter: drop-shadow(0 8px 16px var(--accent-glow));
+    }
+
+    .ring-fill, #progressCircle {
+      stroke: var(--accent);
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s ease;
+    }
+
+    .ring-percent {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 2.4rem;
+      line-height: 1;
+      color: var(--text-primary);
+    }
+    .ring-percent span:last-child {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .traffic-details {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-4);
+    }
+
+    .traffic-item {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      min-width: 0;
+    }
+    .traffic-item i {
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+    .traffic-item span:first-of-type {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      direction: ltr;
+      white-space: nowrap;
+    }
+    .traffic-item span:last-child {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* ======================== CONTENT GRID (Configs & Apps) ======================== */
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: var(--space-4);
+      align-items: start;
+      width: 100%;
+    }
+
+    .configs-section, .apps-section {
+      display: flex;
+      flex-direction: column;
+      height: clamp(24rem, 50vh, 24rem); 
+      min-width: 0; 
+    }
+
+    .section-header {
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .section-header i { color: var(--accent); margin-inline-end: 0.4rem; }
+
+    .config-list, .apps-grid {
+      padding: var(--space-4);
+      padding-bottom: var(--space-5);
+      flex: 1 1 auto;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      min-height: 0; 
+    }
+
+    .config-item {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      transition: all 0.2s ease;
+      min-width: 0;
+      flex-shrink: 0;
+    }
+    .config-item:hover {
+      border-color: var(--accent);
+      background: var(--surface-strong);
+    }
+
+    .config-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      min-width: 0; 
+    }
+
+    .config-name {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: fit-content;
+      max-width: 75%;
+      background: var(--accent-soft);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      direction: ltr;
+    }
+
+    .config-actions { display: flex; gap: 0.4rem; flex: 0 0 auto; }
+
+    .mini-action {
+      width: 2.2rem;
+      height: 2.2rem;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      background: var(--surface-strong);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .mini-action:hover {
+      color: #fff;
+      background: var(--accent);
+      border-color: transparent;
+    }
+
+    .config-link { display: none; }
+
+    /* APPS */
+    .app-card {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.2s;
+      flex-shrink: 0;
+    }
+    .app-card:hover { border-color: var(--accent); }
+
+    .app-header {
+      padding: 1rem var(--space-4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .app-title { display: inline-flex; align-items: center; gap: 0.75rem; }
+    .app-title i { font-size: 1.2rem; color: var(--accent); width: 1.25rem; text-align: center; }
+
+    .app-links {
+      display: none;
+      padding: 0 var(--space-4) var(--space-4);
+      gap: 0.5rem;
+      flex-direction: column;
+    }
+    .app-card.open .app-links {
+      display: flex;
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-4);
+    }
+    .app-card.open .fa-chevron-down { transform: rotate(180deg); }
+
+    .app-link {
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.85rem;
+      border-radius: var(--radius-sm);
+      background: var(--surface-strong);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+    .app-link:hover { background: var(--accent-soft); color: var(--accent); }
+
+    /* ======================== MODAL / TOAST ======================== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .modal.show { display: flex; }
+
+    .modal-content {
+      width: min(100%, 20rem);
+      padding: var(--space-4);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      box-shadow: var(--shadow-lg);
+    }
+    .qr-img { width: 100%; border-radius: var(--radius-sm); background: #fff; padding: 0.75rem; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(1.5rem, env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      padding: 0.6rem 1.25rem;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--accent);
+      box-shadow: var(--shadow-glow);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Scrollbar */
+    .scroll-style::-webkit-scrollbar { width: 4px; }
+    .scroll-style::-webkit-scrollbar-track { background: transparent; }
+    .scroll-style::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+    .scroll-style::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ======================== RESPONSIVE ======================== */
+    @media (max-width: 992px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .content-grid { grid-template-columns: 1fr; }
+      .configs-section, .apps-section { height: 26rem; }
+    }
+
+    @media (max-width: 640px) {
+      .container { gap: var(--space-3); }
+      
+      /* Header Mobile Restructure */
+      .header-card {
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        gap: 0.6rem;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .brand {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 0.85rem 1rem;
+        box-shadow: var(--shadow-sm);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        justify-content: flex-start;
+      }
+      .action-group {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 0.6rem;
+        box-shadow: var(--shadow-sm);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        justify-content: space-between;
+        gap: 0.4rem;
+      }
+      .action-group .btn-icon { flex: 1; padding-inline: 0.5rem;}
+      .action-group .circle-btn { flex: 0 0 2.5rem; width: 2.5rem; height: 2.5rem; min-height: auto;}
+      
+      .stats-grid-2x2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+      .stat-card { padding: 0.85rem; }
+      
+      .usage-panel { padding: 1.5rem 1rem; gap: 1.5rem; }
+      
+      .configs-section, .apps-section { height: auto; max-height: 28rem; }
+    }
+  </style>
+</head>
+<body data-fixed-version="mobile-stats-2col-v34-spacing-perfect">
+<div class="container">
+  
+  <div class="glass-panel header-card animate-in">
+    <div class="brand">
+      <div class="icon-badge shine-effect"><i class="fa-solid fa-bolt"></i></div>
+      <div class="title-section">
+        <h2 id="panelTitle">پنل اشتراک</h2>
+        <div class="sub-email" id="userEmailBadge"></div>
+      </div>
+    </div>
+    <div class="action-group">
+      <button id="copyMainBtn" class="btn-icon btn-primary shine-effect" type="button" title="کپی لینک اشتراک">
+        <i class="fa-regular fa-copy"></i> <span id="copyMainText">کپی لینک</span>
+      </button>
+      <button id="qrMainBtn" class="btn-icon circle-btn" type="button" title="نمایش QR"><i class="fa-solid fa-qrcode"></i></button>
+      <a id="supportBtn" class="btn-icon circle-btn" target="_blank" style="display: none;"><i class="fa-brands fa-telegram"></i></a>
+      <button id="themeToggleBtn" class="btn-icon circle-btn" type="button"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+      <button id="langToggleBtn" class="btn-icon circle-btn" type="button"><i class="fa-solid fa-globe"></i></button>
+    </div>
+  </div>
+
+  <div class="hero-grid animate-in delay-1">
+    
+    <div class="hero-stats-col">
+      <div class="glass-panel quick-import-panel">
+        <div class="qi-label">
+          <i class="fa-solid fa-bolt"></i> <span id="quickImportLabel">افزودن سریع</span>
+        </div>
+        <div class="qi-buttons">
+          <a id="btnImportIncy" href="#" class="qi-btn"><i class="fa-solid fa-download"></i> Incy</a>
+          <a id="btnImportHapp" href="#" class="qi-btn"><i class="fa-solid fa-download"></i> Happ</a>
+        </div>
+      </div>
+      
+      <div class="stats-grid-2x2">
+        <div class="stat-card">
+          <div class="stat-title"><i class="fa-solid fa-chart-line"></i> <span id="usedStatLabel">مصرف شده</span></div>
+          <div><span id="usedStatValue" class="stat-number">0</span> <span class="stat-unit" id="usedUnit">گیگابایت</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title"><i class="fa-solid fa-database"></i> <span id="totalStatLabel">حجم کل</span></div>
+          <div><span id="totalStatValue" class="stat-number">0</span> <span class="stat-unit">گیگابایت</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title"><i class="fa-regular fa-clock"></i> <span id="remainStatLabel">باقی‌مانده</span></div>
+          <div><span id="remainStatValue" class="stat-number">0</span> <span class="stat-unit">گیگابایت</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title"><i class="fa-regular fa-calendar"></i> <span id="expiryStatLabel">انقضا</span></div>
+          <div><span id="expiryDatePreview" class="stat-number" style="font-size:1.25rem;">—</span></div>
+        </div>
+      </div>
+
+      <div class="glass-panel countdown-wrapper">
+        <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);"><i class="fa-regular fa-hourglass-half" style="color: var(--accent); margin-inline-end: 0.3rem;"></i> <span id="expiryTextLabel">زمان باقی‌مانده</span></div>
+        <div class="countdown">
+          <div class="cd-unit"><div class="cd-number" id="daysLeft">0</div><span id="daysLabel">روز</span></div>
+          <div class="cd-unit"><div class="cd-number" id="hoursLeft">0</div><span id="hoursLabel">ساعت</span></div>
+          <div class="cd-unit"><div class="cd-number" id="minutesLeft">0</div><span id="minutesLabel">دقیقه</span></div>
+        </div>
+        <div id="lastOnlineInfo" style="display: none;"></div>
+      </div>
+    </div>
+
+    <div class="glass-panel usage-panel">
+      
+      <div style="display: flex; flex-direction: column; align-items: center; gap: clamp(1rem, 2vh, 1.5rem); width: 100%;">
+        <div id="statusChip" class="trend-badge shine-effect" style="margin: 0; font-size: 0.85rem; padding: 0.35rem 1rem; border-radius: 999px;">
+          <i class="fa-solid fa-circle-check"></i> فعال
+        </div>
+        
+        <div class="progress-ring">
+          <svg width="192" height="192" viewBox="0 0 192 192">
+            <circle cx="96" cy="96" r="84" fill="none" stroke="var(--border)" stroke-width="12" />
+            <circle id="progressCircle" cx="96" cy="96" r="84" fill="none" stroke-width="12" stroke-dasharray="0 528" transform="rotate(-90 96 96)" stroke-linecap="round" />
+          </svg>
+          <div class="ring-percent">
+            <span id="ringPercentText">0%</span>
+            <span id="ringUsageLabel">مصرف</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="traffic-details">
+        <div class="traffic-item">
+          <i class="fa-solid fa-arrow-down"></i>
+          <span id="downloadVal">۰ گیگابایت</span>
+          <span id="downloadLabel">دریافت</span>
+        </div>
+        <div class="traffic-item">
+          <i class="fa-solid fa-arrow-up"></i>
+          <span id="uploadVal">۰ گیگابایت</span>
+          <span id="uploadLabel">ارسال</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="content-grid animate-in delay-2">
+    <div class="glass-panel configs-section">
+      <div class="section-header">
+        <div><i class="fa-solid fa-key"></i> <span id="configsTitle">کانفیگ‌های اختصاصی</span></div>
+        <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <button id="copyAllConfigsBtn" type="button" class="btn-icon" style="padding: 0.3rem 0.8rem; min-height: 2rem; font-size: 0.75rem;">
+            <i class="fa-regular fa-copy"></i> <span id="copyAllText">کپی همه</span>
+          </button>
+          <span id="configCountBadge" style="font-size: 0.8rem; font-weight: 600; background: var(--accent-soft); color: var(--accent); padding: 0.2rem 0.7rem; border-radius: 999px;">0</span>
+        </div>
+      </div>
+      <div class="config-list scroll-style" id="configListContainer">
+        <div style="text-align:center; padding:2rem; color: var(--text-muted);" id="noConfigMsg">در حال بارگذاری...</div>
+      </div>
+    </div>
+    
+    <div class="glass-panel apps-section">
+      <div class="section-header">
+        <div><i class="fa-brands fa-app-store-ios"></i> <span id="appsTitleApp">برنامه‌های پیشنهادی</span></div>
+      </div>
+      <div id="appsGridContainer" class="apps-grid scroll-style"></div>
+    </div>
+  </div>
+
+</div>
+
+<div id="qrModal" class="modal">
+  <div class="modal-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <strong id="modalQrTitle" style="font-size: 1rem; color: var(--text-primary); direction: ltr;">QR کد اشتراک</strong>
+      <button id="closeModalBtn" type="button" style="background:none; border:none; color:var(--text-secondary); font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <img id="qrModalImg" class="qr-img" alt="QR Code">
+    <p id="qrModalText" style="display: none;"></p>
+  </div>
+</div>
+<div id="toastMessage" class="toast">کپی شد!</div>
+
+<script>
+  // ======================== VARIABLES FROM BACKEND ========================
+  const templateVars = {
+    sId: "{{ .sId }}", enabled: "{{ .enabled }}",
+    download: "{{ .download }}", upload: "{{ .upload }}", total: "{{ .total }}", used: "{{ .used }}", remained: "{{ .remained }}",
+    expire: "{{ .expire }}", lastOnline: "{{ .lastOnline }}",
+    downloadByte: "{{ .downloadByte }}", uploadByte: "{{ .uploadByte }}", totalByte: "{{ .totalByte }}",
+    subUrl: "{{ .subUrl }}", subJsonUrl: "{{ .subJsonUrl }}", subClashUrl: "{{ .subClashUrl }}",
+    subTitle: "{{ .subTitle }}", subSupportUrl: "{{ .subSupportUrl }}",
+    links: `{{ range .links }}{{ . }}\n{{ end }}`,
+    emails: `{{ range .emails }}{{ . }}\n{{ end }}`,
+    datepicker: "{{ .datepicker }}", result: "{{ .subUrl }}", jsonUrl: "{{ .subJsonUrl }}", clashUrl: "{{ .subClashUrl }}"
+  };
+
+  const BYTES_IN_KB = 1024;
+  const BYTES_IN_MB = 1024 ** 2;
+  const BYTES_IN_GB = 1024 ** 3;
+
+  function normalizeDigits(str) {
+    if (typeof str !== 'string') return str;
+    const persian = '۰۱۲۳۴۵۶۷۸۹';
+    const arabic = '٠١٢٣٤٥٦٧٨٩';
+    return str.replace(/[۰-۹]/g, c => persian.indexOf(c)).replace(/[٠-٩]/g, c => arabic.indexOf(c));
+  }
+
+  function isPlaceholder(v) { return typeof v === "string" && v.includes("{{") && v.includes("}}"); }
+  function normalize(v, fb) { let t = String(v ?? "").trim(); if (!t || isPlaceholder(t)) return fb; return t; }
+  function toNumber(v) { 
+    let val = normalize(v, ""); 
+    if (!val) return null; 
+    let cleaned = normalizeDigits(val).replace(/[٬,]/g, '').replace(/٫/g, '.'); 
+    let n = Number(cleaned); 
+    return isNaN(n) ? null : n; 
+  }
+  function isUnlimitedText(v) { return /unlimited|infinite|∞|نامحدود/i.test(String(v ?? "")); }
+  function parseTrafficToBytes(val) { 
+    let text = normalize(val, ""); 
+    if (!text) return null; 
+    if (isUnlimitedText(text)) return 0; 
+    let normalizedNum = normalizeDigits(text);
+    let match = normalizedNum.match(/-?\d+(?:\.\d+)?/); 
+    if (!match) return null; 
+    let amount = parseFloat(match[0]); 
+    let multi = 1; 
+    if (/tb|ترابایت/i.test(normalizedNum)) multi = 1024**4; 
+    else if (/gb|گیگابایت/i.test(normalizedNum)) multi = BYTES_IN_GB; 
+    else if (/mb|مگابایت/i.test(normalizedNum)) multi = 1048576; 
+    return amount * multi; 
+  }
+  function parseExpireIso(exp) { 
+    let ts = toNumber(exp); 
+    if (ts === null || ts === 0) return null; 
+    let ms = ts < 1e12 ? ts * 1000 : ts; 
+    let d = new Date(ms); 
+    return isNaN(d.getTime()) ? null : d.toISOString(); 
+  }
+  function parseEmails(raw) { 
+    let txt = normalize(raw, ""); 
+    if (!txt) return []; 
+    if (txt.startsWith("[") && txt.endsWith("]")) try { let arr = JSON.parse(txt); return Array.isArray(arr) ? arr : []; } catch(e) {} 
+    let items = txt.split(/[,\s]+/).filter(Boolean);
+    return [...new Set(items)];
+  }
+  function parseLinks(raw) { 
+    let txt = normalize(raw, ""); 
+    return txt ? txt.split(/\r?\n/).filter(l => l.trim()) : []; 
+  }
+
+  let totalByteNum = toNumber(templateVars.totalByte) ?? parseTrafficToBytes(templateVars.total);
+  let uploadByteNum = toNumber(templateVars.uploadByte) ?? parseTrafficToBytes(templateVars.upload);
+  let downloadByteNum = toNumber(templateVars.downloadByte) ?? parseTrafficToBytes(templateVars.download);
+  if (uploadByteNum === null) uploadByteNum = 0;
+  if (downloadByteNum === null) downloadByteNum = 0;
+  let usedBytes = (isNaN(uploadByteNum) ? 0 : uploadByteNum) + (isNaN(downloadByteNum) ? 0 : downloadByteNum);
+  let isDataUnlimited = (totalByteNum !== null && totalByteNum <= 0) || isUnlimitedText(templateVars.total);
+  let totalGB = (totalByteNum !== null && totalByteNum > 0) ? totalByteNum / BYTES_IN_GB : 0;
+  let usedGB = usedBytes / BYTES_IN_GB;
+  let remainGB = (!isDataUnlimited && totalGB > 0) ? Math.max(0, totalGB - usedGB) : 0;
+  let subLink = normalize(templateVars.subUrl, "") || normalize(templateVars.result, "") || "";
+  let emailsList = parseEmails(templateVars.emails);
+  let configsList = parseLinks(templateVars.links);
+  let expireISO = parseExpireIso(templateVars.expire);
+  let lastOnlineRaw = normalize(templateVars.lastOnline, "");
+  let isEnabled = String(templateVars.enabled).toLowerCase() !== "false";
+  let supportUrl = normalize(templateVars.subSupportUrl, "");
+
+  const locales = {
+    fa: { used: "مصرف شده", usage: "مصرف", total: "حجم کل", remain: "باقی‌مانده", expiry: "انقضا", days: "روز", hours: "ساعت", minutes: "دقیقه", copy: "کپی لینک", qr: "QR", active: "فعال", inactive: "غیرفعال", unlimited: "نامحدود", copyDone: "کپی شد!", copyFail: "خطا", download: "دریافت", upload: "ارسال", configTitle: "کانفیگ‌ها", appsTitle: "برنامه‌های پیشنهادی", noConfig: "کانفیگی موجود نیست", lastOnline: "آخرین بازدید", timeExpired: "منقضی شده", timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده", expireDateFormat: "روز / ساعت / دقیقه", subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت", copyAll: "کپی همه", noConfigToCopy: "کانفیگی برای کپی وجود ندارد", quickImport: "افزودن سریع", support: "پشتیبانی" },
+    en: { used: "Used", usage: "Usage", total: "Total", remain: "Remaining", expiry: "Expiry", days: "Days", hours: "Hours", minutes: "Mins", copy: "Copy Link", qr: "QR", active: "Active", inactive: "Inactive", unlimited: "Unlimited", copyDone: "Copied!", copyFail: "Failed", download: "Download", upload: "Upload", configTitle: "Configs", appsTitle: "Client Apps", noConfig: "No configs available", lastOnline: "Last Online", timeExpired: "Expired", timeUnlimited: "No limit", remainTime: "Remaining time", expireDateFormat: "day / hour / min", subscriptionHub: "Subscription Hub", volumeUnit: "GB", copyAll: "Copy All", noConfigToCopy: "No configs to copy", quickImport: "Quick Import", support: "Support" }
+  };
+  let currentLang = localStorage.getItem("nexus_lang") || "fa";
+  let isDark = (localStorage.getItem("nexus_theme") || "dark") !== "light";
+  let countdownInterval = null;
+
+  function t(key) { return locales[currentLang][key] || key; }
+  function volumeUnit() { return t("volumeUnit"); }
+
+  function volumeUnitByBytes(bytes) {
+    const n = Number(bytes);
+    const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
+    if (isPersianUI()) {
+      if (safeBytes < BYTES_IN_KB) return "بایت";
+      if (safeBytes < BYTES_IN_MB) return "کیلوبایت";
+      if (safeBytes < BYTES_IN_GB) return "مگابایت";
+      return "گیگابایت";
+    }
+    if (safeBytes < BYTES_IN_KB) return "B";
+    if (safeBytes < BYTES_IN_MB) return "KB";
+    if (safeBytes < BYTES_IN_GB) return "MB";
+    return "GB";
+  }
+
+  function formatBytesParts(bytes, digits = 1) {
+    const n = Number(bytes);
+    const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
+    let value = safeBytes;
+    if (safeBytes < BYTES_IN_KB) value = safeBytes;
+    else if (safeBytes < BYTES_IN_MB) value = safeBytes / BYTES_IN_KB;
+    else if (safeBytes < BYTES_IN_GB) value = safeBytes / BYTES_IN_MB;
+    else value = safeBytes / BYTES_IN_GB;
+    return { value: formatFixed(value, digits), unit: volumeUnitByBytes(safeBytes) };
+  }
+
+  function formatBytes(bytes, digits = 1) {
+    const parts = formatBytesParts(bytes, digits);
+    return `${parts.value} ${parts.unit}`;
+  }
+
+  function setVolumeStat(valueId, unitId, bytes, digits = 1) {
+    const valueEl = document.getElementById(valueId);
+    if (!valueEl) return;
+    const parts = formatBytesParts(bytes, digits);
+    valueEl.innerText = parts.value;
+    const unitEl = unitId ? document.getElementById(unitId) : valueEl.parentElement?.querySelector(".stat-unit");
+    if (unitEl) unitEl.innerText = parts.unit;
+  }
+
+  function toFaDigits(value) { return String(value ?? "").replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]); }
+  function formatDisplay(value) { return isPersianUI() ? toFaDigits(value) : String(value ?? ""); }
+
+  function formatFixed(value, digits = 1) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return formatDisplay("0");
+    const rounded = Number(n.toFixed(digits));
+    const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
+    return formatDisplay(text);
+  }
+
+  function formatInteger(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return isPersianUI() ? "۰" : "0";
+    return formatDisplay(Math.floor(n));
+  }
+
+  function isPersianUI() { return currentLang === "fa" || document.documentElement.getAttribute("dir") === "rtl"; }
+
+  function parseSafeTimestamp(raw) {
+    const valOriginal = normalize(raw, "");
+    if (!valOriginal) return null;
+    const val = normalizeDigits(valOriginal).trim();
+    if (!val || /^(0|-1|null|undefined|never|none|نامشخص|هیچ)$/i.test(val)) return null;
+    if (/^\d{2,5}\s*[\/-]\s*\d{1,2}\s*[\/-]\s*\d{1,2}/.test(val)) return null;
+    const match = val.match(/-?\d+(?:\.\d+)?/);
+    if (!match) return null;
+    const n = Number(match[0]);
+    if (!Number.isFinite(n) || n <= 0) return null;
+    const now = Date.now();
+    const candidates = [];
+    const add = (ms) => {
+      if (!Number.isFinite(ms) || ms <= 0) return;
+      const d = new Date(ms);
+      if (isNaN(d.getTime())) return;
+      const y = d.getFullYear();
+      if (y >= 2000 && y <= 2100) candidates.push({ date: d, score: Math.abs(ms - now) });
+    };
+    add(n); add(n * 1000); add(n / 10); add(n / 100); add(n / 1000); add(n / 10000); add(n / 100000); add(n / 1000000); add(n / 1000000000);
+    if (!candidates.length) return null;
+    candidates.sort((a, b) => a.score - b.score);
+    return candidates[0].date;
+  }
+
+  function pad2(value) { return String(value).padStart(2, "0"); }
+  function gregorianToJalali(gy, gm, gd) {
+    const gDm = [0,31,59,90,120,151,181,212,243,273,304,334];
+    let jy = (gy <= 1600) ? 0 : 979; gy -= (gy <= 1600) ? 621 : 1600;
+    const gy2 = (gm > 2) ? (gy + 1) : gy;
+    let days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + gDm[gm - 1];
+    jy += 33 * Math.floor(days / 12053); days %= 12053;
+    jy += 4 * Math.floor(days / 1461); days %= 1461;
+    if (days > 365) { jy += Math.floor((days - 1) / 365); days = (days - 1) % 365; }
+    const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+    const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+    return [jy, jm, jd];
+  }
+
+  function formatDateTime(date) {
+    if (!date || isNaN(date.getTime())) return "";
+    if (isPersianUI()) {
+      const [jy, jm, jd] = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
+      return toFaDigits(`${jy}/${pad2(jm)}/${pad2(jd)}، ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`);
+    }
+    return `${date.getFullYear()}/${pad2(date.getMonth() + 1)}/${pad2(date.getDate())}, ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
+  }
+
+  function formatDateOnly(date) {
+    if (!date || isNaN(date.getTime())) return "";
+    if (isPersianUI()) {
+      const [jy, jm, jd] = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
+      return toFaDigits(`${jy}/${pad2(jm)}/${pad2(jd)}`);
+    }
+    return `${date.getFullYear()}/${pad2(date.getMonth() + 1)}/${pad2(date.getDate())}`;
+  }
+
+  function normalizeFormattedDateText(raw) {
+    const valOriginal = normalize(raw, ""); if (!valOriginal) return "";
+    const val = normalizeDigits(valOriginal).trim();
+    const m = val.match(/^(\d{2,5})\s*([\/-])\s*(\d{1,2})\s*\2\s*(\d{1,2})(.*)$/); if (!m) return "";
+    const y = Number(m[1]);
+    if ((y >= 1200 && y <= 1700) || (y >= 1900 && y <= 2100)) return isPersianUI() ? toFaDigits(val) : val;
+    return "";
+  }
+
+  function renderLastOnline() {
+    const box = document.getElementById("lastOnlineInfo");
+    const parsed = parseSafeTimestamp(templateVars.lastOnline);
+    const formattedRaw = normalizeFormattedDateText(templateVars.lastOnline);
+    const finalText = parsed ? formatDateTime(parsed) : formattedRaw;
+    
+    if (finalText) {
+      box.className = "last-online-badge";
+      box.style.display = "inline-flex";
+      box.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> <span>${t("lastOnline")}: </span> <span style="color:var(--text-primary); margin-inline-start:0.3rem; font-weight:700; direction:ltr; display:inline-block;">${finalText}</span>`;
+    } else {
+      box.style.display = "none";
+      box.innerHTML = "";
+    }
+  }
+
+  function showToast(msg) { let toast = document.getElementById("toastMessage"); toast.innerText = msg; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 2000); }
+  function showQR(data, title, label) { 
+    if (!data) { showToast(t("copyFail")); return; }
+    document.getElementById("modalQrTitle").innerText = title; 
+    document.getElementById("qrModalImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=1&data=${encodeURIComponent(data)}`; 
+    document.getElementById("qrModal").classList.add("show"); 
+  }
+  function closeModal() { document.getElementById("qrModal").classList.remove("show"); }
+  async function copyText(text, successMsg) { 
+    if (!text) { showToast(t("copyFail")); return; }
+    try { await navigator.clipboard.writeText(text); showToast(successMsg); } catch(e) { showToast(t("copyFail")); } 
+  }
+
+  function renderStatsAndRing() {
+    let unlimitedFlag = isDataUnlimited || totalGB <= 0;
+    let usedPercent = (!unlimitedFlag && totalGB > 0) ? Math.min(100, Math.max(0, (usedGB / totalGB) * 100)) : 0;
+    let remainBytes = (!unlimitedFlag && totalByteNum !== null && totalByteNum > 0) ? Math.max(0, totalByteNum - usedBytes) : 0;
+
+    setVolumeStat("usedStatValue", "usedUnit", usedBytes, 1);
+
+    if (unlimitedFlag) {
+      document.getElementById("totalStatValue").innerHTML = "∞";
+      document.getElementById("remainStatValue").innerHTML = "∞";
+    } else {
+      setVolumeStat("totalStatValue", null, totalByteNum || 0, 1);
+      setVolumeStat("remainStatValue", null, remainBytes, 1);
+    }
+
+    let ringPercentText = unlimitedFlag ? "∞" : formatInteger(usedPercent) + "%";
+    document.getElementById("ringPercentText").innerHTML = ringPercentText;
+
+    let circumference = 2 * Math.PI * 84;
+    let dash = unlimitedFlag ? circumference : (usedPercent / 100) * circumference;
+
+    let progressColor = "var(--accent)";
+    if (unlimitedFlag) progressColor = "var(--accent-strong)";
+    else if (usedPercent >= 80) progressColor = "var(--warning)";
+    
+    const progressCircle = document.getElementById("progressCircle");
+    setTimeout(() => { progressCircle.setAttribute("stroke-dasharray", `${dash} ${circumference}`); }, 100);
+    progressCircle.style.stroke = progressColor;
+
+    document.getElementById("downloadVal").innerHTML = formatBytes(downloadByteNum || 0, 1);
+    document.getElementById("uploadVal").innerHTML = formatBytes(uploadByteNum || 0, 1);
+    document.getElementById("downloadLabel").innerText = t("download");
+    document.getElementById("uploadLabel").innerText = t("upload");
+    
+    let isActive = isEnabled && (!expireISO || new Date(expireISO) > new Date()) && (!(!unlimitedFlag && usedGB >= totalGB && totalGB > 0));
+    let statusSpan = document.getElementById("statusChip");
+    statusSpan.innerHTML = `<i class="fa-solid ${isActive ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> ${isActive ? t("active") : t("inactive")}`;
+    statusSpan.classList.toggle("is-inactive", !isActive);
+    
+    if (expireISO && new Date(expireISO) > new Date()) 
+      document.getElementById("expiryDatePreview").innerText = formatDateOnly(new Date(expireISO));
+    else if (!expireISO) 
+      document.getElementById("expiryDatePreview").innerText = t("timeUnlimited");
+    else 
+      document.getElementById("expiryDatePreview").innerText = t("timeExpired");
+  }
+
+  function renderExpiryCountdown() {
+    if (countdownInterval) clearInterval(countdownInterval);
+    if (!expireISO) {
+      document.getElementById("daysLeft").innerText = "∞"; 
+      document.getElementById("hoursLeft").innerText = "∞"; 
+      document.getElementById("minutesLeft").innerText = "∞";
+      document.getElementById("expiryTextLabel").innerText = isPersianUI() ? "اشتراک شما محدودیت زمانی ندارد" : "No time limit";
+      renderLastOnline();
+      return;
+    }
+    let end = new Date(expireISO).getTime();
+    countdownInterval = setInterval(() => {
+      let now = Date.now();
+      let diff = Math.max(0, end - now);
+      let days = Math.floor(diff / 86400000);
+      let hours = Math.floor((diff % 86400000) / 3600000);
+      let mins = Math.floor((diff % 3600000) / 60000);
+      document.getElementById("daysLeft").innerText = formatDisplay(days);
+      document.getElementById("hoursLeft").innerText = formatDisplay(hours);
+      document.getElementById("minutesLeft").innerText = formatDisplay(mins);
+      if (diff <= 0) clearInterval(countdownInterval);
+    }, 1000);
+    document.getElementById("expiryTextLabel").innerText = t("remainTime");
+    renderLastOnline();
+  }
+
+  function renderConfigs() {
+    let container = document.getElementById("configListContainer");
+    if (!configsList.length) { 
+      container.innerHTML = `<div style="text-align:center;padding:2rem;">${t("noConfig")}</div>`; 
+      document.getElementById("configCountBadge").innerText = formatDisplay(0); 
+      return; 
+    }
+    document.getElementById("configCountBadge").innerText = formatDisplay(configsList.length);
+    container.innerHTML = "";
+    configsList.forEach((cfg, idx) => {
+      let name = cfg.includes("#") ? decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " ")) : `${t("configTitle")} ${formatDisplay(idx+1)}`;
+      let div = document.createElement("div"); div.className = "config-item";
+      div.innerHTML = `<div class="config-meta"><span class="config-name" title="${escapeHtml(name)}">${escapeHtml(name)}</span><div class="config-actions"><button class="mini-action copyConfigBtn" data-raw=''><i class="fa-regular fa-copy"></i></button><button class="mini-action qrConfigBtn" data-raw='' data-name="${escapeHtml(name)}"><i class="fa-solid fa-qrcode"></i></button></div></div>`;
+      let copyBtn = div.querySelector(".copyConfigBtn");
+      let qrBtn = div.querySelector(".qrConfigBtn");
+      copyBtn.dataset.raw = cfg; qrBtn.dataset.raw = cfg;
+      copyBtn.addEventListener("click", (e) => { let link = e.currentTarget.dataset.raw; copyText(link, t("copyDone")); });
+      qrBtn.addEventListener("click", (e) => { let link = e.currentTarget.dataset.raw; let n = e.currentTarget.dataset.name; showQR(link, `${n}`, link); });
+      container.appendChild(div);
+    });
+  }
+
+  function renderApps() {
+    let apps = [
+      { name: "Android", icon: "fa-brands fa-android", list: [{ n: "v2rayNG", url: "https://github.com/2dust/v2rayNG/releases" }, { n: "Happ", url: "https://play.google.com/store/apps/details?id=com.happproxy" }, { n: "Incy", url: "https://play.google.com/store/apps/details?id=llc.itdev.incy" }] },
+      { name: "iOS", icon: "fa-brands fa-apple", list: [{ n: "Streisand", url: "https://apps.apple.com/search?term=streisand" }, { n: "Shadowrocket", url: "https://apps.apple.com/search?term=shadowrocket" }, { n: "Happ", url: "https://apps.apple.com/us/app/happ-proxy-utility/id6504287215" }] },
+      { name: "Windows", icon: "fa-brands fa-windows", list: [{ n: "v2rayN", url: "https://github.com/2dust/v2rayN/releases" }, { n: "Nekoray", url: "https://github.com/MatsuriDayo/nekoray" }, { n: "Happ", url: "https://github.com/Happ-proxy/happ-desktop/releases" }] },
+      { name: "macOS", icon: "fa-brands fa-apple", list: [{ n: "V2rayU", url: "https://github.com/yanue/V2rayU" }, { n: "Happ", url: "https://github.com/Happ-proxy/happ-desktop/releases" }, { n: "Incy", url: "https://apps.apple.com/ru/app/incy/id6756943388" }] }
+    ];
+    let grid = document.getElementById("appsGridContainer");
+    grid.innerHTML = "";
+    apps.forEach(os => {
+      let card = document.createElement("div"); card.className = "app-card";
+      card.innerHTML = `<div class="app-header"><span class="app-title"><i class="${os.icon}"></i><span>${os.name}</span></span><i class="fa-solid fa-chevron-down chev"></i></div><div class="app-links"></div>`;
+      let linksDiv = card.querySelector(".app-links");
+      os.list.forEach(app => { let a = document.createElement("a"); a.href = app.url; a.target="_blank"; a.className="app-link"; a.innerHTML = `<span>${app.n}</span> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i>`; linksDiv.appendChild(a); });
+      card.querySelector(".app-header").addEventListener("click", () => { card.classList.toggle("open"); });
+      grid.appendChild(card);
+    });
+  }
+
+  function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+  function forcePersianDigitsInTextNodes(root = document.body) {
+    if (!isPersianUI() || !root) return;
+    const skipTags = new Set(["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "CODE", "PRE"]);
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        if (!parent || skipTags.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+        if (parent.closest && parent.closest(".cd-number, .last-online-badge span:last-child")) return NodeFilter.FILTER_REJECT;
+        return /\d/.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      }
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => { node.nodeValue = toFaDigits(node.nodeValue); });
+  }
+
+  let faDigitObserver = null;
+  function startPersianDigitObserver() {
+    if (faDigitObserver || typeof MutationObserver === "undefined") return;
+    faDigitObserver = new MutationObserver((mutations) => {
+      if (!isPersianUI()) return;
+      for (const m of mutations) {
+        if (m.type === "characterData" && m.target && /\d/.test(m.target.nodeValue || "")) {
+          const parent = m.target.parentElement;
+          if (parent && !(parent.closest && parent.closest(".cd-number, .last-online-badge span:last-child"))) {
+            m.target.nodeValue = toFaDigits(m.target.nodeValue);
+          }
+        }
+        m.addedNodes && m.addedNodes.forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE && /\d/.test(node.nodeValue || "")) node.nodeValue = toFaDigits(node.nodeValue);
+          else if (node.nodeType === Node.ELEMENT_NODE) forcePersianDigitsInTextNodes(node);
+        });
+      }
+    });
+    faDigitObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  function getPanelTitle() { return normalize(templateVars.subTitle, "") || t("subscriptionHub"); }
+  function updateDocumentTitle() { document.title = getPanelTitle(); }
+
+  function updateUI() {
+    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+    document.documentElement.lang = currentLang === "fa" ? "fa" : "en";
+    document.documentElement.dir = currentLang === "fa" ? "rtl" : "ltr";
+    localStorage.setItem("nexus_theme", isDark ? "dark" : "light");
+    localStorage.setItem("nexus_lang", currentLang);
+    document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    updateDocumentTitle();
+    
+    document.getElementById("panelTitle").innerText = getPanelTitle();
+    document.getElementById("usedStatLabel").innerText = t("used");
+    document.querySelectorAll(".stat-unit").forEach(el => { el.innerText = volumeUnit(); });
+    document.getElementById("totalStatLabel").innerText = t("total");
+    document.getElementById("remainStatLabel").innerText = t("remain");
+    document.getElementById("expiryStatLabel").innerText = t("expiry");
+    document.getElementById("daysLabel").innerText = t("days");
+    document.getElementById("hoursLabel").innerText = t("hours");
+    document.getElementById("minutesLabel").innerText = t("minutes");
+    document.getElementById("ringUsageLabel").innerText = t("usage");
+    document.getElementById("configsTitle").innerText = t("configTitle");
+    document.getElementById("appsTitleApp").innerText = t("appsTitle");
+    document.getElementById("copyMainBtn").setAttribute("title", t("copy"));
+    document.getElementById("copyMainText").innerText = t("copy");
+    document.getElementById("qrMainBtn").setAttribute("title", t("qr"));
+    document.getElementById("copyAllText").innerText = t("copyAll");
+    document.getElementById("quickImportLabel").innerText = t("quickImport");
+    
+    if(subLink) {
+      document.getElementById("btnImportIncy").href = `incy://import/${subLink}`;
+      document.getElementById("btnImportHapp").href = `happ://import/${subLink}`;
+    }
+
+    let supportBtn = document.getElementById("supportBtn");
+    if (supportUrl) {
+      supportBtn.href = supportUrl; supportBtn.style.display = "inline-flex";
+    } else {
+      supportBtn.style.display = "none";
+    }
+
+    if (emailsList && emailsList.length > 0) {
+      document.getElementById("userEmailBadge").innerHTML = `<i class="fa-regular fa-user"></i> ${emailsList[0]}`;
+    } else {
+      document.getElementById("userEmailBadge").innerHTML = "";
+    }
+
+    renderStatsAndRing();
+    renderExpiryCountdown();
+    renderConfigs();
+    renderApps();
+    forcePersianDigitsInTextNodes();
+  }
+
+  // Events
+  document.getElementById("copyMainBtn").addEventListener("click", () => copyText(subLink, t("copyDone")));
+  document.getElementById("qrMainBtn").addEventListener("click", () => { if(subLink) showQR(subLink, t("qr"), subLink); else showToast(t("copyFail")); });
+  document.getElementById("themeToggleBtn").addEventListener("click", () => { isDark = !isDark; updateUI(); });
+  document.getElementById("langToggleBtn").addEventListener("click", () => { currentLang = currentLang === "fa" ? "en" : "fa"; updateUI(); });
+  document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+  document.getElementById("qrModal").addEventListener("click", (e) => { if(e.target === document.getElementById("qrModal")) closeModal(); });
+  document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
+
+  document.getElementById("copyAllConfigsBtn").addEventListener("click", () => {
+    if (!configsList || configsList.length === 0) { showToast(t("noConfigToCopy")); return; }
+    copyText(configsList.join("\n"), t("copyDone"));
+  });
+
+  startPersianDigitObserver();
+  updateUI();
+  setInterval(() => { if (isPersianUI()) forcePersianDigitsInTextNodes(); }, 800);
+</script>
+</body>
+</html>
