@@ -504,17 +504,44 @@
       min-width: 0;
     }
 
+    /* Water Tank CSS */
     .progress-ring {
       position: relative;
       width: 12rem;
       height: 12rem;
+      border-radius: 50%;
+      overflow: hidden;
       filter: drop-shadow(0 8px 16px var(--accent-glow));
     }
 
-    .ring-fill, #progressCircle {
-      stroke: var(--accent);
-      stroke-linecap: round;
-      transition: stroke-dasharray 0.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s ease;
+    .water-tank-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .water-wave {
+      transition: fill 0.5s ease;
+    }
+
+    @keyframes waveAnimateLeft {
+      0% { transform: translate(0, var(--wave-y, 0)); }
+      100% { transform: translate(-100px, var(--wave-y, 0)); }
+    }
+
+    @keyframes waveAnimateRight {
+      0% { transform: translate(-100px, var(--wave-y, 0)); }
+      100% { transform: translate(0, var(--wave-y, 0)); }
+    }
+
+    .wave-back {
+      opacity: 0.4;
+      animation: waveAnimateLeft 3s linear infinite;
+    }
+
+    .wave-front {
+      opacity: 0.85;
+      animation: waveAnimateRight 2s linear infinite;
     }
 
     .ring-percent {
@@ -528,11 +555,13 @@
       font-size: 2.4rem;
       line-height: 1;
       color: var(--text-primary);
+      z-index: 10;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* برای خوانایی بهتر روی آب */
     }
     .ring-percent span:last-child {
       font-size: 0.8rem;
       font-weight: 500;
-      color: var(--text-secondary);
+      color: var(--text-primary);
       margin-top: 0.25rem;
     }
 
@@ -837,7 +866,6 @@
 <body data-fixed-version="mobile-stats-2col-v37-bulletproof">
 <div class="container">
   
-  <!-- HEADER -->
   <div class="glass-panel header-card animate-in">
     <div class="brand">
       <div class="icon-badge shine-effect"><i class="fa-solid fa-bolt"></i></div>
@@ -859,10 +887,8 @@
     </div>
   </div>
 
-  <!-- HERO SECTION -->
   <div class="hero-grid animate-in delay-1">
     
-    <!-- Right Col (RTL): Stats & Actions -->
     <div class="hero-stats-col">
       <div class="glass-panel quick-import-panel">
         <div class="qi-label">
@@ -907,20 +933,29 @@
       </div>
     </div>
 
-    <!-- Left Col (RTL): Usage Panel -->
     <div class="glass-panel usage-panel">
       
-      <!-- Status Chip Top of Ring -->
       <div style="display: flex; flex-direction: column; align-items: center; gap: 1.25rem; width: 100%;">
         <div id="statusChip" class="trend-badge shine-effect" style="margin: 0; padding: 0.35rem 1rem; font-size: 0.85rem; border-radius: 999px;">
           <i id="statusIcon" class="fa-solid fa-circle-check"></i> <span id="statusText">فعال</span>
         </div>
 
         <div class="progress-ring">
-          <svg width="192" height="192" viewBox="0 0 192 192">
-            <circle cx="96" cy="96" r="84" fill="none" stroke="var(--border)" stroke-width="12" />
-            <circle id="progressCircle" cx="96" cy="96" r="84" fill="none" stroke-width="12" stroke-dasharray="0 528" transform="rotate(-90 96 96)" stroke-linecap="round" />
+          <svg viewBox="0 0 100 100" class="water-tank-svg">
+            <circle cx="50" cy="50" r="46" fill="var(--surface-muted)" stroke="var(--border)" stroke-width="1" />
+            
+            <clipPath id="tankClip">
+              <circle cx="50" cy="50" r="44" />
+            </clipPath>
+
+            <g clip-path="url(#tankClip)">
+              <path id="waterWave1" class="water-wave wave-back" d="M 0 0 Q 25 -5 50 0 T 100 0 T 150 0 T 200 0 L 200 120 L 0 120 Z" />
+              <path id="waterWave2" class="water-wave wave-front" d="M 0 0 Q 25 5 50 0 T 100 0 T 150 0 T 200 0 L 200 120 L 0 120 Z" />
+            </g>
+            
+            <circle cx="50" cy="50" r="44" fill="none" stroke="var(--border-strong)" stroke-width="1" opacity="0.3"/>
           </svg>
+          
           <div class="ring-percent">
             <span id="ringPercentText">0%</span>
             <span id="ringUsageLabel">مصرف</span>
@@ -950,9 +985,7 @@
 
   </div>
 
-  <!-- CONTENT GRID (Configs & Apps) -->
   <div class="content-grid animate-in delay-2">
-    <!-- Configs -->
     <div class="glass-panel configs-section">
       <div class="section-header">
         <div><i class="fa-solid fa-key"></i> <span id="configsTitle">کانفیگ‌های اختصاصی</span></div>
@@ -968,7 +1001,6 @@
       </div>
     </div>
     
-    <!-- Apps -->
     <div class="glass-panel apps-section">
       <div class="section-header">
         <div><i class="fa-brands fa-app-store-ios"></i> <span id="appsTitleApp">برنامه‌های پیشنهادی</span></div>
@@ -1259,16 +1291,33 @@
     let ringPercentText = unlimitedFlag ? "∞" : formatInteger(usedPercent) + "%";
     document.getElementById("ringPercentText").innerHTML = ringPercentText;
 
-    let circumference = 2 * Math.PI * 84;
-    let dash = unlimitedFlag ? circumference : (usedPercent / 100) * circumference;
+    // منطق رنگ آب
+    let waterColor = "var(--success)"; // 0 to 50%
+    if (!unlimitedFlag) {
+      if (usedPercent >= 80) {
+        waterColor = "var(--danger)"; // 80% to 100%
+      } else if (usedPercent >= 50) {
+        waterColor = "var(--warning)"; // 50% to 80%
+      }
+    } else {
+      waterColor = "var(--accent)"; // Unlimited
+    }
 
-    let progressColor = "var(--accent)";
-    if (unlimitedFlag) progressColor = "var(--accent-strong)";
-    else if (usedPercent >= 80) progressColor = "var(--warning)";
-    
-    const progressCircle = document.getElementById("progressCircle");
-    setTimeout(() => { progressCircle.setAttribute("stroke-dasharray", `${dash} ${circumference}`); }, 100);
-    progressCircle.style.stroke = progressColor;
+    // مقدار Y برای حرکت عمودی آب
+    // خالی بودن (0 درصد) را روی 100 و پر بودن (100 درصد) را روی 15 تنظیم کردم تا کمی پایین‌تر از لبه باشد
+    let rawWaveY = 100 - (usedPercent * 0.85); 
+    let waveTransformY = unlimitedFlag ? 30 : Math.max(15, Math.min(100, rawWaveY));
+
+    const wave1 = document.getElementById("waterWave1");
+    const wave2 = document.getElementById("waterWave2");
+
+    if (wave1 && wave2) {
+      wave1.style.fill = waterColor;
+      wave2.style.fill = waterColor;
+      
+      wave1.style.setProperty('--wave-y', waveTransformY + 'px');
+      wave2.style.setProperty('--wave-y', waveTransformY + 'px');
+    }
 
     setVolumeStat("downloadVal", "downloadUnit", downloadByteNum || 0, 1);
     setVolumeStat("uploadVal", "uploadUnit", uploadByteNum || 0, 1);
