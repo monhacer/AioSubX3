@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-theme="dark" data-build="v34-vibrant-blue-status-reverted">
+<html lang="fa" dir="rtl" data-theme="dark" data-build="v37-vibrant-blue-bulletproof">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -175,6 +175,7 @@
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
       max-width: 100%;
       min-width: 0;
+      overflow: hidden;
     }
     .glass-panel:hover {
       border-color: var(--border-strong);
@@ -293,7 +294,7 @@
       box-shadow: none;
     }
 
-    /* ======================== NEW BALANCED HERO GRID ======================== */
+    /* ======================== BALANCED HERO GRID ======================== */
     .hero-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr);
@@ -473,7 +474,6 @@
       display: block;
     }
 
-    /* Last Online Badge Styling */
     .last-online-badge {
       display: inline-flex;
       align-items: center;
@@ -581,7 +581,7 @@
       margin-top: 0.15rem;
     }
 
-    /* ======================== CONTENT GRID (Configs & Apps) ======================== */
+    /* ======================== CONTENT GRID ======================== */
     .content-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
@@ -788,7 +788,6 @@
     @media (max-width: 640px) {
       .container { gap: var(--space-3); }
       
-      /* Header Mobile Restructure */
       .header-card {
         padding: 0 !important;
         background: transparent !important;
@@ -835,7 +834,7 @@
     }
   </style>
 </head>
-<body data-fixed-version="mobile-stats-2col-v36-status-reverted">
+<body data-fixed-version="mobile-stats-2col-v37-bulletproof">
 <div class="container">
   
   <!-- HEADER -->
@@ -844,7 +843,9 @@
       <div class="icon-badge shine-effect"><i class="fa-solid fa-bolt"></i></div>
       <div class="title-section">
         <h2 id="panelTitle">پنل اشتراک</h2>
-        <div class="sub-email" id="userEmailBadge"></div>
+        <div class="sub-email" id="userEmailBadge" style="display: none;">
+          <i class="fa-regular fa-user"></i> <span id="userEmailText"></span>
+        </div>
       </div>
     </div>
     <div class="action-group">
@@ -861,7 +862,7 @@
   <!-- HERO SECTION -->
   <div class="hero-grid animate-in delay-1">
     
-    <!-- Right Col (RTL): Stats, Quick Import & Countdown -->
+    <!-- Right Col (RTL): Stats & Actions -->
     <div class="hero-stats-col">
       <div class="glass-panel quick-import-panel">
         <div class="qi-label">
@@ -886,11 +887,9 @@
           <div class="stat-title"><i class="fa-regular fa-clock"></i> <span id="remainStatLabel">باقی‌مانده</span></div>
           <div><span id="remainStatValue" class="stat-number">0</span> <span class="stat-unit">گیگابایت</span></div>
         </div>
-        <!-- کارت انقضا با بازگشت بج وضعیت به جایگاه قبلی -->
         <div class="stat-card">
           <div class="stat-title"><i class="fa-regular fa-calendar"></i> <span id="expiryStatLabel">انقضا</span></div>
           <div><span id="expiryDatePreview" class="stat-number" style="font-size:1.25rem;">—</span></div>
-          <div id="statusChip" class="trend-badge shine-effect"><i class="fa-solid fa-circle-check"></i> فعال</div>
         </div>
       </div>
 
@@ -901,21 +900,31 @@
           <div class="cd-unit"><div class="cd-number" id="hoursLeft">0</div><span id="hoursLabel">ساعت</span></div>
           <div class="cd-unit"><div class="cd-number" id="minutesLeft">0</div><span id="minutesLabel">دقیقه</span></div>
         </div>
-        <div id="lastOnlineInfo" style="display: none;"></div>
+        
+        <div id="lastOnlineInfo" class="last-online-badge" style="display: none;">
+          <i class="fa-solid fa-clock-rotate-left"></i> <span id="lastOnlineLabel"></span> <span id="lastOnlineDate"></span>
+        </div>
       </div>
     </div>
 
-    <!-- Left Col (RTL): Usage Panel (Ring & Traffic) -->
+    <!-- Left Col (RTL): Usage Panel -->
     <div class="glass-panel usage-panel">
       
-      <div class="progress-ring">
-        <svg width="192" height="192" viewBox="0 0 192 192">
-          <circle cx="96" cy="96" r="84" fill="none" stroke="var(--border)" stroke-width="12" />
-          <circle id="progressCircle" cx="96" cy="96" r="84" fill="none" stroke-width="12" stroke-dasharray="0 528" transform="rotate(-90 96 96)" stroke-linecap="round" />
-        </svg>
-        <div class="ring-percent">
-          <span id="ringPercentText">0%</span>
-          <span id="ringUsageLabel">مصرف</span>
+      <!-- Status Chip Top of Ring -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 1.25rem; width: 100%;">
+        <div id="statusChip" class="trend-badge shine-effect" style="margin: 0; padding: 0.35rem 1rem; font-size: 0.85rem; border-radius: 999px;">
+          <i id="statusIcon" class="fa-solid fa-circle-check"></i> <span id="statusText">فعال</span>
+        </div>
+
+        <div class="progress-ring">
+          <svg width="192" height="192" viewBox="0 0 192 192">
+            <circle cx="96" cy="96" r="84" fill="none" stroke="var(--border)" stroke-width="12" />
+            <circle id="progressCircle" cx="96" cy="96" r="84" fill="none" stroke-width="12" stroke-dasharray="0 528" transform="rotate(-90 96 96)" stroke-linecap="round" />
+          </svg>
+          <div class="ring-percent">
+            <span id="ringPercentText">0%</span>
+            <span id="ringUsageLabel">مصرف</span>
+          </div>
         </div>
       </div>
       
@@ -1211,12 +1220,11 @@
     const finalText = parsed ? formatDateTime(parsed) : formattedRaw;
     
     if (finalText) {
-      box.className = "last-online-badge";
       box.style.display = "inline-flex";
-      box.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> <span>${t("lastOnline")}: </span> <span style="color:var(--text-primary); margin-inline-start:0.3rem; font-weight:700; direction:ltr; display:inline-block;">${finalText}</span>`;
+      document.getElementById("lastOnlineLabel").innerText = t("lastOnline") + ": ";
+      document.getElementById("lastOnlineDate").innerText = finalText;
     } else {
       box.style.display = "none";
-      box.innerHTML = "";
     }
   }
 
@@ -1269,7 +1277,9 @@
     
     let isActive = isEnabled && (!expireISO || new Date(expireISO) > new Date()) && (!(!unlimitedFlag && usedGB >= totalGB && totalGB > 0));
     let statusSpan = document.getElementById("statusChip");
-    statusSpan.innerHTML = `<i class="fa-solid ${isActive ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> ${isActive ? t("active") : t("inactive")}`;
+    
+    document.getElementById("statusIcon").className = isActive ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark';
+    document.getElementById("statusText").innerText = isActive ? t("active") : t("inactive");
     statusSpan.classList.toggle("is-inactive", !isActive);
     
     if (expireISO && new Date(expireISO) > new Date()) 
@@ -1309,21 +1319,35 @@
   function renderConfigs() {
     let container = document.getElementById("configListContainer");
     if (!configsList.length) { 
-      container.innerHTML = `<div style="text-align:center;padding:2rem;">${t("noConfig")}</div>`; 
+      document.getElementById("noConfigMsg").innerText = t("noConfig");
       document.getElementById("configCountBadge").innerText = formatDisplay(0); 
       return; 
     }
     document.getElementById("configCountBadge").innerText = formatDisplay(configsList.length);
     container.innerHTML = "";
     configsList.forEach((cfg, idx) => {
-      let name = cfg.includes("#") ? decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " ")) : `${t("configTitle")} ${formatDisplay(idx+1)}`;
+      let name = cfg.includes("#") ? decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " ")) : t("configTitle") + " " + formatDisplay(idx+1);
       let div = document.createElement("div"); div.className = "config-item";
-      div.innerHTML = `<div class="config-meta"><span class="config-name" title="${escapeHtml(name)}">${escapeHtml(name)}</span><div class="config-actions"><button class="mini-action copyConfigBtn" data-raw=''><i class="fa-regular fa-copy"></i></button><button class="mini-action qrConfigBtn" data-raw='' data-name="${escapeHtml(name)}"><i class="fa-solid fa-qrcode"></i></button></div></div>`;
-      let copyBtn = div.querySelector(".copyConfigBtn");
-      let qrBtn = div.querySelector(".qrConfigBtn");
-      copyBtn.dataset.raw = cfg; qrBtn.dataset.raw = cfg;
-      copyBtn.addEventListener("click", (e) => { let link = e.currentTarget.dataset.raw; copyText(link, t("copyDone")); });
-      qrBtn.addEventListener("click", (e) => { let link = e.currentTarget.dataset.raw; let n = e.currentTarget.dataset.name; showQR(link, `${n}`, link); });
+      
+      let metaDiv = document.createElement("div"); metaDiv.className = "config-meta";
+      let nameSpan = document.createElement("span"); nameSpan.className = "config-name"; nameSpan.title = name; nameSpan.innerText = name;
+      let actionsDiv = document.createElement("div"); actionsDiv.className = "config-actions";
+      
+      let copyBtn = document.createElement("button"); copyBtn.className = "mini-action"; 
+      let copyIcon = document.createElement("i"); copyIcon.className = "fa-regular fa-copy";
+      copyBtn.appendChild(copyIcon);
+      copyBtn.addEventListener("click", () => { copyText(cfg, t("copyDone")); });
+      
+      let qrBtn = document.createElement("button"); qrBtn.className = "mini-action";
+      let qrIcon = document.createElement("i"); qrIcon.className = "fa-solid fa-qrcode";
+      qrBtn.appendChild(qrIcon);
+      qrBtn.addEventListener("click", () => { showQR(cfg, name, cfg); });
+      
+      actionsDiv.appendChild(copyBtn);
+      actionsDiv.appendChild(qrBtn);
+      metaDiv.appendChild(nameSpan);
+      metaDiv.appendChild(actionsDiv);
+      div.appendChild(metaDiv);
       container.appendChild(div);
     });
   }
@@ -1339,10 +1363,32 @@
     grid.innerHTML = "";
     apps.forEach(os => {
       let card = document.createElement("div"); card.className = "app-card";
-      card.innerHTML = `<div class="app-header"><span class="app-title"><i class="${os.icon}"></i><span>${os.name}</span></span><i class="fa-solid fa-chevron-down chev"></i></div><div class="app-links"></div>`;
-      let linksDiv = card.querySelector(".app-links");
-      os.list.forEach(app => { let a = document.createElement("a"); a.href = app.url; a.target="_blank"; a.className="app-link"; a.innerHTML = `<span>${app.n}</span> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i>`; linksDiv.appendChild(a); });
-      card.querySelector(".app-header").addEventListener("click", () => { card.classList.toggle("open"); });
+      
+      let header = document.createElement("div"); header.className = "app-header";
+      let titleSpan = document.createElement("span"); titleSpan.className = "app-title";
+      let icon = document.createElement("i"); icon.className = os.icon;
+      let nameSpan = document.createElement("span"); nameSpan.innerText = os.name;
+      let chev = document.createElement("i"); chev.className = "fa-solid fa-chevron-down chev";
+      
+      titleSpan.appendChild(icon);
+      titleSpan.appendChild(nameSpan);
+      header.appendChild(titleSpan);
+      header.appendChild(chev);
+      
+      let linksDiv = document.createElement("div"); linksDiv.className = "app-links";
+      os.list.forEach(app => { 
+        let a = document.createElement("a"); a.href = app.url; a.target="_blank"; a.className="app-link"; 
+        let nSpan = document.createElement("span"); nSpan.innerText = app.n;
+        let lIcon = document.createElement("i"); lIcon.className = "fa-solid fa-arrow-up-right-from-square"; lIcon.style.fontSize = "0.75rem";
+        a.appendChild(nSpan);
+        a.appendChild(lIcon);
+        linksDiv.appendChild(a); 
+      });
+      
+      header.addEventListener("click", () => { card.classList.toggle("open"); });
+      
+      card.appendChild(header);
+      card.appendChild(linksDiv);
       grid.appendChild(card);
     });
   }
@@ -1429,9 +1475,10 @@
     }
 
     if (emailsList && emailsList.length > 0) {
-      document.getElementById("userEmailBadge").innerHTML = `<i class="fa-regular fa-user"></i> ${emailsList[0]}`;
+      document.getElementById("userEmailBadge").style.display = "flex";
+      document.getElementById("userEmailText").innerText = emailsList[0];
     } else {
-      document.getElementById("userEmailBadge").innerHTML = "";
+      document.getElementById("userEmailBadge").style.display = "none";
     }
 
     renderStatsAndRing();
