@@ -39,7 +39,7 @@ Modern custom subscription page for **3x-ui v3.3.0+**
 برای نصب سریع AioSubX3 روی سرور، دستور زیر را اجرا کنید:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/monhacer/AioSubX3/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/monhacer/AioSubX3/refs/heads/main/install.sh)
 ```
 
 بعد از اجرا، فایل صفحه ساب در مسیر زیر قرار می‌گیرد:
