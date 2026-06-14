@@ -241,6 +241,7 @@
       cursor: pointer;
       transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
       white-space: nowrap;
+      text-decoration: none;
     }
 
     .btn-icon:hover {
@@ -261,6 +262,55 @@
       width: 2.75rem;
       padding-inline: 0;
       aspect-ratio: 1;
+    }
+
+    /* ======================== QUICK IMPORT ======================== */
+    .quick-import-panel {
+      padding: clamp(0.8rem, 1.5vw, 1.2rem) clamp(1rem, 3vw, 2rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .qi-label {
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .qi-buttons {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    .qi-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 150ms ease;
+    }
+
+    .qi-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
     }
 
     /* ======================== STATS ======================== */
@@ -754,6 +804,18 @@
       .config-item {
         min-height: 92px;
       }
+      
+      .quick-import-panel {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .qi-buttons {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .qi-btn {
+        flex: 1;
+      }
     }
 
     /* ======================== RESPONSIVE ======================== */
@@ -811,8 +873,8 @@
       }
 
       .action-group {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        display: flex;
+        flex-wrap: nowrap;
         gap: var(--space-2);
       }
 
@@ -868,10 +930,6 @@
     }
 
     @media (max-width: 420px) {
-      .action-group {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
       .header-card,
       .glass-panel,
       .usage-ring,
@@ -976,14 +1034,15 @@
 
       .action-group {
         width: 100%;
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        display: flex;
+        gap: 0.4rem;
+        justify-content: space-between;
       }
 
       .btn-icon,
       .circle-btn {
-        width: 100%;
-        flex-basis: auto;
+        flex: 1;
+        width: auto;
       }
     }
 
@@ -1160,6 +1219,7 @@
 </head>
 <body data-fixed-version="mobile-stats-2col-v25">
 <div class="container">
+  
   <div class="glass-panel header-card">
     <div class="brand">
       <div class="icon-badge"><i class="fa-solid fa-bolt"></i></div>
@@ -1171,8 +1231,23 @@
     <div class="action-group">
       <button id="copyMainBtn" class="btn-icon btn-primary icon-only-action" type="button" aria-label="کپی لینک اشتراک" title="کپی لینک اشتراک"><i class="fa-regular fa-copy"></i></button>
       <button id="qrMainBtn" class="btn-icon icon-only-action" type="button" aria-label="نمایش QR اشتراک" title="نمایش QR اشتراک"><i class="fa-solid fa-qrcode"></i></button>
+      <a id="supportBtn" class="btn-icon circle-btn" target="_blank" style="display: none;"><i class="fa-brands fa-telegram"></i></a>
       <button id="themeToggleBtn" class="btn-icon circle-btn" type="button" aria-label="تغییر حالت روشن و تاریک"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
       <button id="langToggleBtn" class="btn-icon circle-btn" type="button" aria-label="تغییر زبان"><i class="fa-solid fa-globe"></i></button>
+    </div>
+  </div>
+
+  <div class="glass-panel quick-import-panel">
+    <div class="qi-label">
+      <i class="fa-solid fa-link" style="color: var(--accent);"></i> <span id="quickImportLabel">افزودن سریع اشتراک</span>
+    </div>
+    <div class="qi-buttons">
+      <a id="btnImportIncy" href="#" class="qi-btn">
+        <i class="fa-solid fa-download"></i> Incy
+      </a>
+      <a id="btnImportHapp" href="#" class="qi-btn">
+        <i class="fa-solid fa-download"></i> Happ
+      </a>
     </div>
   </div>
 
@@ -1328,11 +1403,12 @@
   let expireISO = parseExpireIso(templateVars.expire);
   let lastOnlineRaw = normalize(templateVars.lastOnline, "");
   let isEnabled = String(templateVars.enabled).toLowerCase() !== "false";
+  let supportUrl = normalize(templateVars.subSupportUrl, "");
 
   // i18n
   const locales = {
-    fa: { used: "مصرف شده", usage: "مصرف", total: "کل حجم", remain: "باقی‌مانده", expiry: "انقضا", days: "روز", hours: "ساعت", minutes: "دقیقه", copy: "کپی لینک", qr: "QR", active: "فعال", inactive: "غیرفعال", unlimited: "نامحدود", copyDone: "کپی شد!", copyFail: "خطا", download: "دریافت", upload: "ارسال", configTitle: "کانفیگ‌ها", appsTitle: "دانلود اپلیکیشن", noConfig: "کانفیگی موجود نیست", lastOnline: "آخرین آنلاین", timeExpired: "منقضی شده", timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده", expireDateFormat: "روز / ساعت / دقیقه", subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت", copyAll: "کپی همه", noConfigToCopy: "کانفیگی برای کپی وجود ندارد" },
-    en: { used: "Used", usage: "Usage", total: "Total", remain: "Remaining", expiry: "Expiry", days: "Days", hours: "Hours", minutes: "Mins", copy: "Copy Link", qr: "QR", active: "Active", inactive: "Inactive", unlimited: "Unlimited", copyDone: "Copied!", copyFail: "Failed", download: "Download", upload: "Upload", configTitle: "Configs", appsTitle: "Client Apps", noConfig: "No configs available", lastOnline: "Last online", timeExpired: "Expired", timeUnlimited: "No limit", remainTime: "Remaining time", expireDateFormat: "day / hour / min", subscriptionHub: "Subscription Hub", volumeUnit: "GB", copyAll: "Copy All", noConfigToCopy: "No configs to copy" }
+    fa: { used: "مصرف شده", usage: "مصرف", total: "کل حجم", remain: "باقی‌مانده", expiry: "انقضا", days: "روز", hours: "ساعت", minutes: "دقیقه", copy: "کپی لینک", qr: "QR", active: "فعال", inactive: "غیرفعال", unlimited: "نامحدود", copyDone: "کپی شد!", copyFail: "خطا", download: "دریافت", upload: "ارسال", configTitle: "کانفیگ‌ها", appsTitle: "دانلود اپلیکیشن", noConfig: "کانفیگی موجود نیست", lastOnline: "آخرین آنلاین", timeExpired: "منقضی شده", timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده", expireDateFormat: "روز / ساعت / دقیقه", subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت", copyAll: "کپی همه", noConfigToCopy: "کانفیگی برای کپی وجود ندارد", quickImport: "افزودن سریع اشتراک", support: "پشتیبانی" },
+    en: { used: "Used", usage: "Usage", total: "Total", remain: "Remaining", expiry: "Expiry", days: "Days", hours: "Hours", minutes: "Mins", copy: "Copy Link", qr: "QR", active: "Active", inactive: "Inactive", unlimited: "Unlimited", copyDone: "Copied!", copyFail: "Failed", download: "Download", upload: "Upload", configTitle: "Configs", appsTitle: "Client Apps", noConfig: "No configs available", lastOnline: "Last online", timeExpired: "Expired", timeUnlimited: "No limit", remainTime: "Remaining time", expireDateFormat: "day / hour / min", subscriptionHub: "Subscription Hub", volumeUnit: "GB", copyAll: "Copy All", noConfigToCopy: "No configs to copy", quickImport: "1-Click Import", support: "Support" }
   };
   let currentLang = localStorage.getItem("nexus_lang") || "fa";
   let isDark = (localStorage.getItem("nexus_theme") || "dark") !== "light";
@@ -1358,6 +1434,7 @@
     return "GB";
   }
 
+  // Formatting utils
   function formatBytesParts(bytes, digits = 1) {
     const n = Number(bytes);
     const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
@@ -1385,11 +1462,11 @@
     if (unitEl) unitEl.innerText = parts.unit;
   }
 
-  // ---------- display helpers: Persian digits + safe timestamp/date formatting ----------
   function toFaDigits(value) {
     return String(value ?? "").replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
   }
 
+  // Localization utilities
   function formatDisplay(value) {
     return isPersianUI() ? toFaDigits(value) : String(value ?? "");
   }
@@ -1435,39 +1512,23 @@
       if (y >= 2000 && y <= 2100) candidates.push({ date: d, score: Math.abs(ms - now) });
     };
 
-    add(n);
-    add(n * 1000);
-    add(n / 10);
-    add(n / 100);
-    add(n / 1000);
-    add(n / 10000);
-    add(n / 100000);
-    add(n / 1000000);
-    add(n / 1000000000);
+    add(n); add(n * 1000); add(n / 10); add(n / 100); add(n / 1000); add(n / 10000); add(n / 100000); add(n / 1000000); add(n / 1000000000);
 
     if (!candidates.length) return null;
     candidates.sort((a, b) => a.score - b.score);
     return candidates[0].date;
   }
 
-  function pad2(value) {
-    return String(value).padStart(2, "0");
-  }
+  function pad2(value) { return String(value).padStart(2, "0"); }
 
   function gregorianToJalali(gy, gm, gd) {
     const gDm = [0,31,59,90,120,151,181,212,243,273,304,334];
-    let jy = (gy <= 1600) ? 0 : 979;
-    gy -= (gy <= 1600) ? 621 : 1600;
+    let jy = (gy <= 1600) ? 0 : 979; gy -= (gy <= 1600) ? 621 : 1600;
     const gy2 = (gm > 2) ? (gy + 1) : gy;
     let days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + gDm[gm - 1];
-    jy += 33 * Math.floor(days / 12053);
-    days %= 12053;
-    jy += 4 * Math.floor(days / 1461);
-    days %= 1461;
-    if (days > 365) {
-      jy += Math.floor((days - 1) / 365);
-      days = (days - 1) % 365;
-    }
+    jy += 33 * Math.floor(days / 12053); days %= 12053;
+    jy += 4 * Math.floor(days / 1461); days %= 1461;
+    if (days > 365) { jy += Math.floor((days - 1) / 365); days = (days - 1) % 365; }
     const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
     const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
     return [jy, jm, jd];
@@ -1492,15 +1553,11 @@
   }
 
   function normalizeFormattedDateText(raw) {
-    const valOriginal = normalize(raw, "");
-    if (!valOriginal) return "";
+    const valOriginal = normalize(raw, ""); if (!valOriginal) return "";
     const val = normalizeDigits(valOriginal).trim();
-    const m = val.match(/^(\d{2,5})\s*([\/-])\s*(\d{1,2})\s*\2\s*(\d{1,2})(.*)$/);
-    if (!m) return "";
+    const m = val.match(/^(\d{2,5})\s*([\/-])\s*(\d{1,2})\s*\2\s*(\d{1,2})(.*)$/); if (!m) return "";
     const y = Number(m[1]);
-    if ((y >= 1200 && y <= 1700) || (y >= 1900 && y <= 2100)) {
-      return isPersianUI() ? toFaDigits(val) : val;
-    }
+    if ((y >= 1200 && y <= 1700) || (y >= 1900 && y <= 2100)) return isPersianUI() ? toFaDigits(val) : val;
     return "";
   }
 
@@ -1512,7 +1569,7 @@
     box.innerHTML = finalText ? `<i class="fa-regular fa-eye"></i> ${t("lastOnline")}: ${finalText}` : "";
   }
 
-  // DOM helpers
+  // DOM actions
   function showToast(msg) { let toast = document.getElementById("toastMessage"); toast.innerText = msg; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 1700); }
   function showQR(data, title, label) { 
     if (!data) { showToast(t("copyFail")); return; }
@@ -1527,7 +1584,7 @@
     try { await navigator.clipboard.writeText(text); showToast(successMsg); } catch(e) { showToast(t("copyFail")); } 
   }
 
-  // render functions
+  // Render Core UI
   function renderStatsAndRing() {
     let unlimitedFlag = isDataUnlimited || totalGB <= 0;
     let usedPercent = (!unlimitedFlag && totalGB > 0) ? Math.min(100, Math.max(0, (usedGB / totalGB) * 100)) : 0;
@@ -1550,13 +1607,9 @@
     let dash = unlimitedFlag ? circumference : (usedPercent / 100) * circumference;
 
     let progressColor = "var(--usage-green)";
-    if (unlimitedFlag) {
-      progressColor = "var(--usage-purple)";
-    } else if (usedPercent >= 80) {
-      progressColor = "var(--usage-red)";
-    } else if (usedPercent >= 50) {
-      progressColor = "var(--usage-yellow)";
-    }
+    if (unlimitedFlag) progressColor = "var(--usage-purple)";
+    else if (usedPercent >= 80) progressColor = "var(--usage-red)";
+    else if (usedPercent >= 50) progressColor = "var(--usage-yellow)";
 
     const progressCircle = document.getElementById("progressCircle");
     progressCircle.setAttribute("stroke-dasharray", `${dash} ${circumference}`);
@@ -1623,8 +1676,7 @@
       div.innerHTML = `<div class="config-meta"><span class="config-name">${escapeHtml(name)}</span><div class="config-actions"><button class="mini-action copyConfigBtn" data-raw=''><i class="fa-regular fa-copy"></i></button><button class="mini-action qrConfigBtn" data-raw='' data-name="${escapeHtml(name)}"><i class="fa-solid fa-qrcode"></i></button></div></div><div class="config-link">${escapeHtml(cfg.length > 80 ? cfg.substring(0, 80)+"..." : cfg)}</div>`;
       let copyBtn = div.querySelector(".copyConfigBtn");
       let qrBtn = div.querySelector(".qrConfigBtn");
-      copyBtn.dataset.raw = cfg;
-      qrBtn.dataset.raw = cfg;
+      copyBtn.dataset.raw = cfg; qrBtn.dataset.raw = cfg;
       copyBtn.addEventListener("click", (e) => { let link = e.currentTarget.dataset.raw; copyText(link, t("copyDone")); });
       qrBtn.addEventListener("click", (e) => { let link = e.currentTarget.dataset.raw; let n = e.currentTarget.dataset.name; showQR(link, `${n} (${t("configTitle")})`, link); });
       container.appendChild(div);
@@ -1633,10 +1685,10 @@
 
   function renderApps() {
     let apps = [
-      { name: "Android", icon: "fa-brands fa-android", list: [{ n: "v2rayNG", url: "https://github.com/2dust/v2rayNG/releases" }, { n: "Happ", url: "https://happ.app/" }] },
-      { name: "iOS", icon: "fa-brands fa-apple", list: [{ n: "Streisand", url: "https://apps.apple.com/search?term=streisand" }, { n: "Shadowrocket", url: "https://apps.apple.com/search?term=shadowrocket" }] },
-      { name: "Windows", icon: "fa-brands fa-windows", list: [{ n: "v2rayN", url: "https://github.com/2dust/v2rayN/releases" }, { n: "Nekoray", url: "https://github.com/MatsuriDayo/nekoray" }] },
-      { name: "macOS", icon: "fa-brands fa-apple", list: [{ n: "V2rayU", url: "https://github.com/yanue/V2rayU" }, { n: "Happ", url: "https://happ.app/" }] }
+      { name: "Android", icon: "fa-brands fa-android", list: [{ n: "v2rayNG", url: "https://github.com/2dust/v2rayNG/releases" }, { n: "Happ (Google Play)", url: "https://play.google.com/store/apps/details?id=com.happproxy" }, { n: "Happ (APK)", url: "https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk" }, { n: "Incy (Google Play)", url: "https://play.google.com/store/apps/details?id=llc.itdev.incy" }, { n: "Incy (APK)", url: "https://github.com/INCY-DEV/incy-platforms/releases/latest/download/Incy.apk" }] },
+      { name: "iOS", icon: "fa-brands fa-apple", list: [{ n: "Streisand", url: "https://apps.apple.com/search?term=streisand" }, { n: "Shadowrocket", url: "https://apps.apple.com/search?term=shadowrocket" }, { n: "Happ", url: "https://apps.apple.com/us/app/happ-proxy-utility/id6504287215" }, { n: "Incy", url: "https://apps.apple.com/ru/app/incy/id6756943388" }] },
+      { name: "Windows", icon: "fa-brands fa-windows", list: [{ n: "v2rayN", url: "https://github.com/2dust/v2rayN/releases" }, { n: "Nekoray", url: "https://github.com/MatsuriDayo/nekoray" }, { n: "Happ", url: "https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x64.exe" }] },
+      { name: "macOS", icon: "fa-brands fa-apple", list: [{ n: "V2rayU", url: "https://github.com/yanue/V2rayU" }, { n: "Happ", url: "https://github.com/Happ-proxy/happ-desktop/releases/latest/download/Happ.macOS.universal.dmg" }, { n: "Incy", url: "https://apps.apple.com/ru/app/incy/id6756943388" }] }
     ];
     let grid = document.getElementById("appsGridContainer");
     grid.innerHTML = "";
@@ -1689,13 +1741,8 @@
     faDigitObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
   }
 
-  function getPanelTitle() {
-    return normalize(templateVars.subTitle, "") || t("subscriptionHub");
-  }
-
-  function updateDocumentTitle() {
-    document.title = getPanelTitle();
-  }
+  function getPanelTitle() { return normalize(templateVars.subTitle, "") || t("subscriptionHub"); }
+  function updateDocumentTitle() { document.title = getPanelTitle(); }
 
   function updateUI() {
     document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
@@ -1724,10 +1771,23 @@
     document.getElementById("themeToggleBtn").setAttribute("aria-label", currentLang === "fa" ? "تغییر حالت روشن و تاریک" : "Toggle light/dark mode");
     document.getElementById("langToggleBtn").setAttribute("aria-label", currentLang === "fa" ? "تغییر زبان" : "Change language");
     document.getElementById("closeModalBtn").setAttribute("aria-label", currentLang === "fa" ? "بستن" : "Close");
-    
     document.getElementById("copyAllText").innerText = t("copyAll");
     document.getElementById("copyAllConfigsBtn").setAttribute("title", t("copyAll"));
     document.getElementById("copyAllConfigsBtn").setAttribute("aria-label", t("copyAll"));
+    document.getElementById("quickImportLabel").innerText = t("quickImport");
+    
+    if(subLink) {
+      document.getElementById("btnImportIncy").href = `incy://import/${subLink}`;
+      document.getElementById("btnImportHapp").href = `happ://import/${subLink}`;
+    }
+
+    let supportBtn = document.getElementById("supportBtn");
+    if (supportUrl) {
+      supportBtn.href = supportUrl; supportBtn.style.display = "inline-flex";
+      supportBtn.setAttribute("aria-label", t("support")); supportBtn.setAttribute("title", t("support"));
+    } else {
+      supportBtn.style.display = "none";
+    }
 
     if (emailsList && emailsList.length > 0) {
       document.getElementById("userEmailBadge").innerHTML = `<i class="fa-regular fa-user"></i> ${emailsList[0]}`;
@@ -1742,7 +1802,7 @@
     forcePersianDigitsInTextNodes();
   }
 
-  // event listeners
+  // Events
   document.getElementById("copyMainBtn").addEventListener("click", () => copyText(subLink, t("copyDone")));
   document.getElementById("qrMainBtn").addEventListener("click", () => { if(subLink) showQR(subLink, t("qr") + " " + t("configTitle"), subLink); else showToast(t("copyFail")); });
   document.getElementById("themeToggleBtn").addEventListener("click", () => { isDark = !isDark; updateUI(); });
@@ -1752,12 +1812,8 @@
   document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
 
   document.getElementById("copyAllConfigsBtn").addEventListener("click", () => {
-    if (!configsList || configsList.length === 0) {
-      showToast(t("noConfigToCopy"));
-      return;
-    }
-    const allConfigsText = configsList.join("\n");
-    copyText(allConfigsText, t("copyDone"));
+    if (!configsList || configsList.length === 0) { showToast(t("noConfigToCopy")); return; }
+    copyText(configsList.join("\n"), t("copyDone"));
   });
 
   startPersianDigitObserver();
