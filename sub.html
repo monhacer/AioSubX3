@@ -2023,22 +2023,104 @@
         renderLastOnline();
       }
 
+      // تابع کمکی برای ساخت آیتم‌های ویژه (لینک‌های سابسکریپشن)
+      function createSubscriptionItem(name, url, iconClass) {
+        let div = document.createElement("div");
+        div.className = "config-item";
+        // استایل متمایز برای لینک‌های سابسکریپشن
+        div.style.background = "var(--surface-strong)";
+
+        let metaDiv = document.createElement("div");
+        metaDiv.className = "config-meta";
+
+        let nameSpan = document.createElement("span");
+        nameSpan.className = "config-name";
+        nameSpan.style.background = "var(--accent-soft)";
+        nameSpan.style.color = "var(--accent)";
+        nameSpan.style.boxShadow = "none";
+        nameSpan.title = name;
+        nameSpan.innerHTML = `<i class="${iconClass}" style="margin-inline-end: 0.4rem;"></i>${name}`;
+
+        let actionsDiv = document.createElement("div");
+        actionsDiv.className = "config-actions";
+
+        let copyBtn = document.createElement("button");
+        copyBtn.className = "mini-action";
+        copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+        copyBtn.addEventListener("click", () => {
+          copyText(url, t("copyDone"));
+        });
+
+        let qrBtn = document.createElement("button");
+        qrBtn.className = "mini-action";
+        qrBtn.innerHTML = '<i class="fa-solid fa-qrcode"></i>';
+        qrBtn.addEventListener("click", () => {
+          showQR(url, name, url);
+        });
+
+        actionsDiv.appendChild(copyBtn);
+        actionsDiv.appendChild(qrBtn);
+        metaDiv.appendChild(nameSpan);
+        metaDiv.appendChild(actionsDiv);
+        div.appendChild(metaDiv);
+
+        return div;
+      }
+
+      // جایگزین تابع قبلی شما
       function renderConfigs() {
         let container = document.getElementById("configListContainer");
-        if (!configsList.length) {
-          document.getElementById("noConfigMsg").innerText = t("noConfig");
+
+        let jsonSub = normalize(templateVars.jsonUrl, "");
+        let clashSub = normalize(templateVars.clashUrl, "");
+
+        let configCount = configsList.length;
+        let hasAnyItem = configCount > 0 || jsonSub || clashSub;
+
+        if (!hasAnyItem) {
+          let emptyDiv = document.createElement("div");
+          emptyDiv.id = "noConfigMsg";
+          emptyDiv.style.textAlign = "center";
+          emptyDiv.style.padding = "2rem";
+          emptyDiv.style.color = "var(--text-muted)";
+          emptyDiv.innerText = t("noConfig");
+
+          container.innerHTML = "";
+          container.appendChild(emptyDiv);
           document.getElementById("configCountBadge").innerText =
             formatDisplay(0);
           return;
         }
-        document.getElementById("configCountBadge").innerText = formatDisplay(
-          configsList.length,
-        );
+
+        document.getElementById("configCountBadge").innerText =
+          formatDisplay(configCount);
         container.innerHTML = "";
+
+        if (jsonSub) {
+          container.appendChild(
+            createSubscriptionItem(
+              "JSON Subscription",
+              jsonSub,
+              "fa-solid fa-code",
+            ),
+          );
+        }
+
+        if (clashSub) {
+          container.appendChild(
+            createSubscriptionItem(
+              "Clash / Mihomo",
+              clashSub,
+              "fa-solid fa-cat",
+            ),
+          );
+        }
+
         configsList.forEach((cfg, idx) => {
           let name = cfg.includes("#")
             ? decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " "))
             : t("configTitle") + " " + formatDisplay(idx + 1);
+
           let div = document.createElement("div");
           div.className = "config-item";
 
@@ -2077,7 +2159,6 @@
           container.appendChild(div);
         });
       }
-
       function renderApps() {
         let apps = [
           {
