@@ -63,7 +63,7 @@ chmod 644 /etc/x-ui/sub/sub.html
 برای بروزرسانی AioSubX3، دوباره دستور نصب سریع را اجرا کنید:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/monhacer/AioSubX3/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/monhacer/AioSubX3/refs/heads/main/install.sh)
 ```
 
 ---
