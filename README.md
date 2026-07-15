@@ -22,4 +22,4 @@ Modern, app-like, and highly responsive subscription page for **3x-ui v3.3.0+**.
 برای نصب یا آپدیت به آخرین نسخه AioSubX3، دستور زیر را در ترمینال سرور خود اجرا کنید:
 
 ```bash
-bash <(curl -fsSL [https://raw.githubusercontent.com/monhacer/AioSubX3/refs/heads/main/install.sh](https://raw.githubusercontent.com/monhacer/AioSubX3/refs/heads/main/install.sh))
+bash <(curl -fsSL https://raw.githubusercontent.com/monhacer/AioSubX3/refs/heads/main/install.sh)
