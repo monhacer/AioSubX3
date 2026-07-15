@@ -1,4 +1,4 @@
-# 🚀 AioSubX3 (v2)
+# 🚀 AioSubX3 (v3)
 
 Modern, app-like, and highly responsive subscription page for **3x-ui v3.3.0+**.
 
