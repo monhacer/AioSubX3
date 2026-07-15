@@ -717,7 +717,8 @@
           noConfig: "کانفیگی موجود نیست", timeExpired: "منقضی شده",
           timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده",
           subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت",
-          copyAll: "کپی همه", quickImport: "افزودن سریع", navHome: "داشبورد"
+          copyAll: "کپی همه", quickImport: "افزودن سریع", navHome: "داشبورد",
+          telegramProxy: "پروکسی تلگرام", vmessConfig: "کانفیگ Vmess"
         },
         en: {
           used: "Used", usage: "Usage", total: "Total", remained: "Remaining",
@@ -729,9 +730,11 @@
           noConfig: "No configs", timeExpired: "Expired",
           timeUnlimited: "Unlimited", remainTime: "Remaining time",
           subscriptionHub: "Dashboard", volumeUnit: "GB",
-          copyAll: "Copy All", quickImport: "Quick Import", navHome: "Home"
+          copyAll: "Copy All", quickImport: "Quick Import", navHome: "Home",
+          telegramProxy: "Telegram Proxy", vmessConfig: "Vmess Config"
         },
       };
+
       let currentLang = localStorage.getItem("nexus_lang") || "fa";
       let isDark = (localStorage.getItem("nexus_theme") || "dark") !== "light";
       let countdownInterval = null;
@@ -1027,7 +1030,17 @@
         if (clashSub) html += createSubItem("Clash Sub", clashSub, "fa-solid fa-cat");
         
         configsList.forEach((cfg, idx) => {
-          let name = cfg.includes("#") ? decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " ")) : t("configTitle") + " " + formatDisplay(idx + 1);
+          let name = "";
+          let cleanCfg = cfg.trim();
+          
+          if (cleanCfg.startsWith("tg://")) {
+            name = t("telegramProxy") + " 🚀";
+          } else if (cleanCfg.startsWith("vmess://")) {
+            name = t("vmessConfig") + " " + formatDisplay(idx + 1);
+          } else {
+            name = cleanCfg.includes("#") ? decodeURIComponent(cleanCfg.split("#").pop().replace(/\+/g, " ")) : t("configTitle") + " " + formatDisplay(idx + 1);
+          }
+          
           html += `<div class="list-item">
             <div class="list-item-title">${name}</div>
             <div class="list-actions">
