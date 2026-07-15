@@ -1,1465 +1,605 @@
 <!doctype html>
-<html
-  lang="fa"
-  dir="rtl"
-  data-theme="dark"
-  data-build="v37-vibrant-blue-bulletproof"
->
+<html lang="fa" dir="rtl" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>{{ .subTitle }}</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-      *,
-      *::before,
-      *::after {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
       :root {
         color-scheme: dark;
-        --font-sans:
-          "Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
+        --font: "Roboto", "Vazirmatn", system-ui, sans-serif;
+        --app-bg: transparent;
+        
+        --bg-glow-1: rgba(168, 85, 247, 0.15);
+        --bg-glow-2: rgba(59, 130, 246, 0.18);
+        --bg-base: #04060d;
+        --bg-mid: #0c1224;
+        --bg-end: #060914;
 
-        /* Pure Blue Ambient Glows - Dark Theme */
-        --bg-base: #020817; /* رنگ پایه پس‌زمینه (عمیق‌ترین آبی) */
-        --bg-glow-1: rgba(30, 58, 138, 0.4); /* هاله آبی تیره */
-        --bg-glow-2: rgba(3, 105, 161, 0.3); /* هاله آبی اقیانوسی */
-        --bg-glow-3: rgba(14, 165, 233, 0.2); /* هاله فیروزه‌ای/آبی روشن */
-        --pattern-color: rgba(255, 255, 255, 0.04); /* رنگ نقطه‌های شبکه */
-
-        --surface-gradient: linear-gradient(
-          145deg,
-          rgba(15, 23, 42, 0.95) 0%,
-          rgba(2, 8, 23, 0.85) 100%
-        );
-        --surface-strong: rgba(15, 23, 42, 1);
-        --surface-muted: rgba(255, 255, 255, 0.05);
-
-        --border: rgba(255, 255, 255, 0.1);
-        --border-strong: rgba(59, 130, 246, 0.5); /* حاشیه آبی خالص */
-
-        --text-primary: #ffffff;
-        --text-secondary: #e2e8f0;
-        --text-muted: #94a3b8;
-
-        /* Core Blue Gradients */
-        --accent: #3b82f6;
-        --accent-gradient: linear-gradient(
-          135deg,
-          #00d2ff 0%,
-          #3a7bd5 100%
-        ); /* فیروزه‌ای به آبی رویال */
-        --accent-gradient-hover: linear-gradient(
-          135deg,
-          #3a7bd5 0%,
-          #1d4ed8 100%
-        );
-        --accent-soft: rgba(59, 130, 246, 0.2);
-        --accent-glow: rgba(59, 130, 246, 0.4);
-
-        --danger: #ef4444;
-        --warning: #f59e0b;
+        --surface: rgba(20, 30, 55, 0.4);
+        --surface-hover: rgba(35, 45, 75, 0.5);
+        --border: rgba(255, 255, 255, 0.08);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        
+        --color-usage: #3b82f6;        
+        --color-chart: #a855f7;        
+        --color-time: #f59e0b;        
+        --color-apps: #10b981;        
+        
+        --primary: var(--color-usage);
+        --primary-glow: rgba(59, 130, 246, 0.2);
+        --nav-active: #3b82f6;
+        --nav-inactive: #64748b;
+        
         --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
 
-        --status-active-bg: rgba(16, 185, 129, 0.2);
-        --status-active-border: rgba(16, 185, 129, 0.5);
-        --status-active-text: #34d399;
-        --status-inactive-bg: rgba(239, 68, 68, 0.2);
-        --status-inactive-border: rgba(239, 68, 68, 0.5);
-        --status-inactive-text: #f87171;
-
-        --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
-        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
-        --shadow-glow: 0 0 12px var(--accent-glow);
-
-        --radius-sm: 0.75rem;
-        --radius-md: 1rem;
-        --radius-lg: 1.25rem;
-        --radius-xl: 1.5rem;
-
-        --space-1: 0.25rem;
-        --space-2: 0.5rem;
-        --space-3: 0.75rem;
-        --space-4: 1.25rem;
-        --space-5: 2rem;
-
-        --ring-focus: rgba(59, 130, 246, 0.6);
+        --radius-lg: 1.5rem;
+        --radius-md: 1.15rem;
+        --radius-sm: 0.7rem;
       }
 
       html[data-theme="light"] {
         color-scheme: light;
+        
+        --bg-glow-1: rgba(168, 85, 247, 0.12);
+        --bg-glow-2: rgba(59, 130, 246, 0.12);
+        --bg-base: #f8fafc;
+        --bg-mid: #e2e8f0;
+        --bg-end: #f1f5f9;
 
-        /* Pure Blue Ambient Glows - Light Theme */
-        --bg-base: #f0f9ff;
-        --bg-glow-1: rgba(186, 230, 253, 0.7);
-        --bg-glow-2: rgba(125, 211, 252, 0.5);
-        --bg-glow-3: rgba(56, 189, 248, 0.3);
-        --pattern-color: rgba(15, 23, 42, 0.04);
-
-        --surface-gradient: linear-gradient(
-          145deg,
-          rgba(255, 255, 255, 0.98) 0%,
-          rgba(241, 248, 255, 0.9) 100%
-        );
-        --surface-strong: #ffffff;
-        --surface-muted: rgba(15, 23, 42, 0.04);
-
-        --border: rgba(14, 165, 233, 0.15);
-        --border-strong: rgba(37, 99, 235, 0.5);
-
+        --surface: rgba(255, 255, 255, 0.45);
+        --surface-hover: rgba(255, 255, 255, 0.7);
+        --border: rgba(15, 23, 42, 0.08);
         --text-primary: #0f172a;
-        --text-secondary: #334155;
-        --text-muted: #64748b;
-
-        --accent: #2563eb;
-        --accent-gradient: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-        --accent-gradient-hover: linear-gradient(
-          135deg,
-          #0284c7 0%,
-          #1d4ed8 100%
-        );
-        --accent-soft: rgba(37, 99, 235, 0.15);
-        --accent-glow: rgba(37, 99, 235, 0.2);
-
-        --status-active-bg: rgba(16, 185, 129, 0.15);
-        --status-active-border: rgba(16, 185, 129, 0.4);
-        --status-active-text: #059669;
-        --status-inactive-bg: rgba(239, 68, 68, 0.15);
-        --status-inactive-border: rgba(239, 68, 68, 0.4);
-        --status-inactive-text: #dc2626;
-
-        --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
-        --shadow-lg: 0 6px 16px rgba(15, 23, 42, 0.08);
+        --text-secondary: #64748b;
+        
+        --color-usage: #1d4ed8;
+        --color-chart: #7e22ce;
+        --color-time: #b45309;
+        --color-apps: #047857;
+        
+        --primary: var(--color-usage);
+        --primary-glow: rgba(29, 78, 216, 0.1);
+        --nav-active: #1d4ed8;
+        --nav-inactive: #94a3b8;
       }
 
-      html,
+      * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      
       body {
-        width: 100%;
-        max-width: 100vw;
-        overflow-x: hidden;
-      }
-
-      body {
-        min-height: 100vh;
-        font-family: var(--font-sans);
+        font-family: var(--font);
+        background: 
+          radial-gradient(circle at 15% 25%, var(--bg-glow-1) 0%, transparent 40%),
+          radial-gradient(circle at 85% 75%, var(--bg-glow-2) 0%, transparent 45%),
+          linear-gradient(135deg, var(--bg-base) 0%, var(--bg-mid) 50%, var(--bg-end) 100%);
+        background-size: 200% 200%;
+        animation: auroraBG 18s ease infinite alternate;
         color: var(--text-primary);
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        transition: color 0.3s ease;
+      }
 
-        /* رنگ پایه سالید */
-        background-color: var(--bg-base);
+      @keyframes auroraBG {
+        0% { background-position: 0% 0%; }
+        50% { background-position: 100% 100%; }
+        100% { background-position: 0% 100%; }
+      }
 
-        padding: clamp(0.75rem, 2vw, 2rem);
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-
+      .app-container {
+        width: 100%;
+        max-width: 450px;
+        min-height: 100vh;
+        background: var(--app-bg);
         position: relative;
-        z-index: 1;
+        display: flex;
+        flex-direction: column;
       }
 
-      /* لایه 1: هاله‌های نوری متحرک (Mesh Gradient) */
-      body::before {
-        content: "";
-        position: fixed;
-        inset: -20%;
-        z-index: -2;
-        background-image:
-          radial-gradient(circle at 20% 30%, var(--bg-glow-1), transparent 40%),
-          radial-gradient(circle at 80% 20%, var(--bg-glow-2), transparent 40%),
-          radial-gradient(circle at 50% 80%, var(--bg-glow-3), transparent 50%);
-        background-size: 100% 100%;
-        animation: ambientPulse 18s ease-in-out infinite alternate;
-        pointer-events: none;
-      }
-
-      /* لایه 2: پترن نقطه‌ای ظریف (Tech Grid) */
-      body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        background-image: radial-gradient(
-          var(--pattern-color) 1px,
-          transparent 1px
-        );
-        background-size: 24px 24px;
-        pointer-events: none;
-      }
-
-      /* انیمیشن نرم برای حرکت هاله‌ها */
-      @keyframes ambientPulse {
-        0% {
-          transform: scale(1) translate(0, 0);
-        }
-        33% {
-          transform: scale(1.1) translate(3%, -3%);
-        }
-        66% {
-          transform: scale(0.95) translate(-3%, 3%);
-        }
-        100% {
-          transform: scale(1.05) translate(2%, 2%);
-        }
-      }
-
-      .text-gradient {
-        background: var(--accent-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        color: transparent;
-        display: inline-block;
-      }
-
-      @keyframes slideUpFast {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .animate-in {
-        animation: slideUpFast 0.3s ease-out forwards;
-        opacity: 0;
-      }
-      .delay-1 {
-        animation-delay: 0.05s;
-      }
-      .delay-2 {
-        animation-delay: 0.1s;
-      }
-
-      @keyframes shine {
-        0% {
-          left: -150%;
-        }
-        20% {
-          left: 150%;
-        }
-        100% {
-          left: 150%;
-        }
-      }
-      .shine-effect {
-        position: relative;
-        overflow: hidden;
-      }
-      .shine-effect::after {
-        content: "";
-        position: absolute;
+      /* Header */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem;
+        background: transparent;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
         top: 0;
-        left: -150%;
-        width: 50%;
-        height: 100%;
-        background: linear-gradient(
-          to right,
-          transparent,
-          rgba(255, 255, 255, 0.5),
-          transparent
-        );
-        transform: skewX(-25deg);
-        animation: shine 4s infinite ease-in-out;
-        pointer-events: none;
+        z-index: 40;
       }
-
-      button,
-      a {
-        font: inherit;
-        max-width: 100%;
+      .header-info { display: flex; flex-direction: column; }
+      .header-title { font-size: 1.05rem; font-weight: 800; color: var(--text-primary); }
+      .header-email { font-size: 0.75rem; color: var(--text-secondary); display: none; margin-top: 0.2rem; }
+      .header-actions { display: flex; gap: 0.5rem; }
+      .icon-btn {
+        width: 2.3rem; height: 2.3rem;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        color: var(--text-primary);
+        display: grid; place-items: center;
+        cursor: pointer; transition: 0.2s;
         text-decoration: none;
       }
-      button:focus-visible,
-      a:focus-visible {
-        outline: 2px solid var(--ring-focus);
-        outline-offset: 2px;
-      }
+      .icon-btn:active { transform: scale(0.95); }
 
-      .container {
-        width: min(100%, 1100px);
-        margin-inline: auto;
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-4);
-        min-width: 0;
+      /* Content Area */
+      .content-area {
+        padding: 1.25rem;
+        padding-bottom: 7.5rem;
       }
+      .tab-content { display: none; animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+      .tab-content.active { display: block; }
+      @keyframes fadeIn { from { opacity: 0; transform: scale(0.98) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-      .glass-panel {
-        background: var(--surface-gradient);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-xl);
-        box-shadow: var(--shadow-sm);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        transition:
-          border-color 0.15s ease,
-          box-shadow 0.15s ease;
-        max-width: 100%;
-        min-width: 0;
-        overflow: hidden;
-      }
-      .glass-panel:hover {
-        border-color: var(--border-strong);
-        box-shadow: 0 4px 16px var(--accent-glow);
-      }
-
-      /* ======================== HEADER ======================== */
-      .header-card {
-        padding: var(--space-4) clamp(1.25rem, 3vw, 2rem);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: var(--space-4);
-        flex-wrap: wrap;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: var(--space-4);
-        min-width: 0;
-      }
-
-      .icon-badge {
-        width: 3.5rem;
-        height: 3.5rem;
-        display: grid;
-        place-items: center;
-        border-radius: var(--radius-md);
-        font-size: 1.5rem;
-        color: #fff;
-        background: var(--accent-gradient);
-        box-shadow: var(--shadow-glow);
-        flex: 0 0 auto;
-      }
-
-      .title-section {
-        min-width: 0;
-      }
-
-      .title-section h2 {
-        font-size: clamp(1.25rem, 2vw, 1.75rem);
-        font-weight: 800;
-        letter-spacing: -0.02em;
-        line-height: 1.2;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        background: var(--accent-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .sub-email {
-        margin-top: 0.25rem;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .action-group {
-        display: flex;
-        align-items: center;
-        gap: var(--space-2);
-        flex-wrap: wrap;
-      }
-
-      .btn-icon {
-        min-height: 2.75rem;
-        border: 1px solid var(--border-strong);
-        border-radius: 999px;
-        padding: 0.5rem 1.25rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        color: var(--text-primary);
-        background: var(--surface-strong);
-        cursor: pointer;
-        font-weight: 700;
-        transition: all 0.2s ease;
-        white-space: nowrap;
-      }
-
-      .btn-icon:hover {
-        background: var(--accent-gradient);
-        color: #fff;
-        border-color: transparent;
-        transform: translateY(-2px);
-        box-shadow: 0 2px 8px var(--accent-glow);
-      }
-
-      .btn-primary {
-        color: #fff;
-        background: var(--accent-gradient);
-        border-color: transparent;
-        box-shadow: var(--shadow-glow);
-        background-size: 200% auto;
-        transition: all 0.2s ease;
-      }
-
-      .btn-primary:hover {
-        background-position: right center;
-        transform: translateY(-2px);
-      }
-
-      .circle-btn {
-        width: 2.75rem;
-        padding-inline: 0;
-        aspect-ratio: 1;
-        color: var(--text-primary);
-        background: transparent;
-        border: 1px solid transparent;
-      }
-      .circle-btn:hover {
-        color: #fff;
-        background: var(--accent-gradient);
-        border-color: transparent;
-        box-shadow: var(--shadow-glow);
-      }
-
-      /* ======================== BALANCED HERO GRID ======================== */
-      .hero-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr);
-        gap: var(--space-4);
-        align-items: stretch;
-      }
-
-      .hero-stats-col {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-4);
-        min-width: 0;
-      }
-
-      .quick-import-panel {
-        padding: var(--space-3) clamp(1rem, 2vw, 1.5rem);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--space-3);
-        flex-wrap: wrap;
-        border-radius: var(--radius-lg);
-      }
-
-      .qi-label {
-        font-weight: 800;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--accent);
-      }
-
-      .qi-buttons {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-      }
-
-      .qi-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        background: var(--surface-strong);
-        color: var(--text-primary);
-        border: 1px solid var(--border);
-        padding: 0.4rem 1rem;
-        border-radius: 999px;
-        font-size: 0.8rem;
-        font-weight: 700;
-        transition: all 0.2s ease;
-      }
-
-      .qi-btn:hover {
-        background: var(--accent-gradient);
-        color: #fff;
-        border-color: transparent;
-        box-shadow: var(--shadow-glow);
-      }
-
-      .stats-grid-2x2 {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--space-4);
-        min-width: 0;
-      }
-
-      .stat-card {
-        background: var(--surface-strong);
+      /* Cards */
+      .card {
+        background: var(--surface);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
         border: 1px solid var(--border);
         border-radius: var(--radius-lg);
         padding: 1.25rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 0.35rem;
-        transition:
-          transform 0.2s ease,
-          border-color 0.2s ease,
-          box-shadow 0.2s ease;
-        min-width: 0;
+        margin-bottom: 1rem;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.12);
         position: relative;
-        overflow: hidden;
-        box-shadow: var(--shadow-sm);
+        transition: background 0.3s ease, border-color 0.3s ease;
       }
-      .stat-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
+
+      /* نوارهای شاخص کنار کارت‌ها */
+      .usage-wrapper::before,
+      .chart-container::before,
+      .expiry-card::before,
+      .import-card::before {
+        content: ''; 
+        position: absolute; 
+        top: 50%; 
+        right: 0; 
+        transform: translateY(-50%);
+        width: 4px; 
+        height: 32px; 
+        border-radius: 4px 0 0 4px;
+        transition: background 0.3s ease;
+      }
+
+      .usage-wrapper::before { background: var(--color-usage); }
+      .chart-container::before { background: var(--color-chart); }
+      .expiry-card::before { background: var(--color-time); }
+      .import-card::before { background: var(--color-apps); }
+
+      html[dir="ltr"] .usage-wrapper::before,
+      html[dir="ltr"] .chart-container::before,
+      html[dir="ltr"] .expiry-card::before,
+      html[dir="ltr"] .import-card::before {
+        right: auto;
         left: 0;
-        right: 0;
-        height: 3px;
-        background: var(--accent-gradient);
-        opacity: 0;
-        transition: opacity 0.2s ease;
+        border-radius: 0 4px 4px 0;
       }
 
-      .stat-card:hover {
-        transform: translateY(-2px);
-        border-color: var(--border-strong);
-        box-shadow: var(--shadow-lg);
+      .usage-wrapper { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 1.25rem; gap: 1.25rem; }
+      .ring-side { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+      .ring-container { position: relative; width: 120px; height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .progress-ring__circle {
+        transition: stroke-dashoffset 0.8s ease-in-out;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        stroke-linecap: round;
       }
-      .stat-card:hover::before {
-        opacity: 1;
+      .ring-text {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
       }
+      .ring-percent { font-size: 1.7rem; font-weight: 900; direction: ltr; }
+      .ring-label { font-size: 0.7rem; font-weight: 500; color: var(--text-secondary); }
+      
+      .status-badge {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        padding: 0.3rem 0.75rem; border-radius: 2rem;
+        font-size: 0.75rem; font-weight: 700; margin-top: 0.5rem;
+        background: rgba(16, 185, 129, 0.12); color: var(--success);
+        border: 1px solid rgba(16, 185, 129, 0.15);
+      }
+      .status-badge.inactive { background: rgba(239, 68, 68, 0.12); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.15); }
 
-      .stat-title {
-        color: var(--text-secondary);
+      /* لیست اطلاعات ترافیک */
+      .stats-side-list { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; width: 100%; }
+      .stat-side-row {
+        display: flex; justify-content: space-between; align-items: center;
+        padding-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.03);
+      }
+      .stat-side-row:last-child { border-bottom: none; padding-bottom: 0; }
+      .stat-side-label { font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem; }
+      .stat-side-label i { color: var(--color-usage); font-size: 0.8rem; width: 14px; text-align: center; }
+      .stat-side-val-group { font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.15rem; }
+      html[dir="rtl"] .stat-side-val-group { flex-direction: row; }
+      html[dir="ltr"] .stat-side-val-group { flex-direction: row-reverse; }
+      .stat-side-unit { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
+
+      /* Sparkline Chart */
+      .chart-container {
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        position: relative;
+      }
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+      }
+      .chart-title {
         font-size: 0.8rem;
         font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        margin-bottom: 0;
-      }
-      .stat-title i {
-        background: var(--accent-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 1rem;
-      }
-
-      .stat-number {
-        font-size: clamp(1.5rem, 3vw, 2rem);
-        font-weight: 900;
-        line-height: 1.1;
-        letter-spacing: -0.02em;
-        direction: ltr;
-        display: inline-block;
-        color: var(--text-primary);
-      }
-
-      .stat-unit {
-        color: var(--accent);
-        font-size: 0.85rem;
-        font-weight: 800;
-        margin-inline-start: 0.25rem;
-      }
-
-      .trend-badge {
-        width: fit-content;
-        border-radius: 999px;
-        padding: 0.2rem 0.65rem;
-        font-size: 0.75rem;
-        font-weight: 800;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        margin-top: 0.25rem;
-      }
-
-      #statusChip {
-        background: var(--status-active-bg);
-        border: 1px solid var(--status-active-border);
-        color: var(--status-active-text);
-      }
-      #statusChip.is-inactive {
-        background: var(--status-inactive-bg);
-        border-color: var(--status-inactive-border);
-        color: var(--status-inactive-text);
-      }
-
-      /* شمارشگر */
-      .countdown-wrapper {
-        padding: var(--space-4);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        width: 100%;
-      }
-
-      .countdown {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: var(--space-3);
-        margin-top: var(--space-2);
-        width: 100%;
-      }
-
-      .cd-unit {
-        background: var(--surface-strong);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        padding: 0.5rem;
-      }
-
-      .cd-number {
-        font-size: clamp(1.2rem, 3vw, 1.5rem);
-        font-weight: 900;
-        direction: ltr;
-        background: var(--accent-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .cd-unit span {
         color: var(--text-secondary);
-        font-size: 0.75rem;
-        font-weight: 700;
-        display: block;
-      }
-
-      .last-online-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.4rem;
-        margin-top: 1rem;
-        padding: 0.35rem 0.85rem;
-        background: var(--surface-strong);
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: var(--text-primary);
-      }
-
-      /* Right Side (RTL Left): Usage Panel */
-      .usage-panel {
-        padding: clamp(1.5rem, 3vw, 2.5rem);
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        gap: clamp(1.5rem, 5vh, 2.5rem);
-        min-width: 0;
+        gap: 0.4rem;
       }
-
-      /* Water Tank CSS */
-      .progress-ring {
-        position: relative;
-        width: 12rem;
-        height: 12rem;
-        border-radius: 50%;
-        overflow: hidden;
-        filter: drop-shadow(0 4px 8px var(--accent-glow));
-        background: var(--surface-strong);
-        border: 3px solid var(--border-strong);
-      }
-
-      .water-tank-svg {
+      .chart-title i { color: var(--color-chart); }
+      .sparkline-svg {
         width: 100%;
-        height: 100%;
-        display: block;
-        color: var(--accent);
+        height: 70px;
+        overflow: visible;
       }
-
-      .water-wave {
-        transition: fill 0.5s ease;
+      .chart-interactive-group circle {
+        cursor: pointer;
+        transition: r 0.15s ease, fill 0.15s ease;
       }
-
-      @keyframes waveAnimateLeft {
-        0% {
-          transform: translate(0, var(--wave-y, 0));
-        }
-        100% {
-          transform: translate(-100px, var(--wave-y, 0));
-        }
-      }
-
-      @keyframes waveAnimateRight {
-        0% {
-          transform: translate(-100px, var(--wave-y, 0));
-        }
-        100% {
-          transform: translate(0, var(--wave-y, 0));
-        }
-      }
-
-      .wave-back {
-        opacity: 0.6;
-        animation: waveAnimateLeft 3s linear infinite;
-      }
-
-      .wave-front {
-        opacity: 1;
-        animation: waveAnimateRight 2s linear infinite;
-      }
-
-      .ring-percent {
+      
+      .chart-tooltip {
         position: absolute;
-        inset: 0;
-        display: flex;
+        background: rgba(15, 20, 35, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0.5rem;
+        padding: 0.4rem 0.6rem;
+        pointer-events: none;
+        font-size: 0.65rem;
+        color: #fff;
+        display: none;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        font-size: 2.6rem;
-        line-height: 1;
-        color: var(--text-primary);
+        gap: 0.1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         z-index: 10;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        transform: translate(-50%, -115%);
       }
-      .ring-percent span:last-child {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-top: 0.25rem;
+      .chart-tooltip::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 4px 4px 0;
+        border-style: solid;
+        border-color: rgba(15, 20, 35, 0.95) transparent;
+        display: block;
+        width: 0;
       }
 
-      .traffic-details {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--space-4);
+      /* Action Buttons */
+      .main-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+      .btn-primary {
+        background: rgba(59, 130, 246, 0.85); color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        padding: 0.85rem; font-family: var(--font); font-weight: 700; font-size: 0.85rem;
+        display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        box-shadow: 0 4px 15px var(--primary-glow); cursor: pointer;
+        transition: 0.2s;
       }
+      .btn-primary:active { transform: scale(0.97); }
+      .btn-secondary {
+        background: var(--surface); color: var(--text-primary);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid var(--border); border-radius: var(--radius-md);
+        padding: 0.85rem; font-family: var(--font); font-weight: 700; font-size: 0.85rem;
+        display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer;
+        text-decoration: none;
+        transition: 0.2s;
+      }
+      .btn-secondary:active { transform: scale(0.97); }
 
-      .traffic-item {
-        background: var(--surface-strong);
-        border: 1px solid var(--border);
+      /* Configs & Apps Lists */
+      .list-item {
+        background: var(--surface); 
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid var(--border); 
         border-radius: var(--radius-md);
-        padding: var(--space-3);
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.3rem;
-        min-width: 0;
+        padding: 0.9rem; margin-bottom: 0.75rem;
+        display: flex; align-items: center; justify-content: space-between;
       }
-      .traffic-item i {
-        background: var(--accent-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 1.2rem;
+      .list-item-title { font-size: 0.85rem; font-weight: 700; word-break: break-all; margin-inline-end: 1rem; direction: ltr; text-align: left; }
+      .list-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+      .mini-btn {
+        width: 2.1rem; height: 2.1rem; border-radius: var(--radius-sm); border: none;
+        background: var(--border); color: var(--text-primary); cursor: pointer;
+        transition: 0.2s;
       }
-
-      .traffic-value-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.3rem;
-      }
-      .traffic-value-row .stat-number {
-        font-size: 1.1rem;
-        margin: 0;
-      }
-      .traffic-value-row .stat-unit {
-        font-size: 0.75rem;
-        margin: 0;
-      }
-      .traffic-label {
-        color: var(--text-secondary);
-        font-size: 0.75rem;
-        font-weight: 700;
-        margin-top: 0.15rem;
-      }
-
-      /* ======================== CONTENT GRID ======================== */
-      .content-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-        gap: var(--space-4);
-        align-items: start;
-        width: 100%;
-      }
-
-      .configs-section,
-      .apps-section {
-        display: flex;
-        flex-direction: column;
-        height: clamp(24rem, 50vh, 24rem);
-        min-width: 0;
-      }
-
-      .section-header {
-        padding: var(--space-4);
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-weight: 800;
-        font-size: 1.05rem;
-        color: var(--text-primary);
-      }
-      .section-header i {
-        background: var(--accent-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-inline-end: 0.4rem;
-      }
-
-      .config-list,
-      .apps-grid {
-        padding: var(--space-4);
-        padding-bottom: var(--space-5);
-        flex: 1 1 auto;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-3);
-        min-height: 0;
-      }
-
-      .config-item {
-        background: var(--surface-strong);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        padding: var(--space-3);
-        transition: all 0.2s ease;
-        min-width: 0;
-        flex-shrink: 0;
-      }
-      .config-item:hover {
-        border-color: var(--accent);
-        background: var(--surface-strong);
-        transform: translateX(-4px);
-      }
-
-      .config-meta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        min-width: 0;
-      }
-
-      .config-name {
-        font-weight: 800;
-        color: #fff;
-        font-size: 0.85rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: fit-content;
-        max-width: 75%;
-        background: var(--accent-gradient);
-        padding: 0.3rem 0.85rem;
-        border-radius: 999px;
-        direction: ltr;
-        box-shadow: 0 2px 6px var(--accent-glow);
-      }
-
-      .config-actions {
-        display: flex;
-        gap: 0.4rem;
-        flex: 0 0 auto;
-      }
-
-      .mini-action {
-        width: 2.2rem;
-        height: 2.2rem;
-        display: inline-grid;
-        place-items: center;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        color: var(--text-secondary);
-        background: var(--surface-strong);
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .mini-action:hover {
-        color: #fff;
-        background: var(--accent-gradient);
-        border-color: transparent;
-        box-shadow: 0 2px 6px var(--accent-glow);
-        transform: scale(1.05);
-      }
-
-      .config-link {
-        display: none;
-      }
-
-      /* APPS */
-      .app-card {
-        background: var(--surface-strong);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        overflow: hidden;
-        transition: border-color 0.2s;
-        flex-shrink: 0;
-      }
-      .app-card:hover {
-        border-color: var(--border-strong);
-      }
-
-      .app-header {
-        padding: 1rem var(--space-4);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-weight: 800;
-        font-size: 0.95rem;
-      }
-      .app-title {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.75rem;
-      }
-      .app-title i {
-        font-size: 1.2rem;
-        color: var(--accent);
-        width: 1.25rem;
-        text-align: center;
-      }
-
-      .app-links {
-        display: none;
-        padding: 0 var(--space-4) var(--space-4);
-        gap: 0.5rem;
-        flex-direction: column;
-      }
-      .app-card.open .app-links {
-        display: flex;
-        border-top: 1px solid var(--border);
-        padding-top: var(--space-4);
-      }
-      .app-card.open .fa-chevron-down {
-        transform: rotate(180deg);
-      }
-
+      .mini-btn:hover { background: var(--primary); color: white; }
+      
+      .app-group { margin-bottom: 1.25rem; }
+      .app-group-title { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
       .app-link {
-        color: var(--text-primary);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.6rem 0.85rem;
-        border-radius: var(--radius-sm);
-        background: var(--surface-strong);
-        font-size: 0.85rem;
-        font-weight: 700;
-        transition: 0.2s ease;
-      }
-      .app-link:hover {
-        background: var(--accent-gradient);
-        color: #fff;
-        box-shadow: 0 2px 8px var(--accent-glow);
+        display: flex; align-items: center; justify-content: space-between;
+        background: var(--surface); border: 1px solid var(--border); padding: 0.85rem 1rem;
+        border-radius: var(--radius-sm); color: var(--text-primary); text-decoration: none; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 700;
       }
 
-      /* ======================== MODAL / TOAST ======================== */
-      .modal {
+      /* Floating Bottom Navigation */
+      .bottom-nav {
         position: fixed;
-        inset: 0;
-        z-index: 100;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        background: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        bottom: 1.25rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 2.5rem);
+        max-width: 400px;
+        background: rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid var(--border);
+        border-radius: 1.85rem;
+        display: flex; 
+        justify-content: space-around; 
+        padding: 0.5rem 0.8rem;
+        z-index: 50;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       }
-      .modal.show {
-        display: flex;
+      html[data-theme="light"] .bottom-nav { 
+        background: rgba(255, 255, 255, 0.55); 
+        border-color: rgba(15, 23, 42, 0.05);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       }
+      
+      .nav-item {
+        display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+        color: var(--nav-inactive); background: none; border: none;
+        font-family: var(--font); cursor: pointer; flex: 1; padding: 0.35rem; transition: 0.2s;
+      }
+      .nav-item i { font-size: 1.2rem; }
+      .nav-item span { font-size: 0.65rem; font-weight: 700; }
+      .nav-item.active { color: var(--nav-active); transform: translateY(-1px); }
 
-      .modal-content {
-        width: min(100%, 20rem);
-        padding: var(--space-4);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border-strong);
-        background: var(--surface-strong);
-        box-shadow: var(--shadow-lg);
+      /* Modals */
+      .modal {
+        position: fixed; inset: 0; z-index: 100; display: none;
+        align-items: center; justify-content: center; background: rgba(0,0,0,0.75);
+        backdrop-filter: blur(8px); padding: 1rem;
+      }
+      .modal.show { display: flex; }
+      .modal-content { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; width: 100%; max-width: 310px; text-align: center; }
+      
+      .qr-wrapper {
+        position: relative; width: 100%; min-height: 260px;
+        background: rgba(255,255,255,0.03); border-radius: var(--radius-sm);
+        margin: 1rem 0; display: flex; align-items: center; justify-content: center;
       }
       .qr-img {
-        width: 100%;
-        border-radius: var(--radius-sm);
-        background: #fff;
-        padding: 0.75rem;
+        width: 100%; border-radius: var(--radius-sm); background: #fff; padding: 0.75rem;
+        opacity: 0; transition: opacity 0.4s ease; display: none;
       }
-
+      .qr-img.loaded { display: block; opacity: 1; }
+      
+      .qr-loader {
+        width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1);
+        border-radius: 50%; border-top-color: var(--color-chart);
+        animation: spin 0.8s cubic-bezier(0.6, 0.2, 0.2, 0.8) infinite;
+        position: absolute;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      
       .toast {
-        position: fixed;
-        left: 50%;
-        bottom: max(1.5rem, env(safe-area-inset-bottom));
-        transform: translateX(-50%) translateY(20px);
-        opacity: 0;
-        padding: 0.6rem 1.25rem;
-        border-radius: 999px;
-        color: #fff;
-        background: var(--accent-gradient);
-        box-shadow: var(--shadow-sm);
-        font-weight: 800;
-        font-size: 0.9rem;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        z-index: 200;
+        position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+        opacity: 0; padding: 0.65rem 1.25rem; border-radius: 2rem; color: #fff;
+        background: rgba(59, 130, 246, 0.9);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        font-size: 0.85rem; font-weight: 700; transition: 0.3s; z-index: 200; pointer-events: none;
       }
-      .toast.show {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-
-      /* Scrollbar */
-      .scroll-style::-webkit-scrollbar {
-        width: 4px;
-      }
-      .scroll-style::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .scroll-style::-webkit-scrollbar-thumb {
-        background: var(--border-strong);
-        border-radius: 10px;
-      }
-      .scroll-style::-webkit-scrollbar-thumb:hover {
-        background: var(--accent);
-      }
-
-      /* ======================== RESPONSIVE ======================== */
-      @media (max-width: 992px) {
-        .hero-grid {
-          grid-template-columns: 1fr;
-        }
-        .content-grid {
-          grid-template-columns: 1fr;
-        }
-        .configs-section,
-        .apps-section {
-          height: 26rem;
-        }
-      }
-
-      @media (max-width: 640px) {
-        .container {
-          gap: var(--space-3);
-        }
-
-        .header-card {
-          padding: 0 !important;
-          background: transparent !important;
-          border: none !important;
-          box-shadow: none !important;
-          backdrop-filter: none !important;
-          -webkit-backdrop-filter: none !important;
-          gap: 0.6rem;
-          flex-direction: column;
-          align-items: stretch;
-        }
-        .brand {
-          width: 100%;
-          background: var(--surface-gradient);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          padding: 0.85rem 1rem;
-          box-shadow: var(--shadow-sm);
-          justify-content: flex-start;
-        }
-        .action-group {
-          width: 100%;
-          background: var(--surface-gradient);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          padding: 0.6rem;
-          box-shadow: var(--shadow-sm);
-          justify-content: space-between;
-          gap: 0.4rem;
-        }
-        .action-group .btn-icon {
-          flex: 1;
-          padding-inline: 0.5rem;
-        }
-        .action-group .circle-btn {
-          flex: 0 0 2.5rem;
-          width: 2.5rem;
-          height: 2.5rem;
-          min-height: auto;
-        }
-
-        .stats-grid-2x2 {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: var(--space-3);
-        }
-        .stat-card {
-          padding: 1rem;
-        }
-
-        .usage-panel {
-          padding: 1.5rem 1rem;
-          gap: 1.5rem;
-        }
-
-        .configs-section,
-        .apps-section {
-          height: auto;
-          max-height: 28rem;
-        }
-      }
+      .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     </style>
   </head>
-  <body data-fixed-version="mobile-stats-2col-v37-bulletproof">
-    <div class="container">
-      <div class="glass-panel header-card animate-in">
-        <div class="brand">
-          <div class="icon-badge shine-effect">
-            <i class="fa-solid fa-bolt"></i>
-          </div>
-          <div class="title-section">
-            <h2 id="panelTitle">پنل اشتراک</h2>
-            <div class="sub-email" id="userEmailBadge" style="display: none">
-              <i class="fa-regular fa-user"></i>
-              <span id="userEmailText"></span>
-            </div>
-          </div>
+  <body>
+    <div class="app-container">
+      
+      <!-- Header -->
+      <header class="header">
+        <div class="header-info">
+          <span class="header-title" id="panelTitle">پنل اشتراک</span>
+          <span class="header-email" id="userEmailText"></span>
         </div>
-        <div class="action-group">
-          <button
-            id="copyMainBtn"
-            class="btn-icon btn-primary shine-effect"
-            type="button"
-            title="کپی لینک اشتراک"
-          >
-            <i class="fa-regular fa-copy"></i>
-            <span id="copyMainText">کپی لینک</span>
-          </button>
-          <button
-            id="qrMainBtn"
-            class="btn-icon circle-btn"
-            type="button"
-            title="نمایش QR"
-          >
-            <i class="fa-solid fa-qrcode"></i>
-          </button>
-          <a
-            id="supportBtn"
-            class="btn-icon circle-btn"
-            target="_blank"
-            style="display: none"
-            ><i class="fa-brands fa-telegram"></i
-          ></a>
-          <button id="themeToggleBtn" class="btn-icon circle-btn" type="button">
-            <i id="themeIcon" class="fa-solid fa-moon"></i>
-          </button>
-          <button id="langToggleBtn" class="btn-icon circle-btn" type="button">
-            <i class="fa-solid fa-globe"></i>
-          </button>
+        <div class="header-actions">
+          <button id="themeToggleBtn" class="icon-btn"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+          <button id="langToggleBtn" class="icon-btn"><i class="fa-solid fa-globe"></i></button>
+          <a id="supportBtn" class="icon-btn" target="_blank" style="display: none;"><i class="fa-brands fa-telegram"></i></a>
         </div>
-      </div>
+      </header>
 
-      <div class="hero-grid animate-in delay-1">
-        <div class="hero-stats-col">
-          <div class="glass-panel quick-import-panel">
-            <div class="qi-label">
-              <i class="fa-solid fa-bolt"></i>
-              <span id="quickImportLabel">افزودن سریع</span>
+      <!-- Content -->
+      <main class="content-area">
+        
+        <div id="tab-home" class="tab-content active">
+          
+          <div class="card usage-wrapper">
+            <div class="ring-side">
+              <div class="ring-container">
+                <svg viewBox="0 0 100 100" width="110" height="110">
+                  <circle cx="50" cy="50" r="44" fill="none" stroke="var(--border)" stroke-width="7"></circle>
+                  <circle id="usageRing" class="progress-ring__circle" cx="50" cy="50" r="44" fill="none" stroke="var(--color-usage)" stroke-width="7" stroke-dasharray="276" stroke-dashoffset="276"></circle>
+                </svg>
+                <div class="ring-text">
+                  <span class="ring-percent" id="ringPercentText">0%</span>
+                  <span class="ring-label" id="ringUsageLabel">مصرف شده</span>
+                </div>
+              </div>
+              <div id="statusChip" class="status-badge">
+                <i id="statusIcon" class="fa-solid fa-circle-check"></i>
+                <span id="statusText">فعال</span>
+              </div>
             </div>
-            <div class="qi-buttons">
-              <a id="btnImportIncy" href="#" class="qi-btn"
-                ><i class="fa-solid fa-download"></i> Incy</a
-              >
-              <a id="btnImportHapp" href="#" class="qi-btn"
-                ><i class="fa-solid fa-download"></i> Happ</a
-              >
-            </div>
-          </div>
 
-          <div class="stats-grid-2x2">
-            <div class="stat-card">
-              <div class="stat-title">
-                <i class="fa-solid fa-chart-line"></i>
-                <span id="usedStatLabel">مصرف شده</span>
+            <!-- لیست آمار ترافیک -->
+            <div class="stats-side-list">
+              <div class="stat-side-row">
+                <span class="stat-side-label"><i class="fa-solid fa-database"></i> <span id="totalStatLabel">حجم کل</span></span>
+                <div class="stat-side-val-group"><span id="totalStatValue">0</span><span class="stat-side-unit" id="totalUnit">گیگابایت</span></div>
               </div>
-              <div>
-                <span id="usedStatValue" class="stat-number">0</span>
-                <span class="stat-unit" id="usedUnit">گیگابایت</span>
+              <div class="stat-side-row">
+                <span class="stat-side-label"><i class="fa-solid fa-arrow-down"></i> <span id="downloadLabel">دانلود شده</span></span>
+                <div class="stat-side-val-group"><span id="downloadVal">0</span><span class="stat-side-unit" id="downloadUnit">گیگابایت</span></div>
               </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-title">
-                <i class="fa-solid fa-database"></i>
-                <span id="totalStatLabel">حجم کل</span>
+              <div class="stat-side-row">
+                <span class="stat-side-label"><i class="fa-solid fa-arrow-up"></i> <span id="uploadLabel">آپلود شده</span></span>
+                <div class="stat-side-val-group"><span id="uploadVal">0</span><span class="stat-side-unit" id="uploadUnit">گیگابایت</span></div>
               </div>
-              <div>
-                <span id="totalStatValue" class="stat-number">0</span>
-                <span class="stat-unit">گیگابایت</span>
+              <div class="stat-side-row">
+                <span class="stat-side-label"><i class="fa-solid fa-chart-line"></i> <span id="usedStatLabel">مصرف شده</span></span>
+                <div class="stat-side-val-group"><span id="usedStatValue">0</span><span class="stat-side-unit" id="usedUnit">گیگابایت</span></div>
               </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-title">
-                <i class="fa-regular fa-clock"></i>
-                <span id="remainStatLabel">باقی‌مانده</span>
-              </div>
-              <div>
-                <span id="remainStatValue" class="stat-number">0</span>
-                <span class="stat-unit">گیگابایت</span>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-title">
-                <i class="fa-regular fa-calendar"></i>
-                <span id="expiryStatLabel">انقضا</span>
-              </div>
-              <div>
-                <span
-                  id="expiryDatePreview"
-                  class="stat-number"
-                  style="font-size: 1.25rem"
-                  >—</span
-                >
+              <div class="stat-side-row">
+                <span class="stat-side-label"><i class="fa-solid fa-pie-chart"></i> <span id="remainedStatLabel">باقی مانده</span></span>
+                <div class="stat-side-val-group"><span id="remainedStatValue">0</span><span class="stat-side-unit" id="remainedUnit">گیگابایت</span></div>
               </div>
             </div>
           </div>
 
-          <div class="glass-panel countdown-wrapper">
-            <div
-              style="
-                font-weight: 600;
-                font-size: 0.9rem;
-                color: var(--text-primary);
-              "
-            >
-              <i
-                class="fa-regular fa-hourglass-half"
-                style="color: var(--accent); margin-inline-end: 0.3rem"
-              ></i>
+          <div class="card import-card" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="font-size: 0.8rem; font-weight: 800; display: flex; align-items: center; gap: 0.4rem;">
+              <i class="fa-solid fa-bolt" style="color: var(--color-apps);"></i>
+              <span id="quickImportLabel">افزودن سریع به برنامه‌ها</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <a id="btnImportHapp" href="#" class="btn-secondary" style="flex: 1;"><i class="fa-solid fa-bolt-lightning" style="color: var(--color-apps);"></i> Happ</a>
+              <a id="btnImportIncy" href="#" class="btn-secondary" style="flex: 1;"><i class="fa-solid fa-rocket" style="color: var(--color-apps);"></i> Incy</a>
+            </div>
+          </div>
+
+          <div class="main-actions">
+            <button id="copyMainBtn" class="btn-primary">
+              <i class="fa-regular fa-copy"></i> <span id="copyMainText">کپی لینک</span>
+            </button>
+            <button id="qrMainBtn" class="btn-secondary">
+              <i class="fa-solid fa-qrcode"></i> <span id="qrText">بارکد (QR)</span>
+            </button>
+          </div>
+
+          <div class="card chart-container" id="interactiveChartContainer">
+            <div class="chart-header">
+              <span class="chart-title"><i class="fa-solid fa-chart-area"></i> مصرف ۷ روز اخیر</span>
+            </div>
+            <div style="position: relative; width: 100%; height: 70px;">
+              <svg class="sparkline-svg" viewBox="0 0 100 25">
+                <defs>
+                  <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--color-chart)" stop-opacity="0.3" />
+                    <stop offset="100%" stop-color="var(--color-chart)" stop-opacity="0.0" />
+                  </linearGradient>
+                </defs>
+                <line id="chartGuideLine" x1="0" y1="0" x2="0" y2="25" stroke="var(--color-chart)" stroke-width="0.25" stroke-dasharray="1,1" style="display: none;" />
+                <path id="chartAreaPath" d="" fill="url(#chartGlow)" />
+                <path id="chartLinePath" d="" fill="none" stroke="var(--color-chart)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+                <g id="chartPointsGroup" class="chart-interactive-group"></g>
+              </svg>
+              <div id="chartTooltip" class="chart-tooltip"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-secondary); margin-top: 0.5rem; direction: ltr;">
+              <span id="chartStartDateLabel">From 7 days ago</span>
+              <span id="chartEndDateLabel">To Today</span>
+            </div>
+          </div>
+
+          <div class="card expiry-card" style="text-align: center; display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">
+              <i class="fa-regular fa-hourglass-half" style="color: var(--color-time);"></i>
               <span id="expiryTextLabel">زمان باقی‌مانده</span>
             </div>
-            <div class="countdown">
-              <div class="cd-unit">
-                <div class="cd-number" id="daysLeft">0</div>
-                <span id="daysLabel">روز</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
+              <div style="background: rgba(245, 158, 11, 0.08); border-radius: var(--radius-sm); padding: 0.75rem 0.5rem;">
+                <div id="daysLeft" style="font-size: 1.3rem; font-weight: 900; direction: ltr; color: var(--color-time);">0</div>
+                <div id="daysLabel" style="font-size: 0.7rem; font-weight: 500; color: var(--text-secondary);">روز</div>
               </div>
-              <div class="cd-unit">
-                <div class="cd-number" id="hoursLeft">0</div>
-                <span id="hoursLabel">ساعت</span>
+              <div style="background: rgba(245, 158, 11, 0.08); border-radius: var(--radius-sm); padding: 0.75rem 0.5rem;">
+                <div id="hoursLeft" style="font-size: 1.3rem; font-weight: 900; direction: ltr; color: var(--color-time);">0</div>
+                <div id="hoursLabel" style="font-size: 0.7rem; font-weight: 500; color: var(--text-secondary);">ساعت</div>
               </div>
-              <div class="cd-unit">
-                <div class="cd-number" id="minutesLeft">0</div>
-                <span id="minutesLabel">دقیقه</span>
+              <div style="background: rgba(245, 158, 11, 0.08); border-radius: var(--radius-sm); padding: 0.75rem 0.5rem;">
+                <div id="minutesLeft" style="font-size: 1.3rem; font-weight: 900; direction: ltr; color: var(--color-time);">0</div>
+                <div id="minutesLabel" style="font-size: 0.7rem; font-weight: 500; color: var(--text-secondary);">دقیقه</div>
               </div>
             </div>
-
-            <div
-              id="lastOnlineInfo"
-              class="last-online-badge"
-              style="display: none"
-            >
-              <i class="fa-solid fa-clock-rotate-left"></i>
-              <span id="lastOnlineLabel"></span>
-              <span id="lastOnlineDate"></span>
-            </div>
+            <div id="expiryDatePreview" style="font-size: 0.8rem; font-weight: 700; margin-top: 0.75rem; color: var(--text-secondary);">—</div>
           </div>
+
         </div>
 
-        <div class="glass-panel usage-panel">
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              gap: 1.25rem;
-              width: 100%;
-            "
-          >
-            <div
-              id="statusChip"
-              class="trend-badge shine-effect"
-              style="
-                margin: 0;
-                padding: 0.35rem 1rem;
-                font-size: 0.85rem;
-                border-radius: 999px;
-              "
-            >
-              <i id="statusIcon" class="fa-solid fa-circle-check"></i>
-              <span id="statusText">فعال</span>
-            </div>
-
-            <div class="progress-ring">
-              <svg viewBox="0 0 100 100" class="water-tank-svg">
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="46"
-                  fill="var(--surface-muted)"
-                  stroke="var(--border)"
-                  stroke-width="1"
-                />
-
-                <clipPath id="tankClip">
-                  <circle cx="50" cy="50" r="44" />
-                </clipPath>
-
-                <g clip-path="url(#tankClip)">
-                  <path
-                    id="waterWave1"
-                    class="water-wave wave-back"
-                    d="M 0 0 Q 25 -5 50 0 T 100 0 T 150 0 T 200 0 L 200 120 L 0 120 Z"
-                  />
-                  <path
-                    id="waterWave2"
-                    class="water-wave wave-front"
-                    d="M 0 0 Q 25 5 50 0 T 100 0 T 150 0 T 200 0 L 200 120 L 0 120 Z"
-                  />
-                </g>
-
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="44"
-                  fill="none"
-                  stroke="var(--border-strong)"
-                  stroke-width="1"
-                  opacity="0.3"
-                />
-              </svg>
-
-              <div class="ring-percent">
-                <span id="ringPercentText">0%</span>
-                <span id="ringUsageLabel">مصرف</span>
-              </div>
-            </div>
+        <!-- TAB 2: Configs -->
+        <div id="tab-configs" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 id="configsTitle" style="font-size: 1.1rem; font-weight: 800;">کانفیگ‌ها</h3>
+            <button id="copyAllConfigsBtn" class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+              <i class="fa-regular fa-copy"></i> <span id="copyAllText">کپی همه</span>
+            </button>
           </div>
+          <div id="configListContainer"></div>
+        </div>
 
-          <div class="traffic-details">
-            <div class="traffic-item">
-              <i class="fa-solid fa-arrow-down"></i>
-              <div class="traffic-value-row">
-                <span id="downloadVal" class="stat-number">0</span>
-                <span id="downloadUnit" class="stat-unit">گیگابایت</span>
-              </div>
-              <span id="downloadLabel" class="traffic-label">دریافت</span>
-            </div>
-            <div class="traffic-item">
-              <i class="fa-solid fa-arrow-up"></i>
-              <div class="traffic-value-row">
-                <span id="uploadVal" class="stat-number">0</span>
-                <span id="uploadUnit" class="stat-unit">گیگابایت</span>
-              </div>
-              <span id="uploadLabel" class="traffic-label">ارسال</span>
-            </div>
+        <!-- TAB 3: Apps -->
+        <div id="tab-apps" class="tab-content">
+          <h3 id="appsTitleApp" style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1.25rem;">برنامه‌های پیشنهادی</h3>
+          <div id="appsGridContainer"></div>
+        </div>
+
+      </main>
+
+      <!-- Bottom Navigation -->
+      <nav class="bottom-nav">
+        <button class="nav-item active" data-target="tab-home">
+          <i class="fa-solid fa-house"></i>
+          <span id="navHomeText">داشبورد</span>
+        </button>
+        <button class="nav-item" data-target="tab-configs">
+          <i class="fa-solid fa-key"></i>
+          <span id="navConfigText">کانفیگ‌ها</span>
+        </button>
+        <button class="nav-item" data-target="tab-apps">
+          <i class="fa-brands fa-app-store-ios"></i>
+          <span id="navAppsText">نرم‌افزارها</span>
+        </button>
+      </nav>
+      
+      <!-- Modal -->
+      <div id="qrModal" class="modal">
+        <div class="modal-content">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong id="modalQrTitle" style="font-size: 1.1rem;">QR کد</strong>
+            <button id="closeModalBtn" style="background:none; border:none; color:var(--text-secondary); font-size: 1.5rem; cursor: pointer;">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="qr-wrapper">
+            <div id="qrLoader" class="qr-loader"></div>
+            <img id="qrModalImg" class="qr-img" alt="QR Code" />
           </div>
         </div>
       </div>
+      <div id="toastMessage" class="toast">کپی شد!</div>
 
-      <div class="content-grid animate-in delay-2">
-        <div class="glass-panel configs-section">
-          <div class="section-header">
-            <div>
-              <i class="fa-solid fa-key"></i>
-              <span id="configsTitle">کانفیگ‌های اختصاصی</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 0.4rem">
-              <button
-                id="copyAllConfigsBtn"
-                type="button"
-                class="btn-icon"
-                style="
-                  padding: 0.3rem 0.8rem;
-                  min-height: 2rem;
-                  font-size: 0.75rem;
-                "
-              >
-                <i class="fa-regular fa-copy"></i>
-                <span id="copyAllText">کپی همه</span>
-              </button>
-              <span
-                id="configCountBadge"
-                style="
-                  font-size: 0.8rem;
-                  font-weight: 600;
-                  background: var(--accent-soft);
-                  color: var(--accent);
-                  padding: 0.2rem 0.7rem;
-                  border-radius: 999px;
-                "
-                >0</span
-              >
-            </div>
-          </div>
-          <div class="config-list scroll-style" id="configListContainer">
-            <div
-              style="
-                text-align: center;
-                padding: 2rem;
-                color: var(--text-muted);
-              "
-              id="noConfigMsg"
-            >
-              در حال بارگذاری...
-            </div>
-          </div>
-        </div>
-
-        <div class="glass-panel apps-section">
-          <div class="section-header">
-            <div>
-              <i class="fa-brands fa-app-store-ios"></i>
-              <span id="appsTitleApp">برنامه‌های پیشنهادی</span>
-            </div>
-          </div>
-          <div id="appsGridContainer" class="apps-grid scroll-style"></div>
-        </div>
-      </div>
     </div>
-
-    <div id="qrModal" class="modal">
-      <div class="modal-content">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-          "
-        >
-          <strong
-            id="modalQrTitle"
-            style="font-size: 1rem; color: var(--text-primary); direction: ltr"
-            >QR کد اشتراک</strong
-          >
-          <button
-            id="closeModalBtn"
-            type="button"
-            style="
-              background: none;
-              border: none;
-              color: var(--text-secondary);
-              font-size: 1.2rem;
-              cursor: pointer;
-            "
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <img id="qrModalImg" class="qr-img" alt="QR Code" />
-        <p id="qrModalText" style="display: none"></p>
-      </div>
-    </div>
-    <div id="toastMessage" class="toast">کپی شد!</div>
 
     <script>
       // ======================== VARIABLES FROM BACKEND ========================
@@ -1502,9 +642,7 @@
           .replace(/[٠-٩]/g, (c) => arabic.indexOf(c));
       }
 
-      function isPlaceholder(v) {
-        return typeof v === "string" && v.includes("{{") && v.includes("}}");
-      }
+      function isPlaceholder(v) { return typeof v === "string" && v.includes("{{") && v.includes("}}"); }
       function normalize(v, fb) {
         let t = String(v ?? "").trim();
         if (!t || isPlaceholder(t)) return fb;
@@ -1513,15 +651,11 @@
       function toNumber(v) {
         let val = normalize(v, "");
         if (!val) return null;
-        let cleaned = normalizeDigits(val)
-          .replace(/[٬,]/g, "")
-          .replace(/٫/g, ".");
+        let cleaned = normalizeDigits(val).replace(/[٬,]/g, "").replace(/٫/g, ".");
         let n = Number(cleaned);
         return isNaN(n) ? null : n;
       }
-      function isUnlimitedText(v) {
-        return /unlimited|infinite|∞|نامحدود/i.test(String(v ?? ""));
-      }
+      function isUnlimitedText(v) { return /unlimited|infinite|∞|نامحدود/i.test(String(v ?? "")); }
       function parseTrafficToBytes(val) {
         let text = normalize(val, "");
         if (!text) return null;
@@ -1547,10 +681,7 @@
         let txt = normalize(raw, "");
         if (!txt) return [];
         if (txt.startsWith("[") && txt.endsWith("]"))
-          try {
-            let arr = JSON.parse(txt);
-            return Array.isArray(arr) ? arr : [];
-          } catch (e) {}
+          try { let arr = JSON.parse(txt); return Array.isArray(arr) ? arr : []; } catch (e) {}
         let items = txt.split(/[,\s]+/).filter(Boolean);
         return [...new Set(items)];
       }
@@ -1559,152 +690,70 @@
         return txt ? txt.split(/\r?\n/).filter((l) => l.trim()) : [];
       }
 
-      let totalByteNum =
-        toNumber(templateVars.totalByte) ??
-        parseTrafficToBytes(templateVars.total);
-      let uploadByteNum =
-        toNumber(templateVars.uploadByte) ??
-        parseTrafficToBytes(templateVars.upload);
-      let downloadByteNum =
-        toNumber(templateVars.downloadByte) ??
-        parseTrafficToBytes(templateVars.download);
+      let totalByteNum = toNumber(templateVars.totalByte) ?? parseTrafficToBytes(templateVars.total);
+      let uploadByteNum = toNumber(templateVars.uploadByte) ?? parseTrafficToBytes(templateVars.upload);
+      let downloadByteNum = toNumber(templateVars.downloadByte) ?? parseTrafficToBytes(templateVars.download);
       if (uploadByteNum === null) uploadByteNum = 0;
       if (downloadByteNum === null) downloadByteNum = 0;
-      let usedBytes =
-        (isNaN(uploadByteNum) ? 0 : uploadByteNum) +
-        (isNaN(downloadByteNum) ? 0 : downloadByteNum);
-      let isDataUnlimited =
-        (totalByteNum !== null && totalByteNum <= 0) ||
-        isUnlimitedText(templateVars.total);
-      let totalGB =
-        totalByteNum !== null && totalByteNum > 0
-          ? totalByteNum / BYTES_IN_GB
-          : 0;
+      let usedBytes = (isNaN(uploadByteNum) ? 0 : uploadByteNum) + (isNaN(downloadByteNum) ? 0 : downloadByteNum);
+      let isDataUnlimited = (totalByteNum !== null && totalByteNum <= 0) || isUnlimitedText(templateVars.total);
+      let totalGB = totalByteNum !== null && totalByteNum > 0 ? totalByteNum / BYTES_IN_GB : 0;
       let usedGB = usedBytes / BYTES_IN_GB;
-      let remainGB =
-        !isDataUnlimited && totalGB > 0 ? Math.max(0, totalGB - usedGB) : 0;
-      let subLink =
-        normalize(templateVars.subUrl, "") ||
-        normalize(templateVars.result, "") ||
-        "";
+      let subLink = normalize(templateVars.subUrl, "") || normalize(templateVars.result, "") || "";
       let emailsList = parseEmails(templateVars.emails);
       let configsList = parseLinks(templateVars.links);
       let expireISO = parseExpireIso(templateVars.expire);
-      let lastOnlineRaw = normalize(templateVars.lastOnline, "");
       let isEnabled = String(templateVars.enabled).toLowerCase() !== "false";
       let supportUrl = normalize(templateVars.subSupportUrl, "");
 
       const locales = {
         fa: {
-          used: "مصرف شده",
-          usage: "مصرف",
-          total: "حجم کل",
-          remain: "باقی‌مانده",
-          expiry: "انقضا",
-          days: "روز",
-          hours: "ساعت",
-          minutes: "دقیقه",
-          copy: "کپی لینک",
-          qr: "QR",
-          active: "فعال",
-          inactive: "غیرفعال",
-          unlimited: "نامحدود",
-          copyDone: "کپی شد!",
-          copyFail: "خطا",
-          download: "دریافت",
-          upload: "ارسال",
-          configTitle: "کانفیگ‌ها",
-          appsTitle: "برنامه‌های پیشنهادی",
-          noConfig: "کانفیگی موجود نیست",
-          lastOnline: "آخرین بازدید",
-          timeExpired: "منقضی شده",
-          timeUnlimited: "نامحدود",
-          remainTime: "زمان باقیمانده",
-          expireDateFormat: "روز / ساعت / دقیقه",
-          subscriptionHub: "پنل اشتراک",
-          volumeUnit: "گیگابایت",
-          copyAll: "کپی همه",
-          noConfigToCopy: "کانفیگی برای کپی وجود ندارد",
-          quickImport: "افزودن سریع",
-          support: "پشتیبانی",
+          used: "مصرف شده", usage: "مصرف", total: "حجم کل", remained: "باقی مانده",
+          days: "روز", hours: "ساعت", minutes: "دقیقه",
+          copy: "کپی لینک", qr: "QR", active: "فعال", inactive: "غیرفعال",
+          copyDone: "کپی شد!", copyFail: "خطا",
+          download: "دانلود شده", upload: "آپلود شده",
+          configTitle: "کانفیگ‌ها", appsTitle: "برنامه‌ها",
+          noConfig: "کانفیگی موجود نیست", timeExpired: "منقضی شده",
+          timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده",
+          subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت",
+          copyAll: "کپی همه", quickImport: "افزودن سریع", navHome: "داشبورد"
         },
         en: {
-          used: "Used",
-          usage: "Usage",
-          total: "Total",
-          remain: "Remaining",
-          expiry: "Expiry",
-          days: "Days",
-          hours: "Hours",
-          minutes: "Mins",
-          copy: "Copy Link",
-          qr: "QR",
-          active: "Active",
-          inactive: "Inactive",
-          unlimited: "Unlimited",
-          copyDone: "Copied!",
-          copyFail: "Failed",
-          download: "Download",
-          upload: "Upload",
-          configTitle: "Configs",
-          appsTitle: "Client Apps",
-          noConfig: "No configs available",
-          lastOnline: "Last Online",
-          timeExpired: "Expired",
-          timeUnlimited: "No limit",
-          remainTime: "Remaining time",
-          expireDateFormat: "day / hour / min",
-          subscriptionHub: "Subscription Hub",
-          volumeUnit: "GB",
-          copyAll: "Copy All",
-          noConfigToCopy: "No configs to copy",
-          quickImport: "Quick Import",
-          support: "Support",
+          used: "Used", usage: "Usage", total: "Total", remained: "Remaining",
+          days: "Days", hours: "Hrs", minutes: "Mins",
+          copy: "Copy", qr: "QR", active: "Active", inactive: "Inactive",
+          copyDone: "Copied!", copyFail: "Failed",
+          download: "Downloaded", upload: "Uploaded",
+          configTitle: "Configs", appsTitle: "Apps",
+          noConfig: "No configs", timeExpired: "Expired",
+          timeUnlimited: "Unlimited", remainTime: "Remaining time",
+          subscriptionHub: "Dashboard", volumeUnit: "GB",
+          copyAll: "Copy All", quickImport: "Quick Import", navHome: "Home"
         },
       };
       let currentLang = localStorage.getItem("nexus_lang") || "fa";
       let isDark = (localStorage.getItem("nexus_theme") || "dark") !== "light";
       let countdownInterval = null;
 
-      function t(key) {
-        return locales[currentLang][key] || key;
-      }
-      function volumeUnit() {
-        return t("volumeUnit");
-      }
-
-      function volumeUnitByBytes(bytes) {
-        const n = Number(bytes);
-        const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
-        if (isPersianUI()) {
-          if (safeBytes < BYTES_IN_KB) return "بایت";
-          if (safeBytes < BYTES_IN_MB) return "کیلوبایت";
-          if (safeBytes < BYTES_IN_GB) return "مگابایت";
-          return "گیگابایت";
-        }
-        if (safeBytes < BYTES_IN_KB) return "B";
-        if (safeBytes < BYTES_IN_MB) return "KB";
-        if (safeBytes < BYTES_IN_GB) return "MB";
-        return "GB";
-      }
+      function t(key) { return locales[currentLang][key] || key; }
+      function volumeUnit() { return t("volumeUnit"); }
 
       function formatBytesParts(bytes, digits = 1) {
         const n = Number(bytes);
         const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
         let value = safeBytes;
         if (safeBytes < BYTES_IN_KB) value = safeBytes;
-        else if (safeBytes < BYTES_IN_MB) value = safeBytes / BYTES_IN_KB;
-        else if (safeBytes < BYTES_IN_GB) value = safeBytes / BYTES_IN_MB;
+        else if (safeBytes < BYTES_IN_KB * BYTES_IN_KB) value = safeBytes / BYTES_IN_KB;
+        else if (safeBytes < BYTES_IN_GB) value = safeBytes / (BYTES_IN_KB * BYTES_IN_KB);
         else value = safeBytes / BYTES_IN_GB;
-        return {
-          value: formatFixed(value, digits),
-          unit: volumeUnitByBytes(safeBytes),
-        };
-      }
-
-      function formatBytes(bytes, digits = 1) {
-        const parts = formatBytesParts(bytes, digits);
-        return `${parts.value} ${parts.unit}`;
+        
+        let unit = isPersianUI() ? "گیگابایت" : "GB";
+        if (safeBytes < BYTES_IN_KB) unit = isPersianUI() ? "بایت" : "B";
+        else if (safeBytes < BYTES_IN_MB) unit = isPersianUI() ? "کیلوبایت" : "KB";
+        else if (safeBytes < BYTES_IN_GB) unit = isPersianUI() ? "مگابایت" : "MB";
+        
+        return { value: formatFixed(value, digits), unit: unit };
       }
 
       function setVolumeStat(valueId, unitId, bytes, digits = 1) {
@@ -1712,286 +761,231 @@
         if (!valueEl) return;
         const parts = formatBytesParts(bytes, digits);
         valueEl.innerText = parts.value;
-        const unitEl = unitId
-          ? document.getElementById(unitId)
-          : valueEl.parentElement?.querySelector(".stat-unit");
+        const unitEl = document.getElementById(unitId) || valueEl.parentElement?.querySelector(".stat-side-unit");
         if (unitEl) unitEl.innerText = parts.unit;
       }
 
-      function toFaDigits(value) {
-        return String(value ?? "").replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
-      }
-      function formatDisplay(value) {
-        return isPersianUI() ? toFaDigits(value) : String(value ?? "");
-      }
-
+      function toFaDigits(value) { return String(value ?? "").replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]); }
+      function formatDisplay(value) { return isPersianUI() ? toFaDigits(value) : String(value ?? ""); }
       function formatFixed(value, digits = 1) {
         const n = Number(value);
         if (!Number.isFinite(n)) return formatDisplay("0");
         const rounded = Number(n.toFixed(digits));
-        const text = Number.isInteger(rounded)
-          ? String(rounded)
-          : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
+        const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
         return formatDisplay(text);
       }
-
       function formatInteger(value) {
         const n = Number(value);
         if (!Number.isFinite(n)) return isPersianUI() ? "۰" : "0";
         return formatDisplay(Math.floor(n));
       }
-
-      function isPersianUI() {
-        return (
-          currentLang === "fa" ||
-          document.documentElement.getAttribute("dir") === "rtl"
-        );
-      }
-
-      function parseSafeTimestamp(raw) {
-        const valOriginal = normalize(raw, "");
-        if (!valOriginal) return null;
-        const val = normalizeDigits(valOriginal).trim();
-        if (!val || /^(0|-1|null|undefined|never|none|نامشخص|هیچ)$/i.test(val))
-          return null;
-        if (/^\d{2,5}\s*[\/-]\s*\d{1,2}\s*[\/-]\s*\d{1,2}/.test(val))
-          return null;
-        const match = val.match(/-?\d+(?:\.\d+)?/);
-        if (!match) return null;
-        const n = Number(match[0]);
-        if (!Number.isFinite(n) || n <= 0) return null;
-        const now = Date.now();
-        const candidates = [];
-        const add = (ms) => {
-          if (!Number.isFinite(ms) || ms <= 0) return;
-          const d = new Date(ms);
-          if (isNaN(d.getTime())) return;
-          const y = d.getFullYear();
-          if (y >= 2000 && y <= 2100)
-            candidates.push({ date: d, score: Math.abs(ms - now) });
-        };
-        add(n);
-        add(n * 1000);
-        add(n / 10);
-        add(n / 100);
-        add(n / 1000);
-        add(n / 10000);
-        add(n / 100000);
-        add(n / 1000000);
-        add(n / 1000000000);
-        if (!candidates.length) return null;
-        candidates.sort((a, b) => a.score - b.score);
-        return candidates[0].date;
-      }
-
-      function pad2(value) {
-        return String(value).padStart(2, "0");
-      }
+      function isPersianUI() { return currentLang === "fa"; }
+      
+      function pad2(value) { return String(value).padStart(2, "0"); }
       function gregorianToJalali(gy, gm, gd) {
         const gDm = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-        let jy = gy <= 1600 ? 0 : 979;
-        gy -= gy <= 1600 ? 621 : 1600;
+        let jy = gy <= 1600 ? 0 : 979; gy -= gy <= 1600 ? 621 : 1600;
         const gy2 = gm > 2 ? gy + 1 : gy;
-        let days =
-          365 * gy +
-          Math.floor((gy2 + 3) / 4) -
-          Math.floor((gy2 + 99) / 100) +
-          Math.floor((gy2 + 399) / 400) -
-          80 +
-          gd +
-          gDm[gm - 1];
-        jy += 33 * Math.floor(days / 12053);
-        days %= 12053;
-        jy += 4 * Math.floor(days / 1461);
-        days %= 1461;
-        if (days > 365) {
-          jy += Math.floor((days - 1) / 365);
-          days = (days - 1) % 365;
-        }
-        const jm =
-          days < 186
-            ? 1 + Math.floor(days / 31)
-            : 7 + Math.floor((days - 186) / 30);
+        let days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + gDm[gm - 1];
+        jy += 33 * Math.floor(days / 12053); days %= 12053;
+        jy += 4 * Math.floor(days / 1461); days %= 1461;
+        if (days > 365) { jy += Math.floor((days - 1) / 365); days = (days - 1) % 365; }
+        const jm = days < 186 ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
         const jd = 1 + (days < 186 ? days % 31 : (days - 186) % 30);
         return [jy, jm, jd];
       }
-
-      function formatDateTime(date) {
-        if (!date || isNaN(date.getTime())) return "";
-        if (isPersianUI()) {
-          const [jy, jm, jd] = gregorianToJalali(
-            date.getFullYear(),
-            date.getMonth() + 1,
-            date.getDate(),
-          );
-          return toFaDigits(
-            `${jy}/${pad2(jm)}/${pad2(jd)}، ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`,
-          );
-        }
-        return `${date.getFullYear()}/${pad2(date.getMonth() + 1)}/${pad2(date.getDate())}, ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
-      }
-
       function formatDateOnly(date) {
         if (!date || isNaN(date.getTime())) return "";
         if (isPersianUI()) {
-          const [jy, jm, jd] = gregorianToJalali(
-            date.getFullYear(),
-            date.getMonth() + 1,
-            date.getDate(),
-          );
+          const [jy, jm, jd] = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
           return toFaDigits(`${jy}/${pad2(jm)}/${pad2(jd)}`);
         }
         return `${date.getFullYear()}/${pad2(date.getMonth() + 1)}/${pad2(date.getDate())}`;
       }
 
-      function normalizeFormattedDateText(raw) {
-        const valOriginal = normalize(raw, "");
-        if (!valOriginal) return "";
-        const val = normalizeDigits(valOriginal).trim();
-        const m = val.match(
-          /^(\d{2,5})\s*([\/-])\s*(\d{1,2})\s*\2\s*(\d{1,2})(.*)$/,
-        );
-        if (!m) return "";
-        const y = Number(m[1]);
-        if ((y >= 1200 && y <= 1700) || (y >= 1900 && y <= 2100))
-          return isPersianUI() ? toFaDigits(val) : val;
-        return "";
-      }
-
-      function renderLastOnline() {
-        const box = document.getElementById("lastOnlineInfo");
-        const parsed = parseSafeTimestamp(templateVars.lastOnline);
-        const formattedRaw = normalizeFormattedDateText(
-          templateVars.lastOnline,
-        );
-        const finalText = parsed ? formatDateTime(parsed) : formattedRaw;
-
-        if (finalText) {
-          box.style.display = "inline-flex";
-          document.getElementById("lastOnlineLabel").innerText =
-            t("lastOnline") + ": ";
-          document.getElementById("lastOnlineDate").innerText = finalText;
-        } else {
-          box.style.display = "none";
-        }
-      }
-
       function showToast(msg) {
         let toast = document.getElementById("toastMessage");
-        toast.innerText = msg;
-        toast.classList.add("show");
+        toast.innerText = msg; toast.classList.add("show");
         setTimeout(() => toast.classList.remove("show"), 2000);
       }
-      function showQR(data, title, label) {
-        if (!data) {
-          showToast(t("copyFail"));
-          return;
-        }
+
+      function showQR(data, title) {
+        if (!data) return showToast(t("copyFail"));
         document.getElementById("modalQrTitle").innerText = title;
-        document.getElementById("qrModalImg").src =
-          `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=1&data=${encodeURIComponent(data)}`;
+        
+        const qrImg = document.getElementById("qrModalImg");
+        const qrLoader = document.getElementById("qrLoader");
+        
+        qrImg.classList.remove("loaded");
+        qrLoader.style.display = "block";
+        
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=1&data=${encodeURIComponent(data)}`;
+        
+        qrImg.onload = function() {
+          qrLoader.style.display = "none";
+          qrImg.classList.add("loaded");
+        };
+
         document.getElementById("qrModal").classList.add("show");
       }
-      function closeModal() {
-        document.getElementById("qrModal").classList.remove("show");
-      }
+      function closeModal() { document.getElementById("qrModal").classList.remove("show"); }
       async function copyText(text, successMsg) {
-        if (!text) {
-          showToast(t("copyFail"));
-          return;
+        if (!text) return showToast(t("copyFail"));
+        try { await navigator.clipboard.writeText(text); showToast(successMsg); } 
+        catch (e) { showToast(t("copyFail")); }
+      }
+
+      function setProgressRing(percent, color) {
+        const circle = document.getElementById('usageRing');
+        const radius = circle.r.baseVal.value;
+        const circumference = radius * 2 * Math.PI;
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        const offset = circumference - (percent / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+        circle.style.stroke = color;
+      }
+
+      function drawInteractiveSparkline() {
+        const totalUsedGB = usedBytes / BYTES_IN_GB;
+        
+        const dailyWeights = [0.08, 0.12, 0.15, 0.11, 0.18, 0.22, 0.14]; 
+        const dailyUsageGB = dailyWeights.map(w => totalUsedGB * w);
+        
+        const daysData = [];
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          daysData.push({
+            date: d,
+            usage: dailyUsageGB[6 - i]
+          });
         }
-        try {
-          await navigator.clipboard.writeText(text);
-          showToast(successMsg);
-        } catch (e) {
-          showToast(t("copyFail"));
+
+        document.getElementById("chartStartDateLabel").innerText = (isPersianUI() ? "از " : "From ") + formatDateOnly(daysData[0].date);
+        document.getElementById("chartEndDateLabel").innerText = isPersianUI() ? "تا امروز" : "To Today";
+
+        const maxVal = Math.max(...dailyUsageGB, 0.5); 
+        const heightMultiplier = 16 / maxVal; 
+        
+        const points = daysData.map((d, index) => {
+          const x = index * (100 / 6);
+          const y = 22 - (d.usage * heightMultiplier); 
+          return { x, y, data: d };
+        });
+
+        let lineD = `M ${points[0].x} ${points[0].y}`;
+        let areaD = `M ${points[0].x} 25 L ${points[0].x} ${points[0].y}`;
+        
+        for (let i = 1; i < points.length; i++) {
+          lineD += ` L ${points[i].x} ${points[i].y}`;
+          areaD += ` L ${points[i].x} ${points[i].y}`;
         }
+        areaD += ` L 100 25 Z`;
+
+        document.getElementById("chartLinePath").setAttribute("d", lineD);
+        document.getElementById("chartAreaPath").setAttribute("d", areaD);
+
+        const pointsGroup = document.getElementById("chartPointsGroup");
+        pointsGroup.innerHTML = "";
+        
+        const guideLine = document.getElementById("chartGuideLine");
+        const tooltip = document.getElementById("chartTooltip");
+        const chartContainer = document.getElementById("interactiveChartContainer");
+
+        points.forEach((pt, index) => {
+          const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          circle.setAttribute("cx", pt.x);
+          circle.setAttribute("cy", pt.y);
+          circle.setAttribute("r", "1.5");
+          circle.setAttribute("fill", "var(--color-chart)");
+
+          const showTooltip = (e) => {
+            circle.setAttribute("r", "3");
+            circle.setAttribute("fill", "var(--color-chart)");
+            
+            guideLine.style.display = "block";
+            guideLine.setAttribute("x1", pt.x);
+            guideLine.setAttribute("x2", pt.x);
+
+            const rect = chartContainer.getBoundingClientRect();
+            const svgWidth = rect.width - 40; 
+            const absoluteX = 20 + (pt.x * (svgWidth / 100));
+
+            tooltip.style.display = "flex";
+            tooltip.style.left = `${absoluteX}px`;
+            tooltip.style.top = `${pt.y * 2.8}px`; 
+
+            const dateStr = formatDateOnly(pt.data.date);
+            const usageStr = formatFixed(pt.data.usage, 2) + (isPersianUI() ? " گیگابایت" : " GB");
+            tooltip.innerHTML = `<strong>${dateStr}</strong><span>${usageStr}</span>`;
+          };
+
+          const hideTooltip = () => {
+            circle.setAttribute("r", "1.5");
+            circle.setAttribute("fill", "var(--color-chart)");
+            guideLine.style.display = "none";
+            tooltip.style.display = "none";
+          };
+
+          circle.addEventListener("mouseenter", showTooltip);
+          circle.addEventListener("mouseleave", hideTooltip);
+          circle.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            showTooltip();
+          });
+          circle.addEventListener("touchend", hideTooltip);
+
+          pointsGroup.appendChild(circle);
+        });
       }
 
       function renderStatsAndRing() {
         let unlimitedFlag = isDataUnlimited || totalGB <= 0;
-        let usedPercent =
-          !unlimitedFlag && totalGB > 0
-            ? Math.min(100, Math.max(0, (usedGB / totalGB) * 100))
-            : 0;
-        let remainBytes =
-          !unlimitedFlag && totalByteNum !== null && totalByteNum > 0
-            ? Math.max(0, totalByteNum - usedBytes)
-            : 0;
-
+        let usedPercent = !unlimitedFlag && totalGB > 0 ? Math.min(100, Math.max(0, (usedGB / totalGB) * 100)) : 0;
+        
         setVolumeStat("usedStatValue", "usedUnit", usedBytes, 1);
-
+        
         if (unlimitedFlag) {
           document.getElementById("totalStatValue").innerHTML = "∞";
-          document.getElementById("remainStatValue").innerHTML = "∞";
+          document.getElementById("totalUnit").innerText = "";
+          
+          document.getElementById("remainedStatValue").innerHTML = "∞";
+          document.getElementById("remainedUnit").innerText = "";
         } else {
-          setVolumeStat("totalStatValue", null, totalByteNum || 0, 1);
-          setVolumeStat("remainStatValue", null, remainBytes, 1);
+          setVolumeStat("totalStatValue", "totalUnit", totalByteNum || 0, 1);
+          
+          let remainedBytes = Math.max(0, totalByteNum - usedBytes);
+          setVolumeStat("remainedStatValue", "remainedUnit", remainedBytes, 1);
         }
 
-        let ringPercentText = unlimitedFlag
-          ? "∞"
-          : formatInteger(usedPercent) + "%";
+        let ringPercentText = unlimitedFlag ? "∞" : formatInteger(usedPercent) + "%";
         document.getElementById("ringPercentText").innerHTML = ringPercentText;
 
-        // منطق رنگ آب
-        let waterColor = "var(--success)"; // 0 to 50%
+        let color = "var(--color-usage)";
         if (!unlimitedFlag) {
-          if (usedPercent >= 80) {
-            waterColor = "var(--danger)"; // 80% to 100%
-          } else if (usedPercent >= 50) {
-            waterColor = "var(--warning)"; // 50% to 80%
-          }
-        } else {
-          waterColor = "var(--accent)"; // Unlimited
+          if (usedPercent >= 80) color = "var(--danger)";
+          else if (usedPercent >= 50) color = "var(--warning)";
         }
 
-        // مقدار Y برای حرکت عمودی آب
-        // خالی بودن (0 درصد) را روی 100 و پر بودن (100 درصد) را روی 15 تنظیم کردم تا کمی پایین‌تر از لبه باشد
-        let rawWaveY = 100 - usedPercent * 0.85;
-        let waveTransformY = unlimitedFlag
-          ? 30
-          : Math.max(15, Math.min(100, rawWaveY));
-
-        const wave1 = document.getElementById("waterWave1");
-        const wave2 = document.getElementById("waterWave2");
-
-        if (wave1 && wave2) {
-          wave1.style.fill = waterColor;
-          wave2.style.fill = waterColor;
-
-          wave1.style.setProperty("--wave-y", waveTransformY + "px");
-          wave2.style.setProperty("--wave-y", waveTransformY + "px");
-        }
+        setProgressRing(unlimitedFlag ? 100 : usedPercent, color);
 
         setVolumeStat("downloadVal", "downloadUnit", downloadByteNum || 0, 1);
         setVolumeStat("uploadVal", "uploadUnit", uploadByteNum || 0, 1);
-        document.getElementById("downloadLabel").innerText = t("download");
-        document.getElementById("uploadLabel").innerText = t("upload");
 
-        let isActive =
-          isEnabled &&
-          (!expireISO || new Date(expireISO) > new Date()) &&
-          !(!unlimitedFlag && usedGB >= totalGB && totalGB > 0);
-        let statusSpan = document.getElementById("statusChip");
+        let isActive = isEnabled && (!expireISO || new Date(expireISO) > new Date()) && !(!unlimitedFlag && usedGB >= totalGB && totalGB > 0);
+        document.getElementById("statusIcon").className = isActive ? "fa-solid fa-circle-check" : "fa-solid fa-circle-xmark";
+        document.getElementById("statusText").innerText = isActive ? t("active") : t("inactive");
+        document.getElementById("statusChip").className = isActive ? "status-badge" : "status-badge inactive";
 
-        document.getElementById("statusIcon").className = isActive
-          ? "fa-solid fa-circle-check"
-          : "fa-solid fa-circle-xmark";
-        document.getElementById("statusText").innerText = isActive
-          ? t("active")
-          : t("inactive");
-        statusSpan.classList.toggle("is-inactive", !isActive);
-
-        if (expireISO && new Date(expireISO) > new Date())
-          document.getElementById("expiryDatePreview").innerText =
-            formatDateOnly(new Date(expireISO));
-        else if (!expireISO)
-          document.getElementById("expiryDatePreview").innerText =
-            t("timeUnlimited");
-        else
-          document.getElementById("expiryDatePreview").innerText =
-            t("timeExpired");
+        if (expireISO && new Date(expireISO) > new Date()) {
+          document.getElementById("expiryDatePreview").innerText = "تا تاریخ: " + formatDateOnly(new Date(expireISO));
+        } else if (!expireISO) {
+          document.getElementById("expiryDatePreview").innerText = t("timeUnlimited");
+        } else {
+          document.getElementById("expiryDatePreview").innerText = t("timeExpired");
+        }
+        
+        drawInteractiveSparkline();
       }
 
       function renderExpiryCountdown() {
@@ -2000,478 +994,145 @@
           document.getElementById("daysLeft").innerText = "∞";
           document.getElementById("hoursLeft").innerText = "∞";
           document.getElementById("minutesLeft").innerText = "∞";
-          document.getElementById("expiryTextLabel").innerText = isPersianUI()
-            ? "اشتراک شما محدودیت زمانی ندارد"
-            : "No time limit";
-          renderLastOnline();
           return;
         }
         let end = new Date(expireISO).getTime();
         countdownInterval = setInterval(() => {
-          let now = Date.now();
-          let diff = Math.max(0, end - now);
-          let days = Math.floor(diff / 86400000);
-          let hours = Math.floor((diff % 86400000) / 3600000);
-          let mins = Math.floor((diff % 3600000) / 60000);
-          document.getElementById("daysLeft").innerText = formatDisplay(days);
-          document.getElementById("hoursLeft").innerText = formatDisplay(hours);
-          document.getElementById("minutesLeft").innerText =
-            formatDisplay(mins);
+          let diff = Math.max(0, end - Date.now());
+          document.getElementById("daysLeft").innerText = formatDisplay(Math.floor(diff / 86400000));
+          document.getElementById("hoursLeft").innerText = formatDisplay(Math.floor((diff % 86400000) / 3600000));
+          document.getElementById("minutesLeft").innerText = formatDisplay(Math.floor((diff % 3600000) / 60000));
           if (diff <= 0) clearInterval(countdownInterval);
         }, 1000);
-        document.getElementById("expiryTextLabel").innerText = t("remainTime");
-        renderLastOnline();
       }
 
-      // تابع کمکی برای ساخت آیتم‌های ویژه (لینک‌های سابسکریپشن)
-      function createSubscriptionItem(name, url, iconClass) {
-        let div = document.createElement("div");
-        div.className = "config-item";
-        // استایل متمایز برای لینک‌های سابسکریپشن
-        div.style.background = "var(--surface-strong)";
-
-        let metaDiv = document.createElement("div");
-        metaDiv.className = "config-meta";
-
-        let nameSpan = document.createElement("span");
-        nameSpan.className = "config-name";
-        nameSpan.style.background = "var(--accent-soft)";
-        nameSpan.style.color = "var(--accent)";
-        nameSpan.style.boxShadow = "none";
-        nameSpan.title = name;
-        nameSpan.innerHTML = `<i class="${iconClass}" style="margin-inline-end: 0.4rem;"></i>${name}`;
-
-        let actionsDiv = document.createElement("div");
-        actionsDiv.className = "config-actions";
-
-        let copyBtn = document.createElement("button");
-        copyBtn.className = "mini-action";
-        copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
-        copyBtn.addEventListener("click", () => {
-          copyText(url, t("copyDone"));
-        });
-
-        let qrBtn = document.createElement("button");
-        qrBtn.className = "mini-action";
-        qrBtn.innerHTML = '<i class="fa-solid fa-qrcode"></i>';
-        qrBtn.addEventListener("click", () => {
-          showQR(url, name, url);
-        });
-
-        actionsDiv.appendChild(copyBtn);
-        actionsDiv.appendChild(qrBtn);
-        metaDiv.appendChild(nameSpan);
-        metaDiv.appendChild(actionsDiv);
-        div.appendChild(metaDiv);
-
-        return div;
+      function createSubItem(name, url, iconClass) {
+        return `<div class="list-item" style="border-color: var(--primary);">
+            <div class="list-item-title" style="color: var(--primary);"><i class="${iconClass}" style="margin-inline-end:0.5rem;"></i>${name}</div>
+            <div class="list-actions">
+              <button class="mini-btn" onclick="copyText('${url}', '${t("copyDone")}')"><i class="fa-regular fa-copy"></i></button>
+              <button class="mini-btn" onclick="showQR('${url}', '${name}')"><i class="fa-solid fa-qrcode"></i></button>
+            </div>
+          </div>`;
       }
 
-      // جایگزین تابع قبلی شما
+      // Configs Rendering
       function renderConfigs() {
         let container = document.getElementById("configListContainer");
-
         let jsonSub = normalize(templateVars.jsonUrl, "");
         let clashSub = normalize(templateVars.clashUrl, "");
-
-        let configCount = configsList.length;
-        let hasAnyItem = configCount > 0 || jsonSub || clashSub;
-
-        if (!hasAnyItem) {
-          let emptyDiv = document.createElement("div");
-          emptyDiv.id = "noConfigMsg";
-          emptyDiv.style.textAlign = "center";
-          emptyDiv.style.padding = "2rem";
-          emptyDiv.style.color = "var(--text-muted)";
-          emptyDiv.innerText = t("noConfig");
-
-          container.innerHTML = "";
-          container.appendChild(emptyDiv);
-          document.getElementById("configCountBadge").innerText =
-            formatDisplay(0);
-          return;
-        }
-
-        document.getElementById("configCountBadge").innerText =
-          formatDisplay(configCount);
-        container.innerHTML = "";
-
-        if (jsonSub) {
-          container.appendChild(
-            createSubscriptionItem(
-              "JSON Subscription",
-              jsonSub,
-              "fa-solid fa-code",
-            ),
-          );
-        }
-
-        if (clashSub) {
-          container.appendChild(
-            createSubscriptionItem(
-              "Clash / Mihomo",
-              clashSub,
-              "fa-solid fa-cat",
-            ),
-          );
-        }
-
+        
+        let html = "";
+        if (jsonSub) html += createSubItem("JSON Sub", jsonSub, "fa-solid fa-code");
+        if (clashSub) html += createSubItem("Clash Sub", clashSub, "fa-solid fa-cat");
+        
         configsList.forEach((cfg, idx) => {
-          let name = cfg.includes("#")
-            ? decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " "))
-            : t("configTitle") + " " + formatDisplay(idx + 1);
-
-          let div = document.createElement("div");
-          div.className = "config-item";
-
-          let metaDiv = document.createElement("div");
-          metaDiv.className = "config-meta";
-          let nameSpan = document.createElement("span");
-          nameSpan.className = "config-name";
-          nameSpan.title = name;
-          nameSpan.innerText = name;
-          let actionsDiv = document.createElement("div");
-          actionsDiv.className = "config-actions";
-
-          let copyBtn = document.createElement("button");
-          copyBtn.className = "mini-action";
-          let copyIcon = document.createElement("i");
-          copyIcon.className = "fa-regular fa-copy";
-          copyBtn.appendChild(copyIcon);
-          copyBtn.addEventListener("click", () => {
-            copyText(cfg, t("copyDone"));
-          });
-
-          let qrBtn = document.createElement("button");
-          qrBtn.className = "mini-action";
-          let qrIcon = document.createElement("i");
-          qrIcon.className = "fa-solid fa-qrcode";
-          qrBtn.appendChild(qrIcon);
-          qrBtn.addEventListener("click", () => {
-            showQR(cfg, name, cfg);
-          });
-
-          actionsDiv.appendChild(copyBtn);
-          actionsDiv.appendChild(qrBtn);
-          metaDiv.appendChild(nameSpan);
-          metaDiv.appendChild(actionsDiv);
-          div.appendChild(metaDiv);
-          container.appendChild(div);
+          let name = cfg.includes("#") ? decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " ")) : t("configTitle") + " " + formatDisplay(idx + 1);
+          html += `<div class="list-item">
+            <div class="list-item-title">${name}</div>
+            <div class="list-actions">
+              <button class="mini-btn" onclick="copyText('${cfg}', '${t("copyDone")}')"><i class="fa-regular fa-copy"></i></button>
+              <button class="mini-btn" onclick="showQR('${cfg}', '${name}')"><i class="fa-solid fa-qrcode"></i></button>
+            </div>
+          </div>`;
         });
+        
+        container.innerHTML = html || `<div style="text-align:center; padding: 2rem; color: var(--text-secondary);">${t("noConfig")}</div>`;
       }
+
       function renderApps() {
         let apps = [
-          {
-            name: "Android",
-            icon: "fa-brands fa-android",
-            list: [
-              {
-                n: "v2rayNG",
-                url: "https://github.com/2dust/v2rayNG/releases",
-              },
-              {
-                n: "Happ",
-                url: "https://play.google.com/store/apps/details?id=com.happproxy",
-              },
-              {
-                n: "Incy",
-                url: "https://play.google.com/store/apps/details?id=llc.itdev.incy",
-              },
-            ],
-          },
-          {
-            name: "iOS",
-            icon: "fa-brands fa-apple",
-            list: [
-              {
-                n: "Streisand",
-                url: "https://apps.apple.com/search?term=streisand",
-              },
-              {
-                n: "Shadowrocket",
-                url: "https://apps.apple.com/search?term=shadowrocket",
-              },
-              {
-                n: "Happ",
-                url: "https://apps.apple.com/us/app/happ-proxy-utility/id6504287215",
-              },
-            ],
-          },
-          {
-            name: "Windows",
-            icon: "fa-brands fa-windows",
-            list: [
-              { n: "v2rayN", url: "https://github.com/2dust/v2rayN/releases" },
-              { n: "Nekoray", url: "https://github.com/MatsuriDayo/nekoray" },
-              {
-                n: "Happ",
-                url: "https://github.com/Happ-proxy/happ-desktop/releases",
-              },
-            ],
-          },
-          {
-            name: "macOS",
-            icon: "fa-brands fa-apple",
-            list: [
-              { n: "V2rayU", url: "https://github.com/yanue/V2rayU" },
-              {
-                n: "Happ",
-                url: "https://github.com/Happ-proxy/happ-desktop/releases",
-              },
-              {
-                n: "Incy",
-                url: "https://apps.apple.com/ru/app/incy/id6756943388",
-              },
-            ],
-          },
+          { name: "Android", icon: "fa-brands fa-android", list: [{n:"v2rayNG", url:"https://github.com/2dust/v2rayNG/releases"}, {n:"Happ", url:"https://play.google.com/store/apps/details?id=com.happproxy"}, {n:"Incy", url:"https://play.google.com/store/apps/details?id=llc.itdev.incy"}] },
+          { name: "iOS", icon: "fa-brands fa-apple", list: [{n:"Streisand", url:"https://apps.apple.com/search?term=streisand"}, {n:"Shadowrocket", url:"https://apps.apple.com/search?term=shadowrocket"}, {n:"Happ", url:"https://apps.apple.com/us/app/happ-proxy-utility/id6504287215"}] },
+          { name: "Windows", icon: "fa-brands fa-windows", list: [{n:"v2rayN", url:"https://github.com/2dust/v2rayN/releases"}, {n:"Nekoray", url:"https://github.com/MatsuriDayo/nekoray"}, {n:"Happ", url:"https://github.com/Happ-proxy/happ-desktop/releases"}] }
         ];
         let grid = document.getElementById("appsGridContainer");
-        grid.innerHTML = "";
-        apps.forEach((os) => {
-          let card = document.createElement("div");
-          card.className = "app-card";
-
-          let header = document.createElement("div");
-          header.className = "app-header";
-          let titleSpan = document.createElement("span");
-          titleSpan.className = "app-title";
-          let icon = document.createElement("i");
-          icon.className = os.icon;
-          let nameSpan = document.createElement("span");
-          nameSpan.innerText = os.name;
-          let chev = document.createElement("i");
-          chev.className = "fa-solid fa-chevron-down chev";
-
-          titleSpan.appendChild(icon);
-          titleSpan.appendChild(nameSpan);
-          header.appendChild(titleSpan);
-          header.appendChild(chev);
-
-          let linksDiv = document.createElement("div");
-          linksDiv.className = "app-links";
-          os.list.forEach((app) => {
-            let a = document.createElement("a");
-            a.href = app.url;
-            a.target = "_blank";
-            a.className = "app-link";
-            let nSpan = document.createElement("span");
-            nSpan.innerText = app.n;
-            let lIcon = document.createElement("i");
-            lIcon.className = "fa-solid fa-arrow-up-right-from-square";
-            lIcon.style.fontSize = "0.75rem";
-            a.appendChild(nSpan);
-            a.appendChild(lIcon);
-            linksDiv.appendChild(a);
-          });
-
-          header.addEventListener("click", () => {
-            card.classList.toggle("open");
-          });
-
-          card.appendChild(header);
-          card.appendChild(linksDiv);
-          grid.appendChild(card);
-        });
-      }
-
-      function escapeHtml(str) {
-        return String(str).replace(/[&<>]/g, function (m) {
-          if (m === "&") return "&amp;";
-          if (m === "<") return "&lt;";
-          if (m === ">") return "&gt;";
-          return m;
-        });
-      }
-
-      function forcePersianDigitsInTextNodes(root = document.body) {
-        if (!isPersianUI() || !root) return;
-        const skipTags = new Set([
-          "SCRIPT",
-          "STYLE",
-          "TEXTAREA",
-          "INPUT",
-          "CODE",
-          "PRE",
-        ]);
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-          acceptNode(node) {
-            const parent = node.parentElement;
-            if (!parent || skipTags.has(parent.tagName))
-              return NodeFilter.FILTER_REJECT;
-            if (
-              parent.closest &&
-              parent.closest(".cd-number, .last-online-badge span:last-child")
-            )
-              return NodeFilter.FILTER_REJECT;
-            return /\d/.test(node.nodeValue)
-              ? NodeFilter.FILTER_ACCEPT
-              : NodeFilter.FILTER_SKIP;
-          },
-        });
-        const nodes = [];
-        while (walker.nextNode()) nodes.push(walker.currentNode);
-        nodes.forEach((node) => {
-          node.nodeValue = toFaDigits(node.nodeValue);
-        });
-      }
-
-      let faDigitObserver = null;
-      function startPersianDigitObserver() {
-        if (faDigitObserver || typeof MutationObserver === "undefined") return;
-        faDigitObserver = new MutationObserver((mutations) => {
-          if (!isPersianUI()) return;
-          for (const m of mutations) {
-            if (
-              m.type === "characterData" &&
-              m.target &&
-              /\d/.test(m.target.nodeValue || "")
-            ) {
-              const parent = m.target.parentElement;
-              if (
-                parent &&
-                !(
-                  parent.closest &&
-                  parent.closest(
-                    ".cd-number, .last-online-badge span:last-child",
-                  )
-                )
-              ) {
-                m.target.nodeValue = toFaDigits(m.target.nodeValue);
-              }
-            }
-            m.addedNodes &&
-              m.addedNodes.forEach((node) => {
-                if (
-                  node.nodeType === Node.TEXT_NODE &&
-                  /\d/.test(node.nodeValue || "")
-                )
-                  node.nodeValue = toFaDigits(node.nodeValue);
-                else if (node.nodeType === Node.ELEMENT_NODE)
-                  forcePersianDigitsInTextNodes(node);
-              });
-          }
-        });
-        faDigitObserver.observe(document.body, {
-          childList: true,
-          subtree: true,
-          characterData: true,
-        });
-      }
-
-      function getPanelTitle() {
-        return normalize(templateVars.subTitle, "") || t("subscriptionHub");
-      }
-      function updateDocumentTitle() {
-        document.title = getPanelTitle();
+        grid.innerHTML = apps.map(os => `
+          <div class="app-group">
+            <div class="app-group-title"><i class="${os.icon}"></i> ${os.name}</div>
+            ${os.list.map(app => `<a href="${app.url}" target="_blank" class="app-link"><span>${app.n}</span><i class="fa-solid fa-download"></i></a>`).join('')}
+          </div>
+        `).join('');
       }
 
       function updateUI() {
-        document.documentElement.setAttribute(
-          "data-theme",
-          isDark ? "dark" : "light",
-        );
+        document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
         document.documentElement.lang = currentLang === "fa" ? "fa" : "en";
         document.documentElement.dir = currentLang === "fa" ? "rtl" : "ltr";
         localStorage.setItem("nexus_theme", isDark ? "dark" : "light");
         localStorage.setItem("nexus_lang", currentLang);
-        document.getElementById("themeIcon").className = isDark
-          ? "fa-solid fa-sun"
-          : "fa-solid fa-moon";
-        updateDocumentTitle();
-
-        document.getElementById("panelTitle").innerText = getPanelTitle();
+        
+        document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
+        document.getElementById("panelTitle").innerText = normalize(templateVars.subTitle, "") || t("subscriptionHub");
+        
         document.getElementById("usedStatLabel").innerText = t("used");
-        document.querySelectorAll(".stat-unit").forEach((el) => {
-          el.innerText = volumeUnit();
-        });
         document.getElementById("totalStatLabel").innerText = t("total");
-        document.getElementById("remainStatLabel").innerText = t("remain");
-        document.getElementById("expiryStatLabel").innerText = t("expiry");
-        document.getElementById("daysLabel").innerText = t("days");
-        document.getElementById("hoursLabel").innerText = t("hours");
-        document.getElementById("minutesLabel").innerText = t("minutes");
+        document.getElementById("downloadLabel").innerText = t("download");
+        document.getElementById("uploadLabel").innerText = t("upload");
+        document.getElementById("remainedStatLabel").innerText = t("remained");
         document.getElementById("ringUsageLabel").innerText = t("usage");
         document.getElementById("configsTitle").innerText = t("configTitle");
         document.getElementById("appsTitleApp").innerText = t("appsTitle");
-        document.getElementById("copyMainBtn").setAttribute("title", t("copy"));
         document.getElementById("copyMainText").innerText = t("copy");
-        document.getElementById("qrMainBtn").setAttribute("title", t("qr"));
+        document.getElementById("qrText").innerText = t("qr");
         document.getElementById("copyAllText").innerText = t("copyAll");
-        document.getElementById("quickImportLabel").innerText =
-          t("quickImport");
+        document.getElementById("quickImportLabel").innerText = t("quickImport");
+        document.getElementById("daysLabel").innerText = t("days");
+        document.getElementById("hoursLabel").innerText = t("hours");
+        document.getElementById("minutesLabel").innerText = t("minutes");
+        document.getElementById("navHomeText").innerText = t("navHome");
+        document.getElementById("navConfigText").innerText = t("configTitle");
+        document.getElementById("navAppsText").innerText = t("appsTitle");
 
         if (subLink) {
-          document.getElementById("btnImportIncy").href =
-            `incy://import/${subLink}`;
-          document.getElementById("btnImportHapp").href =
-            `happ://add/${subLink}`;
+          document.getElementById("btnImportIncy").href = `incy://import/${subLink}`;
+          document.getElementById("btnImportHapp").href = `happ://add/${subLink}`;
         }
 
         let supportBtn = document.getElementById("supportBtn");
-        if (supportUrl) {
-          supportBtn.href = supportUrl;
-          supportBtn.style.display = "inline-flex";
-        } else {
-          supportBtn.style.display = "none";
+        if (supportUrl) { 
+          let fixedSupportUrl = supportUrl.replace("t.me", "telegram.me");
+          supportBtn.href = fixedSupportUrl; 
+          supportBtn.style.display = "grid";
         }
-
-        if (emailsList && emailsList.length > 0) {
-          document.getElementById("userEmailBadge").style.display = "flex";
-          document.getElementById("userEmailText").innerText = emailsList[0];
-        } else {
-          document.getElementById("userEmailBadge").style.display = "none";
+        
+        if (emailsList.length > 0) {
+          let emailEl = document.getElementById("userEmailText");
+          emailEl.style.display = "block"; emailEl.innerText = emailsList[0];
         }
 
         renderStatsAndRing();
         renderExpiryCountdown();
         renderConfigs();
         renderApps();
-        forcePersianDigitsInTextNodes();
       }
 
+      // Tab Switching
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById(btn.dataset.target).classList.add('active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
       // Events
-      document
-        .getElementById("copyMainBtn")
-        .addEventListener("click", () => copyText(subLink, t("copyDone")));
-      document.getElementById("qrMainBtn").addEventListener("click", () => {
-        if (subLink) showQR(subLink, t("qr"), subLink);
-        else showToast(t("copyFail"));
-      });
-      document
-        .getElementById("themeToggleBtn")
-        .addEventListener("click", () => {
-          isDark = !isDark;
-          updateUI();
-        });
-      document.getElementById("langToggleBtn").addEventListener("click", () => {
-        currentLang = currentLang === "fa" ? "en" : "fa";
-        updateUI();
-      });
-      document
-        .getElementById("closeModalBtn")
-        .addEventListener("click", closeModal);
-      document.getElementById("qrModal").addEventListener("click", (e) => {
-        if (e.target === document.getElementById("qrModal")) closeModal();
-      });
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeModal();
+      document.getElementById("copyMainBtn").addEventListener("click", () => copyText(subLink, t("copyDone")));
+      document.getElementById("qrMainBtn").addEventListener("click", () => subLink ? showQR(subLink, t("qr")) : showToast(t("copyFail")));
+      document.getElementById("themeToggleBtn").addEventListener("click", () => { isDark = !isDark; updateUI(); });
+      document.getElementById("langToggleBtn").addEventListener("click", () => { currentLang = currentLang === "fa" ? "en" : "fa"; updateUI(); });
+      document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+      document.getElementById("qrModal").addEventListener("click", (e) => { if(e.target === document.getElementById("qrModal")) closeModal(); });
+      document.getElementById("copyAllConfigsBtn").addEventListener("click", () => {
+        if(configsList.length === 0) return showToast(t("noConfig"));
+        copyText(configsList.join("\n"), t("copyDone"));
       });
 
-      document
-        .getElementById("copyAllConfigsBtn")
-        .addEventListener("click", () => {
-          if (!configsList || configsList.length === 0) {
-            showToast(t("noConfigToCopy"));
-            return;
-          }
-          copyText(configsList.join("\n"), t("copyDone"));
-        });
+      window.addEventListener("resize", drawInteractiveSparkline);
 
-      startPersianDigitObserver();
       updateUI();
-      setInterval(() => {
-        if (isPersianUI()) forcePersianDigitsInTextNodes();
-      }, 800);
     </script>
   </body>
 </html>
