@@ -685,10 +685,15 @@
               <span style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-circle-nodes" style="margin-inline-end: 0.4rem;"></i> <span id="pLabelLastOnline">آخرین اتصال</span></span>
               <span id="profileLastOnlineVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr;">—</span>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem;">
               <span style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-regular fa-hourglass-half" style="margin-inline-end: 0.4rem;"></i> <span id="pLabelExpiryDate">تاریخ انقضا</span></span>
               <span id="profileExpiryDateVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr;">—</span>
             </div>
+            
+            <!-- دکمه تمدید اشتراک -->
+            <button id="profileRenewBtn" class="btn-primary" style="width: 100%; margin-top: 0.4rem; display: none;">
+              <i class="fa-solid fa-rotate"></i> <span id="profileRenewText">تمدید اشتراک</span>
+            </button>
           </div>
         </div>
 
@@ -859,7 +864,8 @@
           pUsername: "نام کاربری", pSubId: "شناسه اشتراک", pServersCount: "تعداد سرور ها",
           pLastOnline: "آخرین اتصال", pExpiryDate: "تاریخ انقضا",
           chartTitle: "مصرف ۷ روز اخیر", chartFrom: "از ", chartTo: "تا امروز",
-          expiryUntil: "تا تاریخ: ", bytesUnit: "بایت", kbUnit: "کیلوبایت", mbUnit: "مگابایت"
+          expiryUntil: "تا تاریخ: ", bytesUnit: "بایت", kbUnit: "کیلوبایت", mbUnit: "مگابایت",
+          renewBtn: "تمدید اشتراک"
         },
         en: {
           used: "Used", usage: "Usage", total: "Total", remained: "Remaining",
@@ -877,7 +883,8 @@
           pUsername: "Username", pSubId: "Subscription ID", pServersCount: "Servers Count",
           pLastOnline: "Last Online", pExpiryDate: "Expiry Date",
           chartTitle: "Usage in last 7 days", chartFrom: "From ", chartTo: "To Today",
-          expiryUntil: "Until: ", bytesUnit: "B", kbUnit: "KB", mbUnit: "MB"
+          expiryUntil: "Until: ", bytesUnit: "B", kbUnit: "KB", mbUnit: "MB",
+          renewBtn: "Renew Subscription"
         },
         zh: {
           used: "已使用", usage: "用量", total: "总计", remained: "剩余",
@@ -895,7 +902,8 @@
           pUsername: "用户名", pSubId: "订阅 ID", pServersCount: "节点数量",
           pLastOnline: "最后在线", pExpiryDate: "到期时间",
           chartTitle: "过去 7 天的用量", chartFrom: "从 ", chartTo: "至今天",
-          expiryUntil: "有效期至：", bytesUnit: "B", kbUnit: "KB", mbUnit: "MB"
+          expiryUntil: "有效期至：", bytesUnit: "B", kbUnit: "KB", mbUnit: "MB",
+          renewBtn: "续费订阅"
         },
         ru: {
           used: "Использовано", usage: "Трафик", total: "Всего", remained: "Осталось",
@@ -913,7 +921,8 @@
           pUsername: "Имя пользователя", pSubId: "ID Подписки", pServersCount: "Кол-во серверов",
           pLastOnline: "Последняя сеть", pExpiryDate: "Дата окончания",
           chartTitle: "Потребление за 7 дней", chartFrom: "С ", chartTo: "По сегодня",
-          expiryUntil: "До: ", bytesUnit: "Б", kbUnit: "КБ", mbUnit: "МБ"
+          expiryUntil: "До: ", bytesUnit: "Б", kbUnit: "КБ", mbUnit: "МБ",
+          renewBtn: "Продлить подписку"
         }
       };
 
@@ -1277,18 +1286,23 @@
       }
 
       function renderProfile() {
+        // نام کاربری (ایمیل)
         let userEmailVal = emailsList.length > 0 ? emailsList[0] : "—";
         document.getElementById("profileUsernameVal").innerText = userEmailVal;
 
+        // شناسه اشتراک (آیدی ساب)
         let userIdVal = normalize(templateVars.sId, "—");
         document.getElementById("profileUserIdVal").innerText = formatDisplay(userIdVal);
 
+        // تعداد سرور ها
         let totalServers = configsList.length;
         document.getElementById("profileServersCountVal").innerText = formatDisplay(totalServers);
 
+        // آخرین اتصال
         let lastOnlineRaw = normalize(templateVars.lastOnline, "—");
         document.getElementById("profileLastOnlineVal").innerText = formatDateTime(lastOnlineRaw);
 
+        // تاریخ انقضا
         if (expireISO) {
           document.getElementById("profileExpiryDateVal").innerText = formatDateTime(expireISO);
         } else {
@@ -1327,6 +1341,7 @@
         document.getElementById("chartMainHeaderTitle").innerHTML = `<i class="fa-solid fa-chart-area"></i> ${t("chartTitle")}`;
         document.getElementById("modalQrTitle").innerText = t("qr");
         document.getElementById("toastMessage").innerText = t("copyDone");
+        document.getElementById("profileRenewText").innerText = t("renewBtn");
         
         document.getElementById("currentLangLabel").innerText = currentLang.toUpperCase();
         document.querySelectorAll('.lang-option').forEach(opt => {
@@ -1356,11 +1371,19 @@
 
         if (supportUrl) { 
           let fixedSupportUrl = supportUrl.replace("t.me", "telegram.me");
+          
+          // ست کردن دکمه ناوبری پایینی
           let supportBtn = document.getElementById("navSupportBtn");
           supportBtn.onclick = () => window.open(fixedSupportUrl, "_blank");
           supportBtn.style.display = "flex";
+
+          // ست کردن و نمایش دکمه جدید تمدید اشتراک در تب پروفایل
+          let profileRenewBtn = document.getElementById("profileRenewBtn");
+          profileRenewBtn.onclick = () => window.open(fixedSupportUrl, "_blank");
+          profileRenewBtn.style.display = "flex";
         } else {
           document.getElementById("navSupportBtn").style.display = "none";
+          document.getElementById("profileRenewBtn").style.display = "none";
         }
         
         if (emailsList.length > 0) {
