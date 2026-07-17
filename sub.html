@@ -581,11 +581,12 @@
               <i class="fa-solid fa-bolt" style="color: var(--color-apps);"></i>
               <span id="quickImportLabel">افزودن سریع به برنامه‌ها</span>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem;">
-              <a id="btnImportV2rayNG" href="#" class="btn-secondary" style="padding: 0.75rem 0.15rem; font-size: 0.68rem;"><i class="fa-brands fa-android" style="color: var(--color-apps);"></i> v2rayNG</a>
-              <a id="btnImportHapp" href="#" class="btn-secondary" style="padding: 0.75rem 0.15rem; font-size: 0.68rem;"><i class="fa-solid fa-bolt-lightning" style="color: var(--color-apps);"></i> Happ</a>
-              <a id="btnImportIncy" href="#" class="btn-secondary" style="padding: 0.75rem 0.15rem; font-size: 0.68rem;"><i class="fa-solid fa-rocket" style="color: var(--color-apps);"></i> Incy</a>
-              <a id="btnImportV2box" href="#" class="btn-secondary" style="padding: 0.75rem 0.15rem; font-size: 0.68rem;"><i class="fa-solid fa-box-open" style="color: var(--color-apps);"></i> V2Box</a>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 0.5rem;">
+              <a id="btnImportV2rayNG" href="#" class="btn-secondary" style="padding: 0.6rem 0.15rem; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;"><i class="fa-brands fa-android" style="color: var(--color-apps); font-size: 1rem;"></i> v2rayNG</a>
+              <a id="btnImportHiddify" href="#" class="btn-secondary" style="padding: 0.6rem 0.15rem; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;"><i class="fa-solid fa-shield-halved" style="color: var(--color-apps); font-size: 1rem;"></i> Hiddify</a>
+              <a id="btnImportHapp" href="#" class="btn-secondary" style="padding: 0.6rem 0.15rem; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;"><i class="fa-solid fa-bolt-lightning" style="color: var(--color-apps); font-size: 1rem;"></i> Happ</a>
+              <a id="btnImportIncy" href="#" class="btn-secondary" style="padding: 0.6rem 0.15rem; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;"><i class="fa-solid fa-rocket" style="color: var(--color-apps); font-size: 1rem;"></i> Incy</a>
+              <a id="btnImportV2box" href="#" class="btn-secondary" style="padding: 0.6rem 0.15rem; font-size: 0.65rem; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;"><i class="fa-solid fa-box-open" style="color: var(--color-apps); font-size: 1rem;"></i> V2Box</a>
             </div>
           </div>
 
@@ -1364,6 +1365,7 @@
 
         if (subLink) {
           document.getElementById("btnImportV2rayNG").href = `v2rayng://install-config?url=${encodeURIComponent(subLink)}`;
+          document.getElementById("btnImportHiddify").href = `hiddify://import/${subLink}`;
           document.getElementById("btnImportIncy").href = `incy://import/${subLink}`;
           document.getElementById("btnImportHapp").href = `happ://add/${subLink}`;
           document.getElementById("btnImportV2box").href = `v2box://install-sub?url=${encodeURIComponent(subLink)}&title=${encodeURIComponent(normalize(templateVars.subTitle, 'Sub'))}`;
