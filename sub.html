@@ -46,12 +46,12 @@
 
       html[data-theme="light"] {
         color-scheme: light;
-        
-        --bg-glow-1: rgba(168, 85, 247, 0.12);
-        --bg-glow-2: rgba(59, 130, 246, 0.12);
-        --bg-base: #f8fafc;
-        --bg-mid: #e2e8f0;
-        --bg-end: #f1f5f9;
+
+        --bg-glow-1: rgba(139, 92, 246, 0.18);
+        --bg-glow-2: rgba(6, 182, 212, 0.15);
+        --bg-base: #f0f4ff;
+        --bg-mid: #e0e7ff;
+        --bg-end: #ecfeff;
 
         --surface: rgba(255, 255, 255, 0.45);
         --surface-hover: rgba(255, 255, 255, 0.7);
@@ -71,7 +71,13 @@
       }
 
       * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-      
+
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+      * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+
       body {
         font-family: var(--font);
         background: 
@@ -485,7 +491,25 @@
         position: absolute;
       }
       @keyframes spin { to { transform: rotate(360deg); } }
-      
+
+      .qr-link-box {
+        position: relative; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+        border-radius: var(--radius-sm); padding: 0.6rem 2.5rem 0.6rem 0.75rem;
+        margin-top: 0.5rem; text-align: left; max-height: 80px; overflow-y: auto;
+        word-break: break-all; font-size: 0.72rem; line-height: 1.4; color: var(--text-secondary);
+      }
+      .qr-link-box code { font-family: monospace; user-select: all; }
+      .qr-link-copy-btn {
+        position: absolute; top: 0.4rem; right: 0.4rem; background: none; border: none;
+        color: var(--color-chart); cursor: pointer; font-size: 1rem; padding: 0.25rem;
+        transition: opacity 0.2s;
+      }
+      .qr-link-copy-btn:hover { opacity: 0.7; }
+      html[data-theme="light"] .qr-link-box {
+        background: rgba(15, 23, 42, 0.06);
+        color: #1e293b;
+      }
+
       .toast {
         position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
         opacity: 0; padding: 0.65rem 1.25rem; border-radius: 2rem; color: #fff;
@@ -592,10 +616,10 @@
 
           <div class="main-actions">
             <button id="copyMainBtn" class="btn-primary">
-              <i class="fa-regular fa-copy"></i> <span id="copyMainText">کپی لینک</span>
+              <i class="fa-regular fa-copy"></i> <span id="copyMainText">کپی لینک ساب</span>
             </button>
             <button id="qrMainBtn" class="btn-secondary">
-              <i class="fa-solid fa-qrcode"></i> <span id="qrText">بارکد (QR)</span>
+              <i class="fa-solid fa-qrcode"></i> <span id="qrText">QR لینک ساب</span>
             </button>
           </div>
 
@@ -736,6 +760,12 @@
             <div id="qrLoader" class="qr-loader"></div>
             <img id="qrModalImg" class="qr-img" alt="QR Code" />
           </div>
+          <div class="qr-link-box">
+            <code id="qrLinkText"></code>
+            <button id="qrLinkCopyBtn" class="qr-link-copy-btn" onclick="copyText(document.getElementById('qrLinkText').textContent, t('copyDone'))">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+          </div>
         </div>
       </div>
       <div id="toastMessage" class="toast">کپی شد!</div>
@@ -851,7 +881,7 @@
         fa: {
           used: "مصرف شده", usage: "مصرف", total: "حجم کل", remained: "باقی مانده",
           days: "روز", hours: "ساعت", minutes: "دقیقه",
-          copy: "کپی لینک", qr: "QR", active: "فعال", inactive: "غیرفعال",
+          copy: "کپی لینک ساب", qr: "QR لینک ساب", active: "فعال", inactive: "غیرفعال",
           copyDone: "کپی شد!", copyFail: "خطا",
           download: "دانلود شده", upload: "آپلود شده",
           configTitle: "کانفیگ‌ها", appsTitle: "برنامه‌ها",
@@ -870,7 +900,7 @@
         en: {
           used: "Used", usage: "Usage", total: "Total", remained: "Remaining",
           days: "Days", hours: "Hrs", minutes: "Mins",
-          copy: "Copy", qr: "QR", active: "Active", inactive: "Inactive",
+          copy: "Copy Sublink", qr: "Sublink QR", active: "Active", inactive: "Inactive",
           copyDone: "Copied!", copyFail: "Failed",
           download: "Downloaded", upload: "Uploaded",
           configTitle: "Configs", appsTitle: "Apps",
@@ -889,7 +919,7 @@
         zh: {
           used: "已使用", usage: "用量", total: "总计", remained: "剩余",
           days: "天", hours: "小时", minutes: "分钟",
-          copy: "复制链接", qr: "二维码", active: "已激活", inactive: "未激活",
+          copy: "复制订阅链接", qr: "订阅链接二维码", active: "已激活", inactive: "未激活",
           copyDone: "已复制!", copyFail: "错误",
           download: "已下载", upload: "已上传",
           configTitle: "配置列表", appsTitle: "推荐应用",
@@ -908,7 +938,7 @@
         ru: {
           used: "Использовано", usage: "Трафик", total: "Всего", remained: "Осталось",
           days: "дн.", hours: "ч.", minutes: "мин.",
-          copy: "Копировать", qr: "QR-код", active: "Активен", inactive: "Неактивен",
+          copy: "Копировать ссылку", qr: "QR подписки", active: "Активен", inactive: "Неактивен",
           copyDone: "Скопировано!", copyFail: "Ошибка",
           download: "Скачано", upload: "Загружено",
           configTitle: "Конфиги", appsTitle: "Приложения",
@@ -1031,16 +1061,19 @@
 
       function showQR(data, title) {
         if (!data) return showToast(t("copyFail"));
-        document.getElementById("modalQrTitle").innerText = t("qr");
-        
+        const titleEl = document.getElementById("modalQrTitle");
+        titleEl.innerText = title || t("qr");
+        titleEl.style.fontSize = title && title !== t("qr") ? "0.85rem" : "1.1rem";
+        document.getElementById("qrLinkText").textContent = data;
+
         const qrImg = document.getElementById("qrModalImg");
         const qrLoader = document.getElementById("qrLoader");
-        
+
         qrImg.classList.remove("loaded");
         qrLoader.style.display = "block";
-        
+
         qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=1&data=${encodeURIComponent(data)}`;
-        
+
         qrImg.onload = function() {
           qrLoader.style.display = "none";
           qrImg.classList.add("loaded");
@@ -1274,7 +1307,7 @@
         let apps = [
           { name: "Android", icon: "fa-brands fa-android", list: [{n:"v2rayNG", url:"https://github.com/2dust/v2rayNG/releases"}, {n:"Happ", url:"https://play.google.com/store/apps/details?id=com.happproxy"}, {n:"Incy", url:"https://play.google.com/store/apps/details?id=llc.itdev.incy"}, {n:"V2Box", url:"https://play.google.com/store/apps/details?id=dev.v2box.android"}] },
           { name: "iOS", icon: "fa-brands fa-apple", list: [{n:"Streisand", url:"https://apps.apple.com/app/id6450534064"}, {n:"Shadowrocket", url:"https://apps.apple.com/app/id932747118"}, {n:"Happ", url:"https://apps.apple.com/app/id6504287215"}, {n:"V2Box", url:"https://apps.apple.com/app/id6446814690"}] },
-          { name: "Windows", icon: "fa-brands fa-windows", list: [{n:"v2rayN", url:"https://github.com/2dust/v2rayN/releases"}, {n:"Nekoray", url:"https://github.com/MatsuriDayo/nekoray"}, {n:"Happ", url:"https://github.com/Happ-proxy/happ-desktop/releases"}] }
+          { name: "Windows", icon: "fa-brands fa-windows", list: [{n:"v2rayN", url:"https://github.com/2dust/v2rayN/releases"}, {n:"Hiddify", url:"https://github.com/hiddify/hiddify-app/releases/latest/download/Hiddify-Windows-Setup-x64.Msix"}, {n:"Nekoray", url:"https://github.com/MatsuriDayo/nekoray"}, {n:"Happ", url:"https://github.com/Happ-proxy/happ-desktop/releases"}] }
         ];
         let grid = document.getElementById("appsGridContainer");
         grid.innerHTML = apps.map(os => `
