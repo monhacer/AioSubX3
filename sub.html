@@ -126,7 +126,32 @@
       }
       .header-info { display: flex; flex-direction: column; align-items: flex-start; text-align: right; }
       .header-title { font-size: 1.05rem; font-weight: 800; color: var(--text-primary); }
-      .header-email { font-size: 0.75rem; color: var(--text-secondary); display: none; margin-top: 0.2rem; }
+      
+      .header-email-wrap {
+        display: none;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.25rem;
+      }
+      .header-status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #64748b;
+        flex-shrink: 0;
+        transition: background 0.3s, box-shadow 0.3s;
+      }
+      .header-status-dot.online {
+        background: var(--success);
+        box-shadow: 0 0 8px var(--success);
+        animation: headerPulse 1.8s infinite cubic-bezier(0.45, 0, 0.55, 1);
+      }
+      @keyframes headerPulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.35); opacity: 0.5; }
+      }
+      .header-email { font-size: 0.75rem; color: var(--text-secondary); }
+
       .header-actions { display: flex; gap: 0.5rem; align-items: center; position: relative; }
       
       .icon-btn {
@@ -248,6 +273,7 @@
         transition: background 0.3s ease, border-color 0.3s ease;
       }
 
+      /* Announce Box */
       .announce-card {
         border-right: 4px solid var(--warning);
         background: rgba(245, 158, 11, 0.08);
@@ -554,7 +580,10 @@
       <header class="header">
         <div class="header-info">
           <span class="header-title" id="panelTitle">پنل اشتراک</span>
-          <span class="header-email" id="userEmailText"></span>
+          <div class="header-email-wrap" id="headerEmailWrap">
+            <span class="header-status-dot" id="headerStatusDot"></span>
+            <span class="header-email" id="userEmailText"></span>
+          </div>
         </div>
         <div class="header-actions">
           <button id="themeToggleBtn" class="icon-btn"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
@@ -582,7 +611,7 @@
         <!-- TAB 1: Home/Dashboard -->
         <div id="tab-home" class="tab-content active">
           
-          <!-- Announce Card -->
+          <!-- باکس اطلاعیه -->
           <div id="announceCard" class="card announce-card">
             <i class="fa-solid fa-bullhorn announce-icon"></i>
             <div id="announceText" class="announce-content"></div>
@@ -808,16 +837,12 @@
       const templateVars = {
         sId: "{{ .sId }}",
         enabled: "{{ .enabled }}",
-        download: "{{ .download }}",
-        upload: "{{ .upload }}",
-        total: "{{ .total }}",
-        used: "{{ .used }}",
-        remained: "{{ .remained }}",
-        expire: "{{ .expire }}",
-        lastOnline: "{{ .lastOnline }}",
+        isOnline: "{{ .isOnline }}",
         downloadByte: "{{ .downloadByte }}",
         uploadByte: "{{ .uploadByte }}",
         totalByte: "{{ .totalByte }}",
+        expire: "{{ .expire }}",
+        lastOnline: "{{ .lastOnline }}",
         subUrl: "{{ .subUrl }}",
         subJsonUrl: "{{ .subJsonUrl }}",
         subClashUrl: "{{ .subClashUrl }}",
@@ -826,10 +851,6 @@
         announce: `{{ .announce }}`,
         links: `{{ range .links }}{{ . }}\n{{ end }}`,
         emails: `{{ range .emails }}{{ . }}\n{{ end }}`,
-        datepicker: "{{ .datepicker }}",
-        result: "{{ .subUrl }}",
-        jsonUrl: "{{ .subJsonUrl }}",
-        clashUrl: "{{ .subClashUrl }}",
       };
 
       const BYTES_IN_KB = 1024;
@@ -858,21 +879,6 @@
         let n = Number(cleaned);
         return isNaN(n) ? null : n;
       }
-      function isUnlimitedText(v) { return /unlimited|infinite|∞|نامحدود/i.test(String(v ?? "")); }
-      function parseTrafficToBytes(val) {
-        let text = normalize(val, "");
-        if (!text) return null;
-        if (isUnlimitedText(text)) return 0;
-        let normalizedNum = normalizeDigits(text);
-        let match = normalizedNum.match(/-?\d+(?:\.\d+)?/);
-        if (!match) return null;
-        let amount = parseFloat(match[0]);
-        let multi = 1;
-        if (/tb|ترابایت/i.test(normalizedNum)) multi = 1024 ** 4;
-        else if (/gb|گیگابایت/i.test(normalizedNum)) multi = BYTES_IN_GB;
-        else if (/mb|مگابایت/i.test(normalizedNum)) multi = 1048576;
-        return amount * multi;
-      }
       function parseExpireIso(exp) {
         let ts = toNumber(exp);
         if (ts === null || ts === 0) return null;
@@ -893,20 +899,66 @@
         return txt ? txt.split(/\r?\n/).filter((l) => l.trim()) : [];
       }
 
-      let totalByteNum = toNumber(templateVars.totalByte) ?? parseTrafficToBytes(templateVars.total);
-      let uploadByteNum = toNumber(templateVars.uploadByte) ?? parseTrafficToBytes(templateVars.upload);
-      let downloadByteNum = toNumber(templateVars.downloadByte) ?? parseTrafficToBytes(templateVars.download);
-      if (uploadByteNum === null) uploadByteNum = 0;
-      if (downloadByteNum === null) downloadByteNum = 0;
-      let usedBytes = (isNaN(uploadByteNum) ? 0 : uploadByteNum) + (isNaN(downloadByteNum) ? 0 : downloadByteNum);
-      let isDataUnlimited = (totalByteNum !== null && totalByteNum <= 0) || isUnlimitedText(templateVars.total);
+      function decodeBase64Utf8(str) {
+        try {
+          let clean = str.replace(/-/g, "+").replace(/_/g, "/");
+          while (clean.length % 4) clean += "=";
+          return decodeURIComponent(
+            atob(clean)
+              .split("")
+              .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+              .join("")
+          );
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function parseConfigName(cfg, defaultName) {
+        if (!cfg) return defaultName;
+        let clean = cfg.trim();
+
+        if (clean.startsWith("tg://")) {
+          return t("telegramProxy") + " 🚀";
+        }
+
+        if (clean.startsWith("vmess://")) {
+          try {
+            const b64 = clean.replace(/^vmess:\/\//i, "").trim();
+            const decodedJson = decodeBase64Utf8(b64);
+            if (decodedJson) {
+              const data = JSON.parse(decodedJson);
+              if (data && data.ps && String(data.ps).trim()) {
+                return String(data.ps).trim();
+              }
+            }
+          } catch (e) {}
+        }
+
+        if (clean.includes("#")) {
+          try {
+            const rawTag = clean.split("#").pop().replace(/\+/g, " ");
+            const decodedTag = decodeURIComponent(rawTag).trim();
+            if (decodedTag) return decodedTag;
+          } catch (e) {}
+        }
+
+        return defaultName;
+      }
+
+      let totalByteNum = toNumber(templateVars.totalByte);
+      let uploadByteNum = toNumber(templateVars.uploadByte) || 0;
+      let downloadByteNum = toNumber(templateVars.downloadByte) || 0;
+      let usedBytes = uploadByteNum + downloadByteNum;
+      let isDataUnlimited = totalByteNum === null || totalByteNum <= 0;
       let totalGB = totalByteNum !== null && totalByteNum > 0 ? totalByteNum / BYTES_IN_GB : 0;
       let usedGB = usedBytes / BYTES_IN_GB;
-      let subLink = normalize(templateVars.subUrl, "") || normalize(templateVars.result, "") || "";
+      let subLink = normalize(templateVars.subUrl, "");
       let emailsList = parseEmails(templateVars.emails);
       let configsList = parseLinks(templateVars.links);
       let expireISO = parseExpireIso(templateVars.expire);
       let isEnabled = String(templateVars.enabled).toLowerCase() !== "false";
+      let isLiveConnected = String(templateVars.isOnline).toLowerCase() === "true";
       let supportUrl = normalize(templateVars.subSupportUrl, "");
 
       const locales = {
@@ -914,6 +966,7 @@
           used: "مصرف شده", usage: "مصرف", total: "حجم کل", remained: "باقی مانده",
           days: "روز", hours: "ساعت", minutes: "دقیقه",
           copy: "کپی لینک اشتراک", qr: "QR لینک اشتراک", active: "فعال", inactive: "غیرفعال",
+          online: "آنلاین", offline: "آفلاین",
           copyDone: "کپی شد!", copyFail: "خطا",
           download: "دانلود شده", upload: "آپلود شده",
           configTitle: "کانفیگ‌ها", appsTitle: "برنامه‌ها",
@@ -933,6 +986,7 @@
           used: "Used", usage: "Usage", total: "Total", remained: "Remaining",
           days: "Days", hours: "Hrs", minutes: "Mins",
           copy: "Copy Sublink", qr: "Sublink QR", active: "Active", inactive: "Inactive",
+          online: "Online", offline: "Offline",
           copyDone: "Copied!", copyFail: "Failed",
           download: "Downloaded", upload: "Uploaded",
           configTitle: "Configs", appsTitle: "Apps",
@@ -952,6 +1006,7 @@
           used: "已使用", usage: "用量", total: "总计", remained: "剩余",
           days: "天", hours: "小时", minutes: "分钟",
           copy: "复制订阅链接", qr: "订阅链接二维码", active: "已激活", inactive: "未激活",
+          online: "在线", offline: "离线",
           copyDone: "已复制!", copyFail: "错误",
           download: "已下载", upload: "已上传",
           configTitle: "配置列表", appsTitle: "推荐应用",
@@ -971,6 +1026,7 @@
           used: "Использовано", usage: "Трафик", total: "Всего", remained: "Осталось",
           days: "дн.", hours: "ч.", minutes: "мин.",
           copy: "Копировать ссылку", qr: "QR подписки", active: "Активен", inactive: "Неактивен",
+          online: "В сети", offline: "Не в сети",
           copyDone: "Скопировано!", copyFail: "Ошибка",
           download: "Скачано", upload: "Загружено",
           configTitle: "Конфиги", appsTitle: "Приложения",
@@ -1177,14 +1233,14 @@
         const tooltip = document.getElementById("chartTooltip");
         const chartContainer = document.getElementById("interactiveChartContainer");
 
-        points.forEach((pt, index) => {
+        points.forEach((pt) => {
           const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
           circle.setAttribute("cx", pt.x);
           circle.setAttribute("cy", pt.y);
           circle.setAttribute("r", "1.5");
           circle.setAttribute("fill", "var(--color-chart)");
 
-          const showTooltip = (e) => {
+          const showTooltip = () => {
             circle.setAttribute("r", "3");
             circle.setAttribute("fill", "var(--color-chart)");
             
@@ -1301,27 +1357,19 @@
           </div>`;
       }
 
-      // Configs Rendering
       function renderConfigs() {
         let container = document.getElementById("configListContainer");
-        let jsonSub = normalize(templateVars.jsonUrl, "");
-        let clashSub = normalize(templateVars.clashUrl, "");
+        let jsonSub = normalize(templateVars.subJsonUrl, "");
+        let clashSub = normalize(templateVars.subClashUrl, "");
         
         let html = "";
         if (jsonSub) html += createSubItem("JSON Sub", jsonSub, "fa-solid fa-code");
         if (clashSub) html += createSubItem("Clash Sub", clashSub, "fa-solid fa-cat");
         
         configsList.forEach((cfg, idx) => {
-          let name = "";
           let cleanCfg = cfg.trim();
-          
-          if (cleanCfg.startsWith("tg://")) {
-            name = t("telegramProxy") + " 🚀";
-          } else if (cleanCfg.startsWith("vmess://")) {
-            name = t("vmessConfig") + " " + formatDisplay(idx + 1);
-          } else {
-            name = cleanCfg.includes("#") ? decodeURIComponent(cleanCfg.split("#").pop().replace(/\+/g, " ")) : t("configTitle") + " " + formatDisplay(idx + 1);
-          }
+          let defaultFallback = t("configTitle") + " " + formatDisplay(idx + 1);
+          let name = parseConfigName(cleanCfg, defaultFallback);
           
           html += `<div class="list-item">
             <div class="list-item-title">${name}</div>
@@ -1382,7 +1430,7 @@
         document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
         document.getElementById("panelTitle").innerText = normalize(templateVars.subTitle, "") || t("subscriptionHub");
 
-        // بررسی و رندر بخش اطلاعیه (Announce)
+        // بررسی و مدیریت بخش اعلامیه
         const announceCard = document.getElementById("announceCard");
         const announceText = document.getElementById("announceText");
         const announceVal = normalize(templateVars.announce, "");
@@ -1392,6 +1440,26 @@
           announceCard.style.display = "flex";
         } else {
           announceCard.style.display = "none";
+        }
+
+        // بررسی و اعمال وضعیت آنلاین/آفلاین در کنار ایمیل هدر
+        const emailWrap = document.getElementById("headerEmailWrap");
+        const emailEl = document.getElementById("userEmailText");
+        const statusDot = document.getElementById("headerStatusDot");
+
+        if (emailsList.length > 0) {
+          emailWrap.style.display = "flex";
+          emailEl.innerText = emailsList[0];
+        } else {
+          emailWrap.style.display = "none";
+        }
+
+        if (isLiveConnected) {
+          statusDot.className = "header-status-dot online";
+          statusDot.title = t("online");
+        } else {
+          statusDot.className = "header-status-dot";
+          statusDot.title = t("offline");
         }
         
         document.getElementById("usedStatLabel").innerText = t("used");
@@ -1428,7 +1496,7 @@
         document.getElementById("navSupportText").innerText = t("support");
         document.getElementById("profileTitleText").innerText = t("profile");
 
-        // Profile Labels Update
+        // Profile Labels
         document.getElementById("pLabelUsername").innerText = t("pUsername");
         document.getElementById("pLabelSubId").innerText = t("pSubId");
         document.getElementById("pLabelServersCount").innerText = t("pServersCount");
@@ -1457,11 +1525,6 @@
           document.getElementById("navSupportBtn").style.display = "none";
           document.getElementById("profileRenewBtn").style.display = "none";
         }
-        
-        if (emailsList.length > 0) {
-          let emailEl = document.getElementById("userEmailText");
-          emailEl.style.display = "block"; emailEl.innerText = emailsList[0];
-        }
 
         renderStatsAndRing();
         renderExpiryCountdown();
@@ -1472,7 +1535,7 @@
 
       // Tab Switching
       document.querySelectorAll('.nav-item').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
           if (btn.id === "navSupportBtn") return;
           
           document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1504,7 +1567,7 @@
         langSelector.classList.remove("open");
       });
 
-      // Events
+      // Actions
       document.getElementById("copyMainBtn").addEventListener("click", () => copyText(subLink, t("copyDone")));
       document.getElementById("qrMainBtn").addEventListener("click", () => subLink ? showQR(subLink, t("qr")) : showToast(t("copyFail")));
       document.getElementById("themeToggleBtn").addEventListener("click", () => { isDark = !isDark; updateUI(); });
