@@ -248,6 +248,31 @@
         transition: background 0.3s ease, border-color 0.3s ease;
       }
 
+      .announce-card {
+        border-right: 4px solid var(--warning);
+        background: rgba(245, 158, 11, 0.08);
+        display: none;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      html[dir="ltr"] .announce-card {
+        border-right: 1px solid var(--border);
+        border-left: 4px solid var(--warning);
+      }
+      .announce-icon {
+        color: var(--warning);
+        font-size: 1.1rem;
+        margin-top: 0.15rem;
+        flex-shrink: 0;
+      }
+      .announce-content {
+        font-size: 0.8rem;
+        line-height: 1.6;
+        color: var(--text-primary);
+        word-break: break-word;
+        white-space: pre-line;
+      }
+
       .usage-wrapper::before,
       .chart-container::before,
       .expiry-card::before,
@@ -557,6 +582,12 @@
         <!-- TAB 1: Home/Dashboard -->
         <div id="tab-home" class="tab-content active">
           
+          <!-- Announce Card -->
+          <div id="announceCard" class="card announce-card">
+            <i class="fa-solid fa-bullhorn announce-icon"></i>
+            <div id="announceText" class="announce-content"></div>
+          </div>
+
           <div class="card usage-wrapper">
             <div class="ring-side">
               <div class="ring-container">
@@ -792,6 +823,7 @@
         subClashUrl: "{{ .subClashUrl }}",
         subTitle: "{{ .subTitle }}",
         subSupportUrl: "{{ .subSupportUrl }}",
+        announce: `{{ .announce }}`,
         links: `{{ range .links }}{{ . }}\n{{ end }}`,
         emails: `{{ range .emails }}{{ . }}\n{{ end }}`,
         datepicker: "{{ .datepicker }}",
@@ -1319,23 +1351,18 @@
       }
 
       function renderProfile() {
-        // نام کاربری (ایمیل)
         let userEmailVal = emailsList.length > 0 ? emailsList[0] : "—";
         document.getElementById("profileUsernameVal").innerText = userEmailVal;
 
-        // شناسه اشتراک (آیدی ساب)
         let userIdVal = normalize(templateVars.sId, "—");
         document.getElementById("profileUserIdVal").innerText = formatDisplay(userIdVal);
 
-        // تعداد سرور ها
         let totalServers = configsList.length;
         document.getElementById("profileServersCountVal").innerText = formatDisplay(totalServers);
 
-        // آخرین اتصال
         let lastOnlineRaw = normalize(templateVars.lastOnline, "—");
         document.getElementById("profileLastOnlineVal").innerText = formatDateTime(lastOnlineRaw);
 
-        // تاریخ انقضا
         if (expireISO) {
           document.getElementById("profileExpiryDateVal").innerText = formatDateTime(expireISO);
         } else {
@@ -1354,6 +1381,18 @@
         
         document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
         document.getElementById("panelTitle").innerText = normalize(templateVars.subTitle, "") || t("subscriptionHub");
+
+        // بررسی و رندر بخش اطلاعیه (Announce)
+        const announceCard = document.getElementById("announceCard");
+        const announceText = document.getElementById("announceText");
+        const announceVal = normalize(templateVars.announce, "");
+
+        if (announceVal) {
+          announceText.innerText = announceVal;
+          announceCard.style.display = "flex";
+        } else {
+          announceCard.style.display = "none";
+        }
         
         document.getElementById("usedStatLabel").innerText = t("used");
         document.getElementById("totalStatLabel").innerText = t("total");
@@ -1407,12 +1446,10 @@
         if (supportUrl) { 
           let fixedSupportUrl = supportUrl.replace("t.me", "telegram.me");
           
-          // ست کردن دکمه ناوبری پایینی
           let supportBtn = document.getElementById("navSupportBtn");
           supportBtn.onclick = () => window.open(fixedSupportUrl, "_blank");
           supportBtn.style.display = "flex";
 
-          // ست کردن و نمایش دکمه جدید تمدید اشتراک در تب پروفایل
           let profileRenewBtn = document.getElementById("profileRenewBtn");
           profileRenewBtn.onclick = () => window.open(fixedSupportUrl, "_blank");
           profileRenewBtn.style.display = "flex";
