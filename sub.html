@@ -72,7 +72,7 @@
 
       * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar { width: 4px; height: 4px; }
       ::-webkit-scrollbar-track { background: transparent; }
       ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
       ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
@@ -474,12 +474,19 @@
         border: 1px solid var(--border);
         border-radius: var(--radius-sm);
         padding: 0.75rem;
+        gap: 0.75rem;
       }
       .ip-value {
         font-size: 0.95rem;
         font-weight: 800;
         direction: ltr;
         unicode-bidi: isolate;
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
       }
       .ip-location-wrap {
         display: flex;
@@ -487,10 +494,13 @@
         gap: 0.45rem;
         font-size: 0.8rem;
         font-weight: 700;
+        flex-shrink: 0;
+        white-space: nowrap;
       }
       .ip-country-flag {
         font-size: 1.25rem;
         line-height: 1;
+        flex-shrink: 0;
       }
 
       .ip-status-banner {
@@ -806,7 +816,7 @@
             </div>
           </div>
 
-          <!-- Quick Import (قرار گرفته در زیر زمان باقی‌مانده) -->
+          <!-- Quick Import -->
           <div class="card import-card" style="display: flex; flex-direction: column; gap: 0.75rem;">
             <div style="font-size: 0.8rem; font-weight: 800; display: flex; align-items: center; gap: 0.4rem;">
               <i class="fa-solid fa-bolt" style="color: var(--color-apps);"></i>
@@ -830,7 +840,7 @@
             </button>
           </div>
 
-          <!-- وضعیت آی‌پی و شبکه -->
+          <!-- وضعیت آی‌پی و شبکه با اسکرول افقی اختصاصی برای آی‌پی -->
           <div class="card ip-card" id="ipCheckCard">
             <div class="ip-card-header">
               <span class="ip-card-title">
@@ -1182,7 +1192,7 @@
           noConfig: "Нет конфигураций", notFound: "Ничего не найдено", timeExpired: "Истек",
           timeUnlimited: "Безлимитный", remainTime: "Оставшееся время",
           subscriptionHub: "Панель подписки", volumeUnit: "ГБ",
-          copyAll: "Копировать всё", quickImport: "Быستрый импорт", navHome: "Дашборд",
+          copyAll: "Копировать всё", quickImport: "Быстрый импорт", navHome: "Дашборд",
           telegramProxy: "Прокси Telegram", vmessConfig: "VMess Конфиг",
           profile: "Профиль", support: "Поддержка",
           pUsername: "Имя пользователя", pSubId: "ID Подписки", pServersCount: "Кол-во серверов",
