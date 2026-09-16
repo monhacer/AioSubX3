@@ -6,7 +6,7 @@
     <title>{{ .subTitle }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
       :root {
         color-scheme: dark;
@@ -168,10 +168,8 @@
       }
       .icon-btn:active { transform: scale(0.95); }
 
-      /* کاستوم سلکتور زبان */
-      .lang-selector-container {
-        position: relative;
-      }
+      /* Selector Lang */
+      .lang-selector-container { position: relative; }
       .lang-select-trigger {
         display: flex;
         align-items: center;
@@ -237,9 +235,7 @@
         transition: 0.15s;
         text-align: left;
       }
-      .lang-option:hover {
-        background: var(--surface-hover);
-      }
+      .lang-option:hover { background: var(--surface-hover); }
       .lang-option.selected {
         color: var(--nav-active);
         background: rgba(59, 130, 246, 0.1);
@@ -273,7 +269,6 @@
         transition: background 0.3s ease, border-color 0.3s ease;
       }
 
-      /* Announce Box */
       .announce-card {
         border-right: 4px solid var(--warning);
         background: rgba(245, 158, 11, 0.08);
@@ -300,8 +295,8 @@
       }
 
       .usage-wrapper::before,
-      .chart-container::before,
-      .expiry-card::before,
+      .ip-card::before,
+      .expiry-card-modern::before,
       .import-card::before,
       .profile-details-card::before {
         content: ''; 
@@ -316,14 +311,14 @@
       }
 
       .usage-wrapper::before { background: var(--color-usage); }
-      .chart-container::before { background: var(--color-chart); }
-      .expiry-card::before { background: var(--color-time); }
+      .ip-card::before { background: var(--color-chart); }
+      .expiry-card-modern::before { background: var(--color-time); }
       .import-card::before { background: var(--color-apps); }
       .profile-details-card::before { background: var(--color-chart); }
 
       html[dir="ltr"] .usage-wrapper::before,
-      html[dir="ltr"] .chart-container::before,
-      html[dir="ltr"] .expiry-card::before,
+      html[dir="ltr"] .ip-card::before,
+      html[dir="ltr"] .expiry-card-modern::before,
       html[dir="ltr"] .import-card::before,
       html[dir="ltr"] .profile-details-card::before {
         right: auto;
@@ -344,7 +339,7 @@
         position: absolute; top: 0; left: 0; right: 0; bottom: 0;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
       }
-      .ring-percent { font-size: 1.7rem; font-weight: 900; direction: ltr; }
+      .ring-percent { font-size: 1.7rem; font-weight: 900; direction: ltr; unicode-bidi: isolate; }
       .ring-label { font-size: 0.7rem; font-weight: 500; color: var(--text-secondary); }
       
       .status-badge {
@@ -356,7 +351,6 @@
       }
       .status-badge.inactive { background: rgba(239, 68, 68, 0.12); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.15); }
 
-      /* لیست اطلاعات ترافیک */
       .stats-side-list { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; width: 100%; }
       .stat-side-row {
         display: flex; justify-content: space-between; align-items: center;
@@ -365,22 +359,93 @@
       .stat-side-row:last-child { border-bottom: none; padding-bottom: 0; }
       .stat-side-label { font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem; }
       .stat-side-label i { color: var(--color-usage); font-size: 0.8rem; width: 14px; text-align: center; }
-      .stat-side-val-group { font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.15rem; flex-direction: row; }
+      .stat-side-val-group { font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 0.25rem; flex-direction: row; unicode-bidi: isolate; }
+      .stat-side-val-group span { unicode-bidi: isolate; }
       .stat-side-unit { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
 
-      /* Sparkline Chart */
-      .chart-container {
-        padding: 1.25rem;
-        margin-bottom: 1rem;
-        position: relative;
+      /* کارت زمان باقی‌مانده */
+      .expiry-card-modern {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
       }
-      .chart-header {
+      .expiry-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .expiry-header-title {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+      .expiry-date-tag {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--color-time);
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.22);
+        padding: 0.25rem 0.65rem;
+        border-radius: 2rem;
+        unicode-bidi: isolate;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .expiry-timer-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+      }
+      .timer-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: var(--radius-md);
+        padding: 0.8rem 0.2rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      html[data-theme="light"] .timer-box {
+        background: rgba(245, 158, 11, 0.06);
+        border-color: rgba(245, 158, 11, 0.15);
+      }
+      .timer-box:hover {
+        transform: translateY(-2px);
+        border-color: rgba(245, 158, 11, 0.3);
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.08);
+      }
+      .timer-value {
+        font-size: 1.45rem;
+        font-weight: 900;
+        line-height: 1.1;
+        color: var(--color-time);
+        direction: ltr;
+        unicode-bidi: isolate;
+        letter-spacing: -0.5px;
+      }
+      .timer-label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-top: 0.3rem;
+      }
+
+      /* کارت نمایش وضعیت آی‌پی و شبکه */
+      .ip-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 0.75rem;
       }
-      .chart-title {
+      .ip-card-title {
         font-size: 0.8rem;
         font-weight: 700;
         color: var(--text-secondary);
@@ -388,49 +453,74 @@
         align-items: center;
         gap: 0.4rem;
       }
-      .chart-title i { color: var(--color-chart); }
-      .sparkline-svg {
-        width: 100%;
-        height: 70px;
-        overflow: visible;
-      }
-      .chart-interactive-group circle {
+      .ip-card-title i { color: var(--color-chart); }
+
+      .ip-refresh-btn {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
         cursor: pointer;
-        transition: r 0.15s ease, fill 0.15s ease;
+        font-size: 0.85rem;
+        transition: transform 0.3s ease, color 0.2s ease;
       }
-      
-      .chart-tooltip {
-        position: absolute;
-        background: rgba(15, 20, 35, 0.95);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0.5rem;
-        padding: 0.4rem 0.6rem;
-        pointer-events: none;
-        font-size: 0.65rem;
-        color: #fff;
-        display: none;
-        flex-direction: column;
-        gap: 0.1rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        z-index: 10;
-        transform: translate(-50%, -115%);
+      .ip-refresh-btn:hover { color: var(--text-primary); }
+      .ip-refresh-btn.spinning { animation: spin 0.7s linear infinite; }
+
+      .ip-display-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem;
       }
-      .chart-tooltip::after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-width: 4px 4px 0;
-        border-style: solid;
-        border-color: rgba(15, 20, 35, 0.95) transparent;
-        display: block;
-        width: 0;
+      .ip-value {
+        font-size: 0.95rem;
+        font-weight: 800;
+        direction: ltr;
+        unicode-bidi: isolate;
+      }
+      .ip-location-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+      .ip-country-flag {
+        font-size: 1.25rem;
+        line-height: 1;
       }
 
-      /* Action Buttons */
+      .ip-status-banner {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.55rem;
+        margin-top: 0.6rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.55rem 0.75rem;
+        border-radius: var(--radius-sm);
+        line-height: 1.5;
+        text-align: justify;
+      }
+      .ip-status-banner i {
+        margin-top: 0.15rem;
+        flex-shrink: 0;
+      }
+      .ip-status-banner.protected {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(16, 185, 129, 0.15);
+      }
+      .ip-status-banner.unprotected {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning);
+        border: 1px solid rgba(245, 158, 11, 0.15);
+      }
+
+      /* دکمه‌های اصلی */
       .main-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
       .btn-primary {
         background: rgba(59, 130, 246, 0.85); color: white;
@@ -453,6 +543,43 @@
         transition: 0.2s;
       }
       .btn-secondary:active { transform: scale(0.97); }
+
+      /* سرچ باکس کانفیگ‌ها */
+      .config-search-wrapper {
+        position: relative;
+        margin-bottom: 0.85rem;
+      }
+      .config-search-input {
+        width: 100%;
+        padding: 0.65rem 2.2rem 0.65rem 0.9rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        color: var(--text-primary);
+        font-family: var(--font);
+        font-size: 0.8rem;
+        outline: none;
+        transition: border-color 0.2s ease;
+      }
+      html[dir="ltr"] .config-search-input {
+        padding: 0.65rem 0.9rem 0.65rem 2.2rem;
+      }
+      .config-search-input:focus {
+        border-color: var(--color-usage);
+      }
+      .config-search-icon {
+        position: absolute;
+        top: 50%;
+        right: 0.8rem;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        pointer-events: none;
+      }
+      html[dir="ltr"] .config-search-icon {
+        right: auto;
+        left: 0.8rem;
+      }
 
       /* Configs & Apps Lists */
       .list-item {
@@ -481,7 +608,7 @@
         border-radius: var(--radius-sm); color: var(--text-primary); text-decoration: none; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 700;
       }
 
-      /* Floating Bottom Navigation */
+      /* Bottom Navigation */
       .bottom-nav {
         position: fixed;
         bottom: 1.25rem;
@@ -522,26 +649,18 @@
         backdrop-filter: blur(8px); padding: 1rem;
       }
       .modal.show { display: flex; }
-      .modal-content { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; width: 100%; max-width: 310px; text-align: center; }
+      .modal-content { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; width: 100%; max-width: 320px; text-align: center; }
       
       .qr-wrapper {
-        position: relative; width: 100%; min-height: 260px;
-        background: rgba(255,255,255,0.03); border-radius: var(--radius-sm);
+        position: relative; width: 100%; min-height: 250px;
+        background: #ffffff; border-radius: var(--radius-sm);
         margin: 1rem 0; display: flex; align-items: center; justify-content: center;
+        padding: 0.85rem;
       }
-      .qr-img {
-        width: 100%; border-radius: var(--radius-sm); background: #fff; padding: 0.75rem;
-        opacity: 0; transition: opacity 0.4s ease; display: none;
+      .qr-wrapper img {
+        margin: auto;
+        display: block;
       }
-      .qr-img.loaded { display: block; opacity: 1; }
-      
-      .qr-loader {
-        width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1);
-        border-radius: 50%; border-top-color: var(--color-chart);
-        animation: spin 0.8s cubic-bezier(0.6, 0.2, 0.2, 0.8) infinite;
-        position: absolute;
-      }
-      @keyframes spin { to { transform: rotate(360deg); } }
 
       .qr-link-box {
         position: relative; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
@@ -560,6 +679,8 @@
         background: rgba(15, 23, 42, 0.06);
         color: #1e293b;
       }
+
+      @keyframes spin { to { transform: rotate(360deg); } }
 
       .toast {
         position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -586,9 +707,8 @@
           </div>
         </div>
         <div class="header-actions">
-          <button id="themeToggleBtn" class="icon-btn"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+          <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle Theme"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
           
-          <!-- سلکتور کاستوم زبان -->
           <div class="lang-selector-container" id="langSelector">
             <button class="lang-select-trigger" id="langSelectTrigger">
               <i class="fa-solid fa-globe"></i>
@@ -611,12 +731,12 @@
         <!-- TAB 1: Home/Dashboard -->
         <div id="tab-home" class="tab-content active">
           
-          <!-- باکس اطلاعیه -->
           <div id="announceCard" class="card announce-card">
             <i class="fa-solid fa-bullhorn announce-icon"></i>
             <div id="announceText" class="announce-content"></div>
           </div>
 
+          <!-- کارت مصرف ترافیک -->
           <div class="card usage-wrapper">
             <div class="ring-side">
               <div class="ring-container">
@@ -660,6 +780,33 @@
             </div>
           </div>
 
+          <!-- بازطراحی مدرن کارت زمان باقی‌مانده -->
+          <div class="card expiry-card-modern">
+            <div class="expiry-header-row">
+              <span class="expiry-header-title">
+                <i class="fa-regular fa-hourglass-half" style="color: var(--color-time);"></i>
+                <span id="expiryTextLabel">زمان باقی‌مانده</span>
+              </span>
+              <span id="expiryDatePreview" class="expiry-date-tag">—</span>
+            </div>
+
+            <div class="expiry-timer-grid">
+              <div class="timer-box">
+                <span id="daysLeft" class="timer-value">0</span>
+                <span id="daysLabel" class="timer-label">روز</span>
+              </div>
+              <div class="timer-box">
+                <span id="hoursLeft" class="timer-value">0</span>
+                <span id="hoursLabel" class="timer-label">ساعت</span>
+              </div>
+              <div class="timer-box">
+                <span id="minutesLeft" class="timer-value">0</span>
+                <span id="minutesLabel" class="timer-label">دقیقه</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Import (قرار گرفته در زیر زمان باقی‌مانده) -->
           <div class="card import-card" style="display: flex; flex-direction: column; gap: 0.75rem;">
             <div style="font-size: 0.8rem; font-weight: 800; display: flex; align-items: center; gap: 0.4rem;">
               <i class="fa-solid fa-bolt" style="color: var(--color-apps);"></i>
@@ -683,63 +830,49 @@
             </button>
           </div>
 
-          <div class="card chart-container" id="interactiveChartContainer">
-            <div class="chart-header">
-              <span class="chart-title" id="chartMainHeaderTitle"><i class="fa-solid fa-chart-area"></i> مصرف ۷ روز اخیر</span>
+          <!-- وضعیت آی‌پی و شبکه -->
+          <div class="card ip-card" id="ipCheckCard">
+            <div class="ip-card-header">
+              <span class="ip-card-title">
+                <i class="fa-solid fa-network-wired"></i>
+                <span id="ipCardTitle">وضعیت آی‌پی و موقعیت</span>
+              </span>
+              <button id="refreshIpBtn" class="ip-refresh-btn" title="بررسی مجدد">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
             </div>
-            <div style="position: relative; width: 100%; height: 70px;">
-              <svg class="sparkline-svg" viewBox="0 0 100 25">
-                <defs>
-                  <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="var(--color-chart)" stop-opacity="0.3" />
-                    <stop offset="100%" stop-color="var(--color-chart)" stop-opacity="0.0" />
-                  </linearGradient>
-                </defs>
-                <line id="chartGuideLine" x1="0" y1="0" x2="0" y2="25" stroke="var(--color-chart)" stroke-width="0.25" stroke-dasharray="1,1" style="display: none;" />
-                <path id="chartAreaPath" d="" fill="url(#chartGlow)" />
-                <path id="chartLinePath" d="" fill="none" stroke="var(--color-chart)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
-                <g id="chartPointsGroup" class="chart-interactive-group"></g>
-              </svg>
-              <div id="chartTooltip" class="chart-tooltip"></div>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-secondary); margin-top: 0.5rem; direction: ltr;">
-              <span id="chartStartDateLabel">From 7 days ago</span>
-              <span id="chartEndDateLabel">To Today</span>
-            </div>
-          </div>
 
-          <div class="card expiry-card" style="text-align: center; display: flex; flex-direction: column; gap: 0.5rem;">
-            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700;">
-              <i class="fa-regular fa-hourglass-half" style="color: var(--color-time);"></i>
-              <span id="expiryTextLabel">زمان باقی‌مانده</span>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
-              <div style="background: rgba(245, 158, 11, 0.08); border-radius: var(--radius-sm); padding: 0.75rem 0.5rem;">
-                <div id="daysLeft" style="font-size: 1.3rem; font-weight: 900; direction: ltr; color: var(--color-time);">0</div>
-                <div id="daysLabel" style="font-size: 0.7rem; font-weight: 500; color: var(--text-secondary);">روز</div>
-              </div>
-              <div style="background: rgba(245, 158, 11, 0.08); border-radius: var(--radius-sm); padding: 0.75rem 0.5rem;">
-                <div id="hoursLeft" style="font-size: 1.3rem; font-weight: 900; direction: ltr; color: var(--color-time);">0</div>
-                <div id="hoursLabel" style="font-size: 0.7rem; font-weight: 500; color: var(--text-secondary);">ساعت</div>
-              </div>
-              <div style="background: rgba(245, 158, 11, 0.08); border-radius: var(--radius-sm); padding: 0.75rem 0.5rem;">
-                <div id="minutesLeft" style="font-size: 1.3rem; font-weight: 900; direction: ltr; color: var(--color-time);">0</div>
-                <div id="minutesLabel" style="font-size: 0.7rem; font-weight: 500; color: var(--text-secondary);">دقیقه</div>
+            <div class="ip-display-row">
+              <div class="ip-value" id="userIpText">در حال دریافت...</div>
+              <div class="ip-location-wrap" id="userLocationWrap">
+                <span class="ip-country-flag" id="userFlagText">🌐</span>
+                <span id="userCountryText">—</span>
               </div>
             </div>
-            <div id="expiryDatePreview" style="font-size: 0.8rem; font-weight: 700; margin-top: 0.75rem; color: var(--text-secondary);">—</div>
+
+            <div id="ipStatusBanner" class="ip-status-banner protected" style="display: none;">
+              <i id="ipStatusIcon" class="fa-solid fa-shield-halved"></i>
+              <span id="ipStatusDesc">اتصال شما رمزگذاری شده است</span>
+            </div>
           </div>
 
         </div>
 
         <!-- TAB 2: Configs -->
         <div id="tab-configs" class="tab-content">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
             <h3 id="configsTitle" style="font-size: 1.1rem; font-weight: 800;">کانفیگ‌ها</h3>
             <button id="copyAllConfigsBtn" class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
               <i class="fa-regular fa-copy"></i> <span id="copyAllText">کپی همه</span>
             </button>
           </div>
+          
+          <!-- سرچ باکس زنده کانفیگ‌ها -->
+          <div class="config-search-wrapper" id="configSearchBox" style="display: none;">
+            <i class="fa-solid fa-magnifying-glass config-search-icon"></i>
+            <input type="text" id="configSearchInput" class="config-search-input" placeholder="جستجوی کانفیگ..." autocomplete="off" />
+          </div>
+
           <div id="configListContainer"></div>
         </div>
 
@@ -755,26 +888,25 @@
           <div class="card profile-details-card" style="display: flex; flex-direction: column; gap: 0.9rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
               <span style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-regular fa-user" style="margin-inline-end: 0.4rem;"></i> <span id="pLabelUsername">نام کاربری</span></span>
-              <span id="profileUsernameVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr;">—</span>
+              <span id="profileUsernameVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr; unicode-bidi: isolate;">—</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
               <span style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-fingerprint" style="margin-inline-end: 0.4rem;"></i> <span id="pLabelSubId">شناسه اشتراک</span></span>
-              <span id="profileUserIdVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr;">—</span>
+              <span id="profileUserIdVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr; unicode-bidi: isolate;">—</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
               <span style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-server" style="margin-inline-end: 0.4rem;"></i> <span id="pLabelServersCount">تعداد سرور ها</span></span>
-              <span id="profileServersCountVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr;">—</span>
+              <span id="profileServersCountVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr; unicode-bidi: isolate;">—</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.75rem;">
               <span style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-circle-nodes" style="margin-inline-end: 0.4rem;"></i> <span id="pLabelLastOnline">آخرین اتصال</span></span>
-              <span id="profileLastOnlineVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr;">—</span>
+              <span id="profileLastOnlineVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr; unicode-bidi: isolate;">—</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem;">
               <span style="font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-regular fa-hourglass-half" style="margin-inline-end: 0.4rem;"></i> <span id="pLabelExpiryDate">تاریخ انقضا</span></span>
-              <span id="profileExpiryDateVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr;">—</span>
+              <span id="profileExpiryDateVal" style="font-size: 0.85rem; font-weight: 700; direction: ltr; unicode-bidi: isolate;">—</span>
             </div>
             
-            <!-- دکمه تمدید اشتراک -->
             <button id="profileRenewBtn" class="btn-primary" style="width: 100%; margin-top: 0.4rem; display: none;">
               <i class="fa-solid fa-rotate"></i> <span id="profileRenewText">تمدید اشتراک</span>
             </button>
@@ -807,7 +939,7 @@
         </button>
       </nav>
       
-      <!-- Modal -->
+      <!-- Modal QR Code آفلاین -->
       <div id="qrModal" class="modal">
         <div class="modal-content">
           <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -817,12 +949,11 @@
             </button>
           </div>
           <div class="qr-wrapper">
-            <div id="qrLoader" class="qr-loader"></div>
-            <img id="qrModalImg" class="qr-img" alt="QR Code" />
+            <div id="qrcodeCanvas"></div>
           </div>
           <div class="qr-link-box">
             <code id="qrLinkText"></code>
-            <button id="qrLinkCopyBtn" class="qr-link-copy-btn" onclick="copyText(document.getElementById('qrLinkText').textContent, t('copyDone'))">
+            <button id="qrLinkCopyBtn" class="qr-link-copy-btn">
               <i class="fa-regular fa-copy"></i>
             </button>
           </div>
@@ -866,19 +997,24 @@
           .replace(/[٠-٩]/g, (c) => arabic.indexOf(c));
       }
 
-      function isPlaceholder(v) { return typeof v === "string" && v.includes("{{") && v.includes("}}"); }
+      function isPlaceholder(v) { 
+        return typeof v === "string" && v.includes("{{") && v.includes("}}"); 
+      }
+      
       function normalize(v, fb) {
         let t = String(v ?? "").trim();
         if (!t || isPlaceholder(t)) return fb;
         return t;
       }
+      
       function toNumber(v) {
         let val = normalize(v, "");
         if (!val) return null;
-        let cleaned = normalizeDigits(val).replace(/[٬,]/g, "").replace(/٫/g, ".");
+        let cleaned = normalizeDigits(val).replace(/[٬, ]/g, "").replace(/٫/g, ".");
         let n = Number(cleaned);
         return isNaN(n) ? null : n;
       }
+
       function parseExpireIso(exp) {
         let ts = toNumber(exp);
         if (ts === null || ts === 0) return null;
@@ -886,6 +1022,7 @@
         let d = new Date(ms);
         return isNaN(d.getTime()) ? null : d.toISOString();
       }
+
       function parseEmails(raw) {
         let txt = normalize(raw, "");
         if (!txt) return [];
@@ -894,6 +1031,7 @@
         let items = txt.split(/[,\s]+/).filter(Boolean);
         return [...new Set(items)];
       }
+
       function parseLinks(raw) {
         let txt = normalize(raw, "");
         return txt ? txt.split(/\r?\n/).filter((l) => l.trim()) : [];
@@ -918,9 +1056,7 @@
         if (!cfg) return defaultName;
         let clean = cfg.trim();
 
-        if (clean.startsWith("tg://")) {
-          return t("telegramProxy") + " 🚀";
-        }
+        if (clean.startsWith("tg://")) return t("telegramProxy") + " 🚀";
 
         if (clean.startsWith("vmess://")) {
           try {
@@ -928,9 +1064,7 @@
             const decodedJson = decodeBase64Utf8(b64);
             if (decodedJson) {
               const data = JSON.parse(decodedJson);
-              if (data && data.ps && String(data.ps).trim()) {
-                return String(data.ps).trim();
-              }
+              if (data && data.ps && String(data.ps).trim()) return String(data.ps).trim();
             }
           } catch (e) {}
         }
@@ -970,7 +1104,7 @@
           copyDone: "کپی شد!", copyFail: "خطا",
           download: "دانلود شده", upload: "آپلود شده",
           configTitle: "کانفیگ‌ها", appsTitle: "برنامه‌ها",
-          noConfig: "کانفیگی موجود نیست", timeExpired: "منقضی شده",
+          noConfig: "کانفیگی موجود نیست", notFound: "موردی یافت نشد", timeExpired: "منقضی شده",
           timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده",
           subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت",
           copyAll: "کپی همه", quickImport: "افزودن سریع", navHome: "داشبورد",
@@ -978,9 +1112,14 @@
           profile: "پروفایل", support: "پشتیبانی",
           pUsername: "نام کاربری", pSubId: "شناسه اشتراک", pServersCount: "تعداد سرور ها",
           pLastOnline: "آخرین اتصال", pExpiryDate: "تاریخ انقضا",
-          chartTitle: "مصرف ۷ روز اخیر", chartFrom: "از ", chartTo: "تا امروز",
           expiryUntil: "تا تاریخ: ", bytesUnit: "بایت", kbUnit: "کیلوبایت", mbUnit: "مگابایت",
-          renewBtn: "تمدید اشتراک"
+          renewBtn: "تمدید اشتراک", searchPlaceholder: "جستجوی کانفیگ...",
+          ipTitle: "وضعیت آی‌پی و موقعیت",
+          ipProtected: "اتصال به اینترنت آزاد برقرار است",
+          ipUnprotected: "ارتباط با آی‌پی ایران (فیلترشکن خاموش است)",
+          ipAzerbaijan: "از آنجایی که هم اکنون اپراتور های ایران از آیپی آذربایجان برای روتینگ های خارجی استفاده میکنند، ممکن است دسترسی به برخی سایت ها برقرار نباشد؛ در صورتی که به VPN آذربایجان متصل هستید اتصال شما به اینترنت بین المللی برقرار است.",
+          ipLoading: "در حال بررسی...",
+          ipError: "خطا در استعلام آی‌پی"
         },
         en: {
           used: "Used", usage: "Usage", total: "Total", remained: "Remaining",
@@ -990,7 +1129,7 @@
           copyDone: "Copied!", copyFail: "Failed",
           download: "Downloaded", upload: "Uploaded",
           configTitle: "Configs", appsTitle: "Apps",
-          noConfig: "No configs", timeExpired: "Expired",
+          noConfig: "No configs", notFound: "No matching configs", timeExpired: "Expired",
           timeUnlimited: "Unlimited", remainTime: "Remaining time",
           subscriptionHub: "Dashboard", volumeUnit: "GB",
           copyAll: "Copy All", quickImport: "Quick Import", navHome: "Dashboard",
@@ -998,9 +1137,14 @@
           profile: "Profile", support: "Support",
           pUsername: "Username", pSubId: "Subscription ID", pServersCount: "Servers Count",
           pLastOnline: "Last Online", pExpiryDate: "Expiry Date",
-          chartTitle: "Usage in last 7 days", chartFrom: "From ", chartTo: "To Today",
           expiryUntil: "Until: ", bytesUnit: "B", kbUnit: "KB", mbUnit: "MB",
-          renewBtn: "Renew Subscription"
+          renewBtn: "Renew Subscription", searchPlaceholder: "Search configs...",
+          ipTitle: "Public IP & Location",
+          ipProtected: "Secure connection is active",
+          ipUnprotected: "Direct domestic IP (VPN disconnected)",
+          ipAzerbaijan: "Iranian ISPs currently route international traffic via Azerbaijan; some services may remain restricted unless connected to a verified Azerbaijan VPN.",
+          ipLoading: "Checking...",
+          ipError: "Unable to detect IP"
         },
         zh: {
           used: "已使用", usage: "用量", total: "总计", remained: "剩余",
@@ -1010,7 +1154,7 @@
           copyDone: "已复制!", copyFail: "错误",
           download: "已下载", upload: "已上传",
           configTitle: "配置列表", appsTitle: "推荐应用",
-          noConfig: "暂无可用配置", timeExpired: "已过期",
+          noConfig: "暂无可用配置", notFound: "未找到匹配节点", timeExpired: "已过期",
           timeUnlimited: "无限制", remainTime: "剩余时间",
           subscriptionHub: "订阅面板", volumeUnit: "GB",
           copyAll: "复制全部", quickImport: "快速导入", navHome: "仪表盘",
@@ -1018,9 +1162,14 @@
           profile: "个人中心", support: "技术支持",
           pUsername: "用户名", pSubId: "订阅 ID", pServersCount: "节点数量",
           pLastOnline: "最后在线", pExpiryDate: "到期时间",
-          chartTitle: "过去 7 天的用量", chartFrom: "从 ", chartTo: "至今天",
           expiryUntil: "有效期至：", bytesUnit: "B", kbUnit: "KB", mbUnit: "MB",
-          renewBtn: "续费订阅"
+          renewBtn: "续费订阅", searchPlaceholder: "搜索节点...",
+          ipTitle: "公网 IP 与归属地",
+          ipProtected: "安全连接已生效",
+          ipUnprotected: "直连 IP（代理未连接）",
+          ipAzerbaijan: "部分网络正通过阿塞拜疆路由出口，如未连接专属节点可能受限。",
+          ipLoading: "查询中...",
+          ipError: "无法检测 IP"
         },
         ru: {
           used: "Использовано", usage: "Трафик", total: "Всего", remained: "Осталось",
@@ -1030,40 +1179,71 @@
           copyDone: "Скопировано!", copyFail: "Ошибка",
           download: "Скачано", upload: "Загружено",
           configTitle: "Конфиги", appsTitle: "Приложения",
-          noConfig: "Нет конфигураций", timeExpired: "Истек",
+          noConfig: "Нет конфигураций", notFound: "Ничего не найдено", timeExpired: "Истек",
           timeUnlimited: "Безлимитный", remainTime: "Оставшееся время",
           subscriptionHub: "Панель подписки", volumeUnit: "ГБ",
-          copyAll: "Копировать всё", quickImport: "Быстрый импорт", navHome: "Дашборд",
+          copyAll: "Копировать всё", quickImport: "Быستрый импорт", navHome: "Дашборд",
           telegramProxy: "Прокси Telegram", vmessConfig: "VMess Конфиг",
           profile: "Профиль", support: "Поддержка",
           pUsername: "Имя пользователя", pSubId: "ID Подписки", pServersCount: "Кол-во серверов",
           pLastOnline: "Последняя сеть", pExpiryDate: "Дата окончания",
-          chartTitle: "Потребление за 7 дней", chartFrom: "С ", chartTo: "По сегодня",
           expiryUntil: "До: ", bytesUnit: "Б", kbUnit: "КБ", mbUnit: "МБ",
-          renewBtn: "Продлить подписку"
+          renewBtn: "Продлить подписку", searchPlaceholder: "Поиск конфигурации...",
+          ipTitle: "Публичный IP и локация",
+          ipProtected: "Защищенное соединение активно",
+          ipUnprotected: "Прямой IP (VPN отключен)",
+          ipAzerbaijan: "Маршрутизация через Азербайджан: некоторые сервисы могут быть ограничены.",
+          ipLoading: "Проверка...",
+          ipError: "Ошибка определения IP"
         }
       };
 
       let currentLang = localStorage.getItem("nexus_lang") || "fa";
       let isDark = (localStorage.getItem("nexus_theme") || "dark") !== "light";
-      let countdownInterval = null;
+      let qrcodeInstance = null;
+      let configSearchTerm = "";
+      let isDetectingIp = false;
 
       function t(key) { return locales[currentLang][key] || key; }
       function volumeUnit() { return t("volumeUnit"); }
+
+      function toFaDigits(value) { return String(value ?? "").replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]); }
+      function formatDisplay(value) { return isPersianUI() ? toFaDigits(value) : String(value ?? ""); }
+      function isPersianUI() { return currentLang === "fa"; }
+
+      function formatFixed(value, digits = 1) {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return formatDisplay("0");
+        const rounded = Number(n.toFixed(digits));
+        const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
+        return formatDisplay(text);
+      }
+
+      function formatInteger(value) {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return isPersianUI() ? "۰" : "0";
+        return formatDisplay(Math.floor(n));
+      }
 
       function formatBytesParts(bytes, digits = 1) {
         const n = Number(bytes);
         const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
         let value = safeBytes;
-        if (safeBytes < BYTES_IN_KB) value = safeBytes;
-        else if (safeBytes < BYTES_IN_KB * BYTES_IN_KB) value = safeBytes / BYTES_IN_KB;
-        else if (safeBytes < BYTES_IN_GB) value = safeBytes / (BYTES_IN_KB * BYTES_IN_KB);
-        else value = safeBytes / BYTES_IN_GB;
-        
         let unit = volumeUnit();
-        if (safeBytes < BYTES_IN_KB) unit = t("bytesUnit");
-        else if (safeBytes < BYTES_IN_MB) unit = t("kbUnit");
-        else if (safeBytes < BYTES_IN_GB) unit = t("mbUnit");
+
+        if (safeBytes < BYTES_IN_KB) {
+          value = safeBytes;
+          unit = t("bytesUnit");
+        } else if (safeBytes < BYTES_IN_MB) {
+          value = safeBytes / BYTES_IN_KB;
+          unit = t("kbUnit");
+        } else if (safeBytes < BYTES_IN_GB) {
+          value = safeBytes / BYTES_IN_MB;
+          unit = t("mbUnit");
+        } else {
+          value = safeBytes / BYTES_IN_GB;
+          unit = volumeUnit();
+        }
         
         return { value: formatFixed(value, digits), unit: unit };
       }
@@ -1072,26 +1252,10 @@
         const valueEl = document.getElementById(valueId);
         if (!valueEl) return;
         const parts = formatBytesParts(bytes, digits);
-        valueEl.innerText = parts.value;
+        valueEl.textContent = parts.value;
         const unitEl = document.getElementById(unitId) || valueEl.parentElement?.querySelector(".stat-side-unit");
-        if (unitEl) unitEl.innerText = parts.unit;
+        if (unitEl) unitEl.textContent = parts.unit;
       }
-
-      function toFaDigits(value) { return String(value ?? "").replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]); }
-      function formatDisplay(value) { return isPersianUI() ? toFaDigits(value) : String(value ?? ""); }
-      function formatFixed(value, digits = 1) {
-        const n = Number(value);
-        if (!Number.isFinite(n)) return formatDisplay("0");
-        const rounded = Number(n.toFixed(digits));
-        const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
-        return formatDisplay(text);
-      }
-      function formatInteger(value) {
-        const n = Number(value);
-        if (!Number.isFinite(n)) return isPersianUI() ? "۰" : "0";
-        return formatDisplay(Math.floor(n));
-      }
-      function isPersianUI() { return currentLang === "fa"; }
       
       function pad2(value) { return String(value).padStart(2, "0"); }
       function gregorianToJalali(gy, gm, gd) {
@@ -1110,7 +1274,6 @@
       function formatDateTime(rawDate) {
         if (!rawDate) return "—";
         let dateObj;
-        
         let numericVal = Number(rawDate);
         if (!isNaN(numericVal) && numericVal > 0) {
           let ms = numericVal < 1e12 ? numericVal * 1000 : numericVal;
@@ -1154,130 +1317,55 @@
         titleEl.style.fontSize = title && title !== t("qr") ? "0.85rem" : "1.1rem";
         document.getElementById("qrLinkText").textContent = data;
 
-        const qrImg = document.getElementById("qrModalImg");
-        const qrLoader = document.getElementById("qrLoader");
+        const qrContainer = document.getElementById("qrcodeCanvas");
+        qrContainer.innerHTML = "";
 
-        qrImg.classList.remove("loaded");
-        qrLoader.style.display = "block";
-
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=1&data=${encodeURIComponent(data)}`;
-
-        qrImg.onload = function() {
-          qrLoader.style.display = "none";
-          qrImg.classList.add("loaded");
-        };
+        qrcodeInstance = new QRCode(qrContainer, {
+          text: data,
+          width: 220,
+          height: 220,
+          colorDark: "#0b1329",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
 
         document.getElementById("qrModal").classList.add("show");
       }
+
       function closeModal() { document.getElementById("qrModal").classList.remove("show"); }
+
       async function copyText(text, successMsg) {
         if (!text) return showToast(t("copyFail"));
-        try { await navigator.clipboard.writeText(text); showToast(successMsg); } 
-        catch (e) { showToast(t("copyFail")); }
+        try { 
+          await navigator.clipboard.writeText(text); 
+          showToast(successMsg); 
+        } catch (e) {
+          const textArea = document.createElement("textarea");
+          textArea.value = text;
+          textArea.style.position = "fixed";
+          textArea.style.left = "-9999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          try {
+            document.execCommand('copy');
+            showToast(successMsg);
+          } catch (err) {
+            showToast(t("copyFail"));
+          }
+          document.body.removeChild(textArea);
+        }
       }
 
       function setProgressRing(percent, color) {
         const circle = document.getElementById('usageRing');
+        if (!circle) return;
         const radius = circle.r.baseVal.value;
         const circumference = radius * 2 * Math.PI;
         circle.style.strokeDasharray = `${circumference} ${circumference}`;
         const offset = circumference - (percent / 100) * circumference;
         circle.style.strokeDashoffset = offset;
         circle.style.stroke = color;
-      }
-
-      function drawInteractiveSparkline() {
-        const totalUsedGB = usedBytes / BYTES_IN_GB;
-        
-        const dailyWeights = [0.08, 0.12, 0.15, 0.11, 0.18, 0.22, 0.14]; 
-        const dailyUsageGB = dailyWeights.map(w => totalUsedGB * w);
-        
-        const daysData = [];
-        for (let i = 6; i >= 0; i--) {
-          const d = new Date();
-          d.setDate(d.getDate() - i);
-          daysData.push({
-            date: d,
-            usage: dailyUsageGB[6 - i]
-          });
-        }
-
-        document.getElementById("chartStartDateLabel").innerText = t("chartFrom") + formatDateOnly(daysData[0].date);
-        document.getElementById("chartEndDateLabel").innerText = t("chartTo");
-
-        const maxVal = Math.max(...dailyUsageGB, 0.5); 
-        const heightMultiplier = 16 / maxVal; 
-        
-        const points = daysData.map((d, index) => {
-          const x = index * (100 / 6);
-          const y = 22 - (d.usage * heightMultiplier); 
-          return { x, y, data: d };
-        });
-
-        let lineD = `M ${points[0].x} ${points[0].y}`;
-        let areaD = `M ${points[0].x} 25 L ${points[0].x} ${points[0].y}`;
-        
-        for (let i = 1; i < points.length; i++) {
-          lineD += ` L ${points[i].x} ${points[i].y}`;
-          areaD += ` L ${points[i].x} ${points[i].y}`;
-        }
-        areaD += ` L 100 25 Z`;
-
-        document.getElementById("chartLinePath").setAttribute("d", lineD);
-        document.getElementById("chartAreaPath").setAttribute("d", areaD);
-
-        const pointsGroup = document.getElementById("chartPointsGroup");
-        pointsGroup.innerHTML = "";
-        
-        const guideLine = document.getElementById("chartGuideLine");
-        const tooltip = document.getElementById("chartTooltip");
-        const chartContainer = document.getElementById("interactiveChartContainer");
-
-        points.forEach((pt) => {
-          const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-          circle.setAttribute("cx", pt.x);
-          circle.setAttribute("cy", pt.y);
-          circle.setAttribute("r", "1.5");
-          circle.setAttribute("fill", "var(--color-chart)");
-
-          const showTooltip = () => {
-            circle.setAttribute("r", "3");
-            circle.setAttribute("fill", "var(--color-chart)");
-            
-            guideLine.style.display = "block";
-            guideLine.setAttribute("x1", pt.x);
-            guideLine.setAttribute("x2", pt.x);
-
-            const rect = chartContainer.getBoundingClientRect();
-            const svgWidth = rect.width - 40; 
-            const absoluteX = 20 + (pt.x * (svgWidth / 100));
-
-            tooltip.style.display = "flex";
-            tooltip.style.left = `${absoluteX}px`;
-            tooltip.style.top = `${pt.y * 2.8}px`; 
-
-            const dateStr = formatDateOnly(pt.data.date);
-            const usageStr = formatFixed(pt.data.usage, 2) + " " + volumeUnit();
-            tooltip.innerHTML = `<strong>${dateStr}</strong><span>${usageStr}</span>`;
-          };
-
-          const hideTooltip = () => {
-            circle.setAttribute("r", "1.5");
-            circle.setAttribute("fill", "var(--color-chart)");
-            guideLine.style.display = "none";
-            tooltip.style.display = "none";
-          };
-
-          circle.addEventListener("mouseenter", showTooltip);
-          circle.addEventListener("mouseleave", hideTooltip);
-          circle.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            showTooltip();
-          });
-          circle.addEventListener("touchend", hideTooltip);
-
-          pointsGroup.appendChild(circle);
-        });
       }
 
       function renderStatsAndRing() {
@@ -1294,7 +1382,6 @@
           document.getElementById("remainedUnit").innerText = "";
         } else {
           setVolumeStat("totalStatValue", "totalUnit", totalByteNum || 0, 1);
-          
           let remainedBytes = Math.max(0, totalByteNum - usedBytes);
           setVolumeStat("remainedStatValue", "remainedUnit", remainedBytes, 1);
         }
@@ -1318,103 +1405,256 @@
         document.getElementById("statusText").innerText = isActive ? t("active") : t("inactive");
         document.getElementById("statusChip").className = isActive ? "status-badge" : "status-badge inactive";
 
-        if (expireISO && new Date(expireISO) > new Date()) {
-          document.getElementById("expiryDatePreview").innerText = t("expiryUntil") + formatDateOnly(new Date(expireISO));
-        } else if (!expireISO) {
-          document.getElementById("expiryDatePreview").innerText = t("timeUnlimited");
-        } else {
-          document.getElementById("expiryDatePreview").innerText = t("timeExpired");
+        const expiryPreview = document.getElementById("expiryDatePreview");
+        if (expiryPreview) {
+          if (expireISO && new Date(expireISO) > new Date()) {
+            expiryPreview.innerText = t("expiryUntil") + formatDateOnly(new Date(expireISO));
+          } else if (!expireISO) {
+            expiryPreview.innerText = t("timeUnlimited");
+          } else {
+            expiryPreview.innerText = t("timeExpired");
+          }
         }
-        
-        drawInteractiveSparkline();
       }
 
-      function renderExpiryCountdown() {
-        if (countdownInterval) clearInterval(countdownInterval);
+      function updateCountdownTick() {
+        const daysEl = document.getElementById("daysLeft");
+        const hoursEl = document.getElementById("hoursLeft");
+        const minsEl = document.getElementById("minutesLeft");
+        if (!daysEl || !hoursEl || !minsEl) return;
+
         if (!expireISO) {
-          document.getElementById("daysLeft").innerText = "∞";
-          document.getElementById("hoursLeft").innerText = "∞";
-          document.getElementById("minutesLeft").innerText = "∞";
+          daysEl.innerText = "∞";
+          hoursEl.innerText = "∞";
+          minsEl.innerText = "∞";
           return;
         }
-        let end = new Date(expireISO).getTime();
-        countdownInterval = setInterval(() => {
-          let diff = Math.max(0, end - Date.now());
-          document.getElementById("daysLeft").innerText = formatDisplay(Math.floor(diff / 86400000));
-          document.getElementById("hoursLeft").innerText = formatDisplay(Math.floor((diff % 86400000) / 3600000));
-          document.getElementById("minutesLeft").innerText = formatDisplay(Math.floor((diff % 3600000) / 60000));
-          if (diff <= 0) clearInterval(countdownInterval);
-        }, 1000);
+
+        const end = new Date(expireISO).getTime();
+        const diff = Math.max(0, end - Date.now());
+        daysEl.innerText = formatDisplay(Math.floor(diff / 86400000));
+        hoursEl.innerText = formatDisplay(Math.floor((diff % 86400000) / 3600000));
+        minsEl.innerText = formatDisplay(Math.floor((diff % 3600000) / 60000));
       }
 
-      function createSubItem(name, url, iconClass) {
-        return `<div class="list-item" style="border-color: var(--primary);">
-            <div class="list-item-title" style="color: var(--primary);"><i class="${iconClass}" style="margin-inline-end:0.5rem;"></i>${name}</div>
-            <div class="list-actions">
-              <button class="mini-btn" onclick="copyText('${url}', '${t("copyDone")}')"><i class="fa-regular fa-copy"></i></button>
-              <button class="mini-btn" onclick="showQR('${url}', '${name}')"><i class="fa-solid fa-qrcode"></i></button>
-            </div>
-          </div>`;
+      function getCountryFlag(countryCode) {
+        if (!countryCode || countryCode.length !== 2) return "🌐";
+        const codePoints = countryCode
+          .toUpperCase()
+          .split("")
+          .map(c => 127397 + c.charCodeAt(0));
+        return String.fromCodePoint(...codePoints);
+      }
+
+      async function checkPublicIp() {
+        if (isDetectingIp) return;
+        isDetectingIp = true;
+
+        const btn = document.getElementById("refreshIpBtn");
+        const ipEl = document.getElementById("userIpText");
+        const flagEl = document.getElementById("userFlagText");
+        const countryEl = document.getElementById("userCountryText");
+        const banner = document.getElementById("ipStatusBanner");
+        const bannerDesc = document.getElementById("ipStatusDesc");
+        const bannerIcon = document.getElementById("ipStatusIcon");
+
+        if (btn) btn.classList.add("spinning");
+        if (ipEl) ipEl.innerText = t("ipLoading");
+        if (banner) banner.style.display = "none";
+
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+          const res = await fetch("https://ipwho.is/", { signal: controller.signal });
+          clearTimeout(timeoutId);
+          const data = await res.json();
+
+          if (data && data.success) {
+            if (ipEl) ipEl.innerText = data.ip;
+            if (flagEl) flagEl.innerText = getCountryFlag(data.country_code);
+            if (countryEl) countryEl.innerText = data.country || data.country_code;
+
+            const isIran = data.country_code === "IR";
+            const isAzerbaijan = data.country_code === "AZ";
+
+            if (isAzerbaijan) {
+              banner.className = "ip-status-banner unprotected";
+              bannerIcon.className = "fa-solid fa-triangle-exclamation";
+              bannerDesc.innerText = t("ipAzerbaijan");
+            } else if (isIran) {
+              banner.className = "ip-status-banner unprotected";
+              bannerIcon.className = "fa-solid fa-triangle-exclamation";
+              bannerDesc.innerText = t("ipUnprotected");
+            } else {
+              banner.className = "ip-status-banner protected";
+              bannerIcon.className = "fa-solid fa-shield-halved";
+              bannerDesc.innerText = t("ipProtected");
+            }
+            banner.style.display = "flex";
+          } else {
+            throw new Error();
+          }
+        } catch (err) {
+          if (ipEl) ipEl.innerText = t("ipError");
+          if (flagEl) flagEl.innerText = "⚠️";
+          if (countryEl) countryEl.innerText = "—";
+        } finally {
+          if (btn) btn.classList.remove("spinning");
+          isDetectingIp = false;
+        }
+      }
+
+      function buildSubItemElement(name, url, iconClass) {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.style.borderColor = "var(--primary)";
+
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "list-item-title";
+        titleDiv.style.color = "var(--primary)";
+        titleDiv.innerHTML = `<i class="${iconClass}" style="margin-inline-end:0.5rem;"></i>`;
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = name;
+        titleDiv.appendChild(titleSpan);
+
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "list-actions";
+
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "mini-btn";
+        copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+        copyBtn.onclick = () => copyText(url, t("copyDone"));
+
+        const qrBtn = document.createElement("button");
+        qrBtn.className = "mini-btn";
+        qrBtn.innerHTML = '<i class="fa-solid fa-qrcode"></i>';
+        qrBtn.onclick = () => showQR(url, name);
+
+        actionsDiv.appendChild(copyBtn);
+        actionsDiv.appendChild(qrBtn);
+        div.appendChild(titleDiv);
+        div.appendChild(actionsDiv);
+        return div;
+      }
+
+      function buildConfigItemElement(name, cfg) {
+        const div = document.createElement("div");
+        div.className = "list-item";
+
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "list-item-title";
+        titleDiv.textContent = name;
+
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "list-actions";
+
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "mini-btn";
+        copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+        copyBtn.onclick = () => copyText(cfg, t("copyDone"));
+
+        const qrBtn = document.createElement("button");
+        qrBtn.className = "mini-btn";
+        qrBtn.innerHTML = '<i class="fa-solid fa-qrcode"></i>';
+        qrBtn.onclick = () => showQR(cfg, name);
+
+        actionsDiv.appendChild(copyBtn);
+        actionsDiv.appendChild(qrBtn);
+        div.appendChild(titleDiv);
+        div.appendChild(actionsDiv);
+        return div;
       }
 
       function renderConfigs() {
-        let container = document.getElementById("configListContainer");
-        let jsonSub = normalize(templateVars.subJsonUrl, "");
-        let clashSub = normalize(templateVars.subClashUrl, "");
-        
-        let html = "";
-        if (jsonSub) html += createSubItem("JSON Sub", jsonSub, "fa-solid fa-code");
-        if (clashSub) html += createSubItem("Clash Sub", clashSub, "fa-solid fa-cat");
-        
+        const container = document.getElementById("configListContainer");
+        const searchBox = document.getElementById("configSearchBox");
+        if (!container) return;
+        container.innerHTML = "";
+
+        const jsonSub = normalize(templateVars.subJsonUrl, "");
+        const clashSub = normalize(templateVars.subClashUrl, "");
+
+        let renderedCount = 0;
+
+        if (jsonSub && (!configSearchTerm || "json sub".includes(configSearchTerm.toLowerCase()))) {
+          container.appendChild(buildSubItemElement("JSON Sub", jsonSub, "fa-solid fa-code"));
+          renderedCount++;
+        }
+        if (clashSub && (!configSearchTerm || "clash sub".includes(configSearchTerm.toLowerCase()))) {
+          container.appendChild(buildSubItemElement("Clash Sub", clashSub, "fa-solid fa-cat"));
+          renderedCount++;
+        }
+
         configsList.forEach((cfg, idx) => {
-          let cleanCfg = cfg.trim();
-          let defaultFallback = t("configTitle") + " " + formatDisplay(idx + 1);
-          let name = parseConfigName(cleanCfg, defaultFallback);
-          
-          html += `<div class="list-item">
-            <div class="list-item-title">${name}</div>
-            <div class="list-actions">
-              <button class="mini-btn" onclick="copyText('${cfg}', '${t("copyDone")}')"><i class="fa-regular fa-copy"></i></button>
-              <button class="mini-btn" onclick="showQR('${cfg}', '${name}')"><i class="fa-solid fa-qrcode"></i></button>
-            </div>
-          </div>`;
+          const cleanCfg = cfg.trim();
+          const defaultFallback = t("configTitle") + " " + formatDisplay(idx + 1);
+          const name = parseConfigName(cleanCfg, defaultFallback);
+
+          if (!configSearchTerm || name.toLowerCase().includes(configSearchTerm.toLowerCase()) || cleanCfg.toLowerCase().includes(configSearchTerm.toLowerCase())) {
+            container.appendChild(buildConfigItemElement(name, cleanCfg));
+            renderedCount++;
+          }
         });
-        
-        container.innerHTML = html || `<div style="text-align:center; padding: 2rem; color: var(--text-secondary);">${t("noConfig")}</div>`;
+
+        if (searchBox) {
+          if (configsList.length > 3) {
+            searchBox.style.display = "block";
+          } else {
+            searchBox.style.display = "none";
+          }
+        }
+
+        if (renderedCount === 0) {
+          const empty = document.createElement("div");
+          empty.style.textAlign = "center";
+          empty.style.padding = "2rem";
+          empty.style.color = "var(--text-secondary)";
+          empty.textContent = configSearchTerm ? t("notFound") : t("noConfig");
+          container.appendChild(empty);
+        }
       }
 
       function renderApps() {
-        let apps = [
+        const apps = [
           { name: "Android", icon: "fa-brands fa-android", list: [{n:"v2rayNG", url:"https://github.com/2dust/v2rayNG/releases"}, {n:"Happ", url:"https://play.google.com/store/apps/details?id=com.happproxy"}, {n:"Incy", url:"https://play.google.com/store/apps/details?id=llc.itdev.incy"}, {n:"V2Box", url:"https://play.google.com/store/apps/details?id=dev.v2box.android"}] },
           { name: "iOS", icon: "fa-brands fa-apple", list: [{n:"Streisand", url:"https://apps.apple.com/app/id6450534064"}, {n:"Shadowrocket", url:"https://apps.apple.com/app/id932747118"}, {n:"Happ", url:"https://apps.apple.com/app/id6504287215"}, {n:"V2Box", url:"https://apps.apple.com/app/id6446814690"}] },
           { name: "Windows", icon: "fa-brands fa-windows", list: [{n:"v2rayN", url:"https://github.com/2dust/v2rayN/releases"}, {n:"Hiddify", url:"https://github.com/hiddify/hiddify-app/releases/latest/download/Hiddify-Windows-Setup-x64.Msix"}, {n:"Nekoray", url:"https://github.com/MatsuriDayo/nekoray"}, {n:"Happ", url:"https://github.com/Happ-proxy/happ-desktop/releases"}] }
         ];
-        let grid = document.getElementById("appsGridContainer");
+        const grid = document.getElementById("appsGridContainer");
+        if (!grid) return;
         grid.innerHTML = apps.map(os => `
           <div class="app-group">
             <div class="app-group-title"><i class="${os.icon}"></i> ${os.name}</div>
-            ${os.list.map(app => `<a href="${app.url}" target="_blank" class="app-link"><span>${app.n}</span><i class="fa-solid fa-download"></i></a>`).join('')}
+            ${os.list.map(app => `<a href="${app.url}" target="_blank" rel="noopener noreferrer" class="app-link"><span>${app.n}</span><i class="fa-solid fa-download"></i></a>`).join('')}
           </div>
         `).join('');
       }
 
       function renderProfile() {
         let userEmailVal = emailsList.length > 0 ? emailsList[0] : "—";
-        document.getElementById("profileUsernameVal").innerText = userEmailVal;
+        const pUser = document.getElementById("profileUsernameVal");
+        if (pUser) pUser.innerText = userEmailVal;
 
         let userIdVal = normalize(templateVars.sId, "—");
-        document.getElementById("profileUserIdVal").innerText = formatDisplay(userIdVal);
+        const pId = document.getElementById("profileUserIdVal");
+        if (pId) pId.innerText = formatDisplay(userIdVal);
 
         let totalServers = configsList.length;
-        document.getElementById("profileServersCountVal").innerText = formatDisplay(totalServers);
+        const pServers = document.getElementById("profileServersCountVal");
+        if (pServers) pServers.innerText = formatDisplay(totalServers);
 
         let lastOnlineRaw = normalize(templateVars.lastOnline, "—");
-        document.getElementById("profileLastOnlineVal").innerText = formatDateTime(lastOnlineRaw);
+        const pLastOnline = document.getElementById("profileLastOnlineVal");
+        if (pLastOnline) pLastOnline.innerText = formatDateTime(lastOnlineRaw);
 
-        if (expireISO) {
-          document.getElementById("profileExpiryDateVal").innerText = formatDateTime(expireISO);
-        } else {
-          document.getElementById("profileExpiryDateVal").innerText = t("timeUnlimited");
+        const pExpiry = document.getElementById("profileExpiryDateVal");
+        if (pExpiry) {
+          if (expireISO) {
+            pExpiry.innerText = formatDateTime(expireISO);
+          } else {
+            pExpiry.innerText = t("timeUnlimited");
+          }
         }
       }
 
@@ -1428,28 +1668,26 @@
         localStorage.setItem("nexus_lang", currentLang);
         
         document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
-        document.getElementById("panelTitle").innerText = normalize(templateVars.subTitle, "") || t("subscriptionHub");
+        document.getElementById("panelTitle").textContent = normalize(templateVars.subTitle, "") || t("subscriptionHub");
 
-        // بررسی و مدیریت بخش اعلامیه
         const announceCard = document.getElementById("announceCard");
         const announceText = document.getElementById("announceText");
         const announceVal = normalize(templateVars.announce, "");
 
         if (announceVal) {
-          announceText.innerText = announceVal;
+          announceText.textContent = announceVal;
           announceCard.style.display = "flex";
         } else {
           announceCard.style.display = "none";
         }
 
-        // بررسی و اعمال وضعیت آنلاین/آفلاین در کنار ایمیل هدر
         const emailWrap = document.getElementById("headerEmailWrap");
         const emailEl = document.getElementById("userEmailText");
         const statusDot = document.getElementById("headerStatusDot");
 
         if (emailsList.length > 0) {
           emailWrap.style.display = "flex";
-          emailEl.innerText = emailsList[0];
+          emailEl.textContent = emailsList[0];
         } else {
           emailWrap.style.display = "none";
         }
@@ -1478,10 +1716,11 @@
         document.getElementById("hoursLabel").innerText = t("hours");
         document.getElementById("minutesLabel").innerText = t("minutes");
         document.getElementById("expiryTextLabel").innerText = t("remainTime");
-        document.getElementById("chartMainHeaderTitle").innerHTML = `<i class="fa-solid fa-chart-area"></i> ${t("chartTitle")}`;
         document.getElementById("modalQrTitle").innerText = t("qr");
         document.getElementById("toastMessage").innerText = t("copyDone");
         document.getElementById("profileRenewText").innerText = t("renewBtn");
+        document.getElementById("configSearchInput").placeholder = t("searchPlaceholder");
+        document.getElementById("ipCardTitle").innerText = t("ipTitle");
         
         document.getElementById("currentLangLabel").innerText = currentLang.toUpperCase();
         document.querySelectorAll('.lang-option').forEach(opt => {
@@ -1513,7 +1752,6 @@
 
         if (supportUrl) { 
           let fixedSupportUrl = supportUrl.replace("t.me", "telegram.me");
-          
           let supportBtn = document.getElementById("navSupportBtn");
           supportBtn.onclick = () => window.open(fixedSupportUrl, "_blank");
           supportBtn.style.display = "flex";
@@ -1527,7 +1765,7 @@
         }
 
         renderStatsAndRing();
-        renderExpiryCountdown();
+        updateCountdownTick();
         renderConfigs();
         renderApps();
         renderProfile();
@@ -1546,7 +1784,7 @@
         });
       });
 
-      // Custom Lang Selector Interactions
+      // Lang Selector
       const langSelector = document.getElementById("langSelector");
       const langSelectTrigger = document.getElementById("langSelectTrigger");
 
@@ -1560,11 +1798,18 @@
           currentLang = opt.dataset.value;
           langSelector.classList.remove("open");
           updateUI();
+          checkPublicIp();
         });
       });
 
       document.addEventListener("click", () => {
         langSelector.classList.remove("open");
+      });
+
+      // جستجو در کانفیگ‌ها
+      document.getElementById("configSearchInput").addEventListener("input", (e) => {
+        configSearchTerm = e.target.value.trim();
+        renderConfigs();
       });
 
       // Actions
@@ -1573,14 +1818,16 @@
       document.getElementById("themeToggleBtn").addEventListener("click", () => { isDark = !isDark; updateUI(); });
       document.getElementById("closeModalBtn").addEventListener("click", closeModal);
       document.getElementById("qrModal").addEventListener("click", (e) => { if(e.target === document.getElementById("qrModal")) closeModal(); });
+      document.getElementById("qrLinkCopyBtn").addEventListener("click", () => copyText(document.getElementById('qrLinkText').textContent, t('copyDone')));
       document.getElementById("copyAllConfigsBtn").addEventListener("click", () => {
         if(configsList.length === 0) return showToast(t("noConfig"));
         copyText(configsList.join("\n"), t("copyDone"));
       });
-
-      window.addEventListener("resize", drawInteractiveSparkline);
+      document.getElementById("refreshIpBtn").addEventListener("click", checkPublicIp);
 
       updateUI();
+      setInterval(updateCountdownTick, 1000);
+      checkPublicIp();
     </script>
   </body>
 </html>
